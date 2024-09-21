@@ -19,16 +19,24 @@ public class Rectangle extends Shape {
 
     @Override
     public double getArea() {
-        return (max.x() - min.x()) * (max.y() - min.y());
+        return getHeight() * getWidth();
     }
 
     @Override
     public double getPerimeter() {
-        return ((max.x() - min.x()) + (max.y() - min.y())) * 2;
+        return (getHeight() + getWidth()) * 2;
     }
 
     @Override
     public boolean intersects(@NonNull Shape other) {
         return false;
+    }
+
+    public double getHeight() {
+        return max.y() - min.y();
+    }
+
+    public double getWidth() {
+        return max.x() - min.x();
     }
 }
