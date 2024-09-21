@@ -2,22 +2,26 @@ plugins {
     id("java")
 }
 
-group = "com.wizardlybump17.physics"
-version = "0.1.0"
+allprojects {
+    apply(plugin = "java")
 
-repositories {
-    mavenCentral()
-}
+    group = "com.wizardlybump17.physics"
+    version = "0.1.0"
 
-val junit = "5.11.0"
+    repositories {
+        mavenCentral()
+    }
 
-dependencies {
-    testImplementation(platform("org.junit:junit-bom:${junit}"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-}
+    val junit = "5.11.0"
 
-tasks {
-    test {
-        useJUnitPlatform()
+    dependencies {
+        testImplementation(platform("org.junit:junit-bom:${junit}"))
+        testImplementation("org.junit.jupiter:junit-jupiter")
+    }
+
+    tasks {
+        test {
+            useJUnitPlatform()
+        }
     }
 }
