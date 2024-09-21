@@ -27,4 +27,12 @@ public record Vector2D(double x, double y) {
     public @NonNull Vector2D midpoint(@NonNull Vector2D other) {
         return new Vector2D((x + other.x) / 2, (y + other.y) / 2);
     }
+
+    public static @NonNull Vector2D min(@NonNull Vector2D a, @NonNull Vector2D b) {
+        return new Vector2D(Math.min(a.x, b.x), Math.min(a.y, b.y));
+    }
+
+    public static @NonNull Vector2D max(@NonNull Vector2D a, @NonNull Vector2D b) {
+        return new Vector2D(Math.max(a.x, b.x), Math.max(a.y, b.y));
+    }
 }
