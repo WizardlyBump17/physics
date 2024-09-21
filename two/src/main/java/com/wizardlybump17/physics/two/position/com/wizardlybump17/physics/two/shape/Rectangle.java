@@ -5,13 +5,13 @@ import lombok.Getter;
 import lombok.NonNull;
 
 @Getter
-public class Square extends Shape {
+public class Rectangle extends Shape {
 
     private final @NonNull Vector2D min;
     private final @NonNull Vector2D max;
     private final @NonNull Vector2D position;
 
-    public Square(@NonNull Vector2D min, @NonNull Vector2D max) {
+    public Rectangle(@NonNull Vector2D min, @NonNull Vector2D max) {
         this.min = Vector2D.min(min, max);
         this.max = Vector2D.max(max, max);
         position = this.min.midpoint(this.max);
