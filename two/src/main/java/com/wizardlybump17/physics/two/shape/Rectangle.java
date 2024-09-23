@@ -36,7 +36,11 @@ public class Rectangle extends Shape {
                 yield otherMin.isInAABB(min, max)
                         || Vector2D.isInAABB(otherMin.x() + rectangle.getWidth(), otherMin.y(), min.x(), min.y(), max.x(), max.y())
                         || Vector2D.isInAABB(otherMin.x(), otherMin.y() + rectangle.getHeight(), min.x(), min.y(), max.x(), max.y())
-                        || otherMax.isInAABB(min, max);
+                        || otherMax.isInAABB(min, max)
+                        || min.isInAABB(otherMin, otherMax)
+                        || Vector2D.isInAABB(min.x() + getWidth(), min.y(), otherMin.x(), otherMin.y(), otherMax.x(), otherMax.y())
+                        || Vector2D.isInAABB(min.x(), min.y() + getHeight(), otherMin.x(), otherMin.y(), otherMax.x(), otherMax.y())
+                        || max.isInAABB(otherMin, otherMax);
             }
             default -> throw new IllegalStateException("Unexpected value: " + other);
         };
