@@ -50,4 +50,17 @@ public record Vector2D(double x, double y) {
         return x >= realMinX && x <= realMaxX
                 && y >= realMinY && y <= realMaxY;
     }
+
+    public double length() {
+        return Math.sqrt(x * x + y * y);
+    }
+
+    public double lengthSquared() {
+        return x * x + y * y;
+    }
+
+    public @NonNull Vector2D normalize() {
+        double length = length();
+        return new Vector2D(x / length, y / length);
+    }
 }
