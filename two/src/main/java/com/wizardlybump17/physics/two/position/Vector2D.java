@@ -4,6 +4,8 @@ import lombok.NonNull;
 
 public record Vector2D(double x, double y) {
 
+    public static final @NonNull Vector2D ZERO = new Vector2D(0, 0);
+
     public @NonNull Vector2D add(double x, double y) {
         return new Vector2D(this.x + x, this.y + y);
     }
