@@ -11,7 +11,7 @@ public class PanelShape {
     protected static int currentId;
 
     private final int id = currentId++;
-    private final @NonNull Shape shape;
-    private final @NonNull ShapeRenderer<?> renderer;
+    private @NonNull Shape shape;
+    private @NonNull ShapeRenderer<?> renderer;
     private boolean selected;
 }

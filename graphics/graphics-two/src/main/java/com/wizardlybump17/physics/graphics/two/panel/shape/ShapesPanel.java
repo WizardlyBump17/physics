@@ -6,6 +6,8 @@ import com.wizardlybump17.physics.graphics.two.renderer.shape.ShapeRenderer;
 import com.wizardlybump17.physics.two.shape.Shape;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,9 +15,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Getter
+@Setter
 public class ShapesPanel extends JPanel {
 
     private final @NonNull Map<Integer, PanelShape> shapes = new HashMap<>();
+    private @Nullable PanelShape selectedShape;
 
     public ShapesPanel() {
         addMouseListener(new ShapePanelMouseListener(this));
@@ -24,10 +28,12 @@ public class ShapesPanel extends JPanel {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected void paintComponent(@NonNull Graphics graphics) {
+    public void paint(@NonNull Graphics graphics) {
         super.paintComponent(graphics);
 
         shapes.values().forEach(panelShape -> ((ShapeRenderer<Shape>) panelShape.getRenderer()).render(graphics, panelShape.getShape()));
+        if (selectedShape != null)
+            ((ShapeRenderer<Shape>) selectedShape.getRenderer()).render(graphics, selectedShape.getShape());
     }
 
     public <S extends Shape, R extends ShapeRenderer<? extends S>> void addShape(@NonNull S shape, @NonNull R renderer) {

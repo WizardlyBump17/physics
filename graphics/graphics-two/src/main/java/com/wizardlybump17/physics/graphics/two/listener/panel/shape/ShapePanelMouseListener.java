@@ -20,14 +20,25 @@ public class ShapePanelMouseListener extends MouseAdapter {
     public void mouseClicked(@NonNull MouseEvent event) {
         Vector2D point = new Vector2D(event.getX(), event.getY());
 
+        boolean success = false;
         for (PanelShape shape : panel.getShapes().values()) {
             boolean selected = shape.getShape().hasPoint(point);
             shape.setSelected(selected);
 
-            if (selected)
-                break;
+            if (!selected)
+                continue;
+
+            PanelShape previous = panel.getSelectedShape();
+            if (previous != null)
+                previous.setSelected(false);
+
+            panel.setSelectedShape(shape);
+            success = true;
+            break;
         }
 
+        if (!success)
+            panel.setSelectedShape(null);
         panel.repaint();
     }
 }
