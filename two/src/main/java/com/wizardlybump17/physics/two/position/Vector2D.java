@@ -72,4 +72,28 @@ public record Vector2D(double x, double y) {
     public double distanceSquared(@NonNull Vector2D other) {
         return MathUtil.square(x - other.x) + MathUtil.square(y - other.y);
     }
+
+    public @NonNull Vector2D multiply(@NonNull Vector2D other) {
+        return new Vector2D(x * other.x, y * other.y);
+    }
+
+    public @NonNull Vector2D multiply(double x, double y) {
+        return new Vector2D(this.x * x, this.y * y);
+    }
+
+    public @NonNull Vector2D multiply(double multiplier) {
+        return new Vector2D(x * multiplier, y * multiplier);
+    }
+
+    public @NonNull Vector2D divide(@NonNull Vector2D other) {
+        return new Vector2D(x / other.x, y / other.y);
+    }
+
+    public @NonNull Vector2D divide(double x, double y) {
+        return new Vector2D(this.x / x, this.y / y);
+    }
+
+    public @NonNull Vector2D divide(double divisor) {
+        return new Vector2D(x / divisor, y / divisor);
+    }
 }
