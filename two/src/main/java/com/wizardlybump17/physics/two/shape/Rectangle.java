@@ -1,4 +1,4 @@
-package com.wizardlybump17.physics.two.position.com.wizardlybump17.physics.two.shape;
+package com.wizardlybump17.physics.two.shape;
 
 import com.wizardlybump17.physics.two.position.Vector2D;
 import lombok.Getter;
