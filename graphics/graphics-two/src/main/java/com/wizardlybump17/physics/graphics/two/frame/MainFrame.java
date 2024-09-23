@@ -1,6 +1,6 @@
 package com.wizardlybump17.physics.graphics.two.frame;
 
-import com.wizardlybump17.physics.graphics.two.panel.ShapesPanel;
+import com.wizardlybump17.physics.graphics.two.panel.shape.ShapesPanel;
 import lombok.Getter;
 import lombok.NonNull;
 
