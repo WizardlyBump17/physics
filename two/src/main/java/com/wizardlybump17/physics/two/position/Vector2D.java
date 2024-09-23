@@ -47,7 +47,7 @@ public record Vector2D(double x, double y) {
         double realMinY = Math.min(minY, maxY);
         double realMaxX = Math.max(minX, maxX);
         double realMaxY = Math.max(minY, maxY);
-        return realMinX >= x && x <= realMaxX
-                && realMinY >= y && y <= realMaxY;
+        return x >= realMinX && x <= realMaxX
+                && y >= realMinY && y <= realMaxY;
     }
 }
