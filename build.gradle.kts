@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 plugins {
     id("java")
 }
@@ -22,6 +24,9 @@ allprojects {
     tasks {
         test {
             useJUnitPlatform()
+            testLogging {
+                events(TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.STARTED, TestLogEvent.STANDARD_ERROR, TestLogEvent.STANDARD_OUT)
+            }
         }
     }
 }
