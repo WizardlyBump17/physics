@@ -29,7 +29,17 @@ public class Rectangle extends Shape {
 
     @Override
     public boolean intersects(@NonNull Shape other) {
-        return false;
+        return switch (other) {
+            case Rectangle rectangle -> {
+                Vector2D otherMin = rectangle.getMin();
+                Vector2D otherMax = rectangle.getMax();
+                yield otherMin.isInAABB(min, max)
+                        || Vector2D.isInAABB(otherMin.x() + rectangle.getWidth(), otherMin.y(), min.x(), min.y(), max.x(), max.y())
+                        || Vector2D.isInAABB(otherMin.x(), otherMin.y() + rectangle.getHeight(), min.x(), min.y(), max.x(), max.y())
+                        || otherMax.isInAABB(min, max);
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + other);
+        };
     }
 
     public double getHeight() {

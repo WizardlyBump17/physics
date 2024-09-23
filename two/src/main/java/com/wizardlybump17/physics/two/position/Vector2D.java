@@ -35,4 +35,17 @@ public record Vector2D(double x, double y) {
     public static @NonNull Vector2D max(@NonNull Vector2D a, @NonNull Vector2D b) {
         return new Vector2D(Math.max(a.x, b.x), Math.max(a.y, b.y));
     }
+
+    public boolean isInAABB(@NonNull Vector2D min, @NonNull Vector2D max) {
+        return isInAABB(x, y, min.x, min.y, max.x, max.y);
+    }
+
+    public static boolean isInAABB(double x, double y, double minX, double minY, double maxX, double maxY) {
+        double realMinX = Math.min(minX, maxX);
+        double realMinY = Math.min(minY, maxY);
+        double realMaxX = Math.max(minX, maxX);
+        double realMaxY = Math.max(minY, maxY);
+        return realMinX >= x && x <= realMaxX
+                && realMinY >= y && y <= realMaxY;
+    }
 }
