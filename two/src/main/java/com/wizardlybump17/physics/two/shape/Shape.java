@@ -12,4 +12,6 @@ public abstract class Shape {
     public abstract double getPerimeter();
 
     public abstract boolean intersects(@NonNull Shape other);
+
+    public abstract boolean hasPoint(@NonNull Vector2D point);
 }

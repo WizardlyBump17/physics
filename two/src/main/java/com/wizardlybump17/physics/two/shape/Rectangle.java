@@ -46,6 +46,11 @@ public class Rectangle extends Shape {
         };
     }
 
+    @Override
+    public boolean hasPoint(@NonNull Vector2D point) {
+        return point.isInAABB(min, max);
+    }
+
     public double getHeight() {
         return max.y() - min.y();
     }
