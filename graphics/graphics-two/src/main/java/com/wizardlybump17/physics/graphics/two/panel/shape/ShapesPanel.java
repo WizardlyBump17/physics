@@ -10,8 +10,8 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 public class ShapesPanel extends JPanel {
 
@@ -34,6 +34,38 @@ public class ShapesPanel extends JPanel {
                 repaint();
             }
         });
+        addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseDragged(@NonNull MouseEvent event) {
+                Vector2D point = new Vector2D(event.getX(), event.getY());
+
+                Iterator<PanelShape> iterator = shapes.values().iterator();
+                PanelShape selectedShape = null;
+                while (iterator.hasNext()) {
+                    PanelShape shape = iterator.next();
+                    if (!shape.isSelected())
+                        continue;
+
+                    if (!shape.getShape().hasPoint(point))
+                        break;
+
+                    iterator.remove();
+                    selectedShape = shape;
+                    break;
+                }
+
+                if (selectedShape == null)
+                    return;
+
+                ShapeRenderer<?> renderer = selectedShape.getRenderer();
+                PanelShape newShape = new PanelShape(selectedShape.getShape().at(point), renderer);
+                newShape.setSelected(true);
+                renderer.setPanelShape(newShape);
+                shapes.put(newShape.getId(), newShape);
+
+                repaint();
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -44,9 +76,9 @@ public class ShapesPanel extends JPanel {
         shapes.values().forEach(panelShape -> ((ShapeRenderer<Shape>) panelShape.getRenderer()).render(graphics, panelShape.getShape()));
     }
 
-    public <S extends Shape, R extends ShapeRenderer<? extends S>> void addShape(@NonNull S shape, @NonNull R renderer, @NonNull BiConsumer<R, PanelShape> afterAdd) {
+    public <S extends Shape, R extends ShapeRenderer<? extends S>> void addShape(@NonNull S shape, @NonNull R renderer) {
         PanelShape panelShape = new PanelShape(shape, renderer);
         shapes.put(panelShape.getId(), panelShape);
-        afterAdd.accept(renderer, panelShape);
+        renderer.setPanelShape(panelShape);
     }
 }

@@ -13,6 +13,6 @@ public class Main {
         frame.setVisible(true);
 
         ShapesPanel shapesPanel = frame.getShapesPanel();
-        shapesPanel.addShape(new Rectangle(Vector2D.ZERO, new Vector2D(100, 100)), new RectangleRenderer(), RectangleRenderer::setPanelShape);
+        shapesPanel.addShape(new Rectangle(Vector2D.ZERO, new Vector2D(100, 100)), new RectangleRenderer());
     }
 }

@@ -58,4 +58,11 @@ public class Rectangle extends Shape {
     public double getWidth() {
         return max.x() - min.x();
     }
+
+    @Override
+    public @NonNull Shape at(@NonNull Vector2D position) {
+        double width = getWidth() / 2;
+        double height = getHeight() / 2;
+        return new Rectangle(position.subtract(width, height), position.add(width, height));
+    }
 }
