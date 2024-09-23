@@ -13,6 +13,8 @@ import java.awt.*;
 @Setter
 public class RectangleRenderer implements ShapeRenderer<Rectangle> {
 
+    public static final int HIGHLIGHT_SIZE = 3;
+
     private @NonNull Color color;
     private @NonNull Color highlightColor;
     private @NonNull PanelShape panelShape;
@@ -30,19 +32,18 @@ public class RectangleRenderer implements ShapeRenderer<Rectangle> {
     @Override
     public void render(@NonNull Graphics graphics, @NonNull Rectangle value) {
         Vector2D min = value.getMin();
-        graphics.setColor(color);
 
         int x = (int) min.x();
         int y = (int) min.y();
         int width = (int) value.getWidth();
         int height = (int) value.getHeight();
 
+        if (panelShape.isSelected()) {
+            graphics.setColor(highlightColor);
+            graphics.fillRect(x - HIGHLIGHT_SIZE, y - HIGHLIGHT_SIZE, width + HIGHLIGHT_SIZE * 2, height + HIGHLIGHT_SIZE * 2);
+        }
+
+        graphics.setColor(color);
         graphics.fillRect(x, y, width, height);
-
-        if (!panelShape.isSelected())
-            return;
-
-        graphics.setColor(highlightColor);
-        graphics.drawRect(x - 20, y - 20, width + 20, height + 20);
     }
 }
