@@ -1,14 +1,18 @@
 package com.wizardlybump17.physics.graphics.two;
 
-import javax.swing.*;
+import com.wizardlybump17.physics.graphics.two.frame.MainFrame;
+import com.wizardlybump17.physics.graphics.two.panel.ShapesPanel;
+import com.wizardlybump17.physics.graphics.two.renderer.shape.RectangleRenderer;
+import com.wizardlybump17.physics.two.position.Vector2D;
+import com.wizardlybump17.physics.two.shape.Rectangle;
 
 public class Main {
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("2D test");
-        frame.setSize(500, 500);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
+        MainFrame frame = new MainFrame("2D test");
         frame.setVisible(true);
+
+        ShapesPanel shapesPanel = frame.getShapesPanel();
+        shapesPanel.addShape(new Rectangle(Vector2D.ZERO, new Vector2D(100, 100)), new RectangleRenderer());
     }
 }
