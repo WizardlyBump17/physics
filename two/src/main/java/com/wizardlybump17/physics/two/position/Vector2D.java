@@ -1,5 +1,6 @@
 package com.wizardlybump17.physics.two.position;
 
+import com.wizardlybump17.physics.two.util.MathUtil;
 import lombok.NonNull;
 
 public record Vector2D(double x, double y) {
@@ -62,5 +63,13 @@ public record Vector2D(double x, double y) {
     public @NonNull Vector2D normalize() {
         double length = length();
         return new Vector2D(x / length, y / length);
+    }
+
+    public double distance(@NonNull Vector2D other) {
+        return Math.sqrt(MathUtil.square(x - other.x) + MathUtil.square(y - other.y));
+    }
+
+    public double distanceSquared(@NonNull Vector2D other) {
+        return MathUtil.square(x - other.x) + MathUtil.square(y - other.y);
     }
 }
