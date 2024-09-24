@@ -19,7 +19,7 @@ public class Rectangle extends Shape {
 
     public Rectangle(@NonNull Vector2D min, @NonNull Vector2D max) {
         this.min = Vector2D.min(min, max);
-        this.max = Vector2D.max(max, max);
+        this.max = Vector2D.max(min, max);
         position = this.min.midpoint(this.max);
     }
 
