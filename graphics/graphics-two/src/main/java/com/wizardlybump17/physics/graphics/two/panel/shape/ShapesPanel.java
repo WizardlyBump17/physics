@@ -24,7 +24,7 @@ public class ShapesPanel extends JPanel {
 
     public ShapesPanel() {
         addMouseListener(new ShapePanelMouseListener(this));
-        addMouseMotionListener(new ShapePanelMouseMotionListener(this));
+        addMouseMotionListener(new ShapePanelMouseMotionListener(this, false));
     }
 
     @SuppressWarnings("unchecked")
@@ -56,6 +56,18 @@ public class ShapesPanel extends JPanel {
                 anotherShape.getIntersecting().remove(shape.getId());
             }
         }
+    }
+
+    public @NonNull Intersection getIntersection(@NonNull Shape shape, int id) {
+        for (PanelShape otherPanelShape : shapes.values()) {
+            if (otherPanelShape.getId() == id)
+                continue;
+
+            Intersection intersection = otherPanelShape.getShape().intersect(shape);
+            if (intersection.intersects())
+                return intersection;
+        }
+        return Intersection.EMPTY;
     }
 
     public <S extends Shape, R extends ShapeRenderer<? extends S>> void addShape(@NonNull S shape, @NonNull R renderer) {

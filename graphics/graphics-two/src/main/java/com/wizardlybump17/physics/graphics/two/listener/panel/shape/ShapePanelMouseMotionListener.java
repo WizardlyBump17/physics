@@ -16,6 +16,7 @@ import java.awt.event.MouseEvent;
 public class ShapePanelMouseMotionListener extends MouseAdapter {
 
     private final @NonNull ShapesPanel panel;
+    private final boolean canIntersect;
 
     @Override
     public void mouseDragged(@NonNull MouseEvent event) {
@@ -25,6 +26,10 @@ public class ShapePanelMouseMotionListener extends MouseAdapter {
 
         Vector2D point = new Vector2D(event.getX(), event.getY());
         Shape shape = panelShape.getShape();
+
+        if (!canIntersect && panel.getIntersection(shape.at(point), panelShape.getId()).intersects())
+            return;
+
         panelShape.setShape(shape.at(point));
 
         panel.repaint();
