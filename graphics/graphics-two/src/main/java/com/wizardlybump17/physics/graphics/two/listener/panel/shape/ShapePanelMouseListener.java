@@ -29,7 +29,7 @@ public class ShapePanelMouseListener extends MouseAdapter {
                 continue;
 
             PanelShape previous = panel.getSelectedShape();
-            if (previous != null)
+            if (previous != null && previous.getId() != shape.getId())
                 previous.setSelected(false);
 
             panel.setSelectedShape(shape);
