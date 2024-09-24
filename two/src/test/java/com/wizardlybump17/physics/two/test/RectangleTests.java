@@ -1,5 +1,6 @@
 package com.wizardlybump17.physics.two.test;
 
+import com.wizardlybump17.physics.two.intersection.Intersection;
 import com.wizardlybump17.physics.two.intersection.rectangle.RectangleToRectangleIntersection;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Rectangle;
@@ -71,6 +72,22 @@ class RectangleTests {
                         create(new Vector2D(-10, 7), new Vector2D(0, 10))
                 ),
                 create(new Vector2D(-10, 7), new Vector2D(0, 10)).intersect(create(new Vector2D(5, 5), new Vector2D(-15, 15)))
+        );
+    }
+
+    @Test
+    void testNoIntersections() {
+        Assertions.assertEquals(
+                Intersection.EMPTY,
+                create(Vector2D.ZERO, new Vector2D(10, 10)).intersect(create(new Vector2D(10, 10), new Vector2D(15, 15)))
+        );
+        Assertions.assertEquals(
+                Intersection.EMPTY,
+                create(new Vector2D(-10, -10), Vector2D.ZERO).intersect(create(new Vector2D(1, 54), new Vector2D(75, 41)))
+        );
+        Assertions.assertEquals(
+                Intersection.EMPTY,
+                create(new Vector2D(-9, -4), Vector2D.ZERO).intersect(create(new Vector2D(0, 0.1), new Vector2D(75, 41)))
         );
     }
 
