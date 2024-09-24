@@ -9,9 +9,10 @@ class RectangleTests {
 
     @Test
     void testIntersects() {
-        Assertions.assertTrue(new Rectangle(Vector2D.ZERO, new Vector2D(1, 1)).intersects(new Rectangle(new Vector2D(-1, -1), Vector2D.ZERO)));
-        Assertions.assertTrue(new Rectangle(Vector2D.ZERO, new Vector2D(2, 2)).intersects(new Rectangle(new Vector2D(-1, -1), new Vector2D(1, 1))));
+        Assertions.assertTrue(new Rectangle(Vector2D.ZERO, new Vector2D(1, 1)).intersects(new Rectangle(new Vector2D(-1, -1), new Vector2D(1.0001, 1.0001))));
+        Assertions.assertTrue(new Rectangle(Vector2D.ZERO, new Vector2D(2, 2)).intersects(new Rectangle(new Vector2D(-1, -1), new Vector2D(1.0001, 1.0001))));
         Assertions.assertTrue(new Rectangle(new Vector2D(1, 0), new Vector2D(2, 2)).intersects(new Rectangle(new Vector2D(-1, -1), new Vector2D(3, 3))));
+        Assertions.assertTrue(new Rectangle(Vector2D.ZERO, new Vector2D(10, 10)).intersects(new Rectangle(new Vector2D(-4, 4), new Vector2D(16, 8))));
     }
 
     @Test
