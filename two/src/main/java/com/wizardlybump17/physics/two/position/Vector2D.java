@@ -3,6 +3,8 @@ package com.wizardlybump17.physics.two.position;
 import com.wizardlybump17.physics.two.util.MathUtil;
 import lombok.NonNull;
 
+import java.util.Random;
+
 public record Vector2D(double x, double y) {
 
     public static final @NonNull Vector2D ZERO = new Vector2D(0, 0);
@@ -95,5 +97,19 @@ public record Vector2D(double x, double y) {
 
     public @NonNull Vector2D divide(double divisor) {
         return new Vector2D(x / divisor, y / divisor);
+    }
+
+    public static @NonNull Vector2D randomVector(@NonNull Random random, double minX, double minY, double maxX, double maxY) {
+        return new Vector2D(
+                random.nextDouble(minX, maxX),
+                random.nextDouble(minY, maxY)
+        );
+    }
+
+    public static @NonNull Vector2D randomVector(@NonNull Random random, @NonNull Vector2D min, @NonNull Vector2D max) {
+        return new Vector2D(
+                random.nextDouble(Math.min(min.x, max.x), Math.max(min.x, max.x)),
+                random.nextDouble(Math.max(min.y, max.y), Math.max(min.y, max.y))
+        );
     }
 }

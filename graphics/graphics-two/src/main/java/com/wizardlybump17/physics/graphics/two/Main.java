@@ -6,15 +6,28 @@ import com.wizardlybump17.physics.graphics.two.renderer.shape.RectangleRenderer;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Rectangle;
 
+import java.awt.*;
+import java.util.concurrent.ThreadLocalRandom;
+
 public class Main {
 
     public static void main(String[] args) {
         MainFrame frame = new MainFrame("2D test");
         frame.setVisible(true);
 
+        Dimension size = frame.getSize();
+        ThreadLocalRandom current = ThreadLocalRandom.current();
+
         ShapesPanel shapesPanel = frame.getShapesPanel();
-        shapesPanel.addShape(new Rectangle(Vector2D.ZERO, new Vector2D(100, 100)), new RectangleRenderer());
-        shapesPanel.addShape(new Rectangle(Vector2D.ZERO, new Vector2D(100, 100)), new RectangleRenderer());
-        shapesPanel.addShape(new Rectangle(Vector2D.ZERO, new Vector2D(100, 100)), new RectangleRenderer());
+        for (int i = 0; i < 10; i++) {
+            shapesPanel.addShape(
+                    new Rectangle(
+                            Vector2D.randomVector(current, 0, 0, size.getWidth(), size.getHeight()),
+                            current.nextDouble(90) + 10,
+                            current.nextDouble(90) + 10
+                    ),
+                    new RectangleRenderer()
+            );
+        }
     }
 }

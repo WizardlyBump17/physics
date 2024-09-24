@@ -17,6 +17,12 @@ public class Rectangle extends Shape {
         position = this.min.midpoint(this.max);
     }
 
+    public Rectangle(@NonNull Vector2D position, double width, double height) {
+        this.position = position;
+        this.min = position.subtract(width / 2, height / 2);
+        this.max = position.add(width / 2, height / 2);
+    }
+
     @Override
     public double getArea() {
         return getHeight() * getWidth();
