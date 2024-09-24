@@ -31,6 +31,22 @@ public class ShapesPanel extends JPanel {
     public void paint(@NonNull Graphics graphics) {
         super.paintComponent(graphics);
 
+        for (PanelShape shape : shapes.values()) {
+            for (PanelShape anotherShape : shapes.values()) {
+                if (shape.getId() == anotherShape.getId())
+                    continue;
+
+                if (shape.getShape().intersects(anotherShape.getShape())) {
+                    shape.getIntersecting().add(anotherShape.getId());
+                    anotherShape.getIntersecting().add(shape.getId());
+                    continue;
+                }
+
+                shape.getIntersecting().remove(anotherShape.getId());
+                anotherShape.getIntersecting().remove(shape.getId());
+            }
+        }
+
         shapes.values().forEach(panelShape -> ((ShapeRenderer<Shape>) panelShape.getRenderer()).render(graphics, panelShape.getShape()));
         if (selectedShape != null)
             ((ShapeRenderer<Shape>) selectedShape.getRenderer()).render(graphics, selectedShape.getShape());

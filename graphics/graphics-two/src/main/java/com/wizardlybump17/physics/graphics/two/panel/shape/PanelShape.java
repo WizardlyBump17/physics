@@ -5,6 +5,9 @@ import com.wizardlybump17.physics.two.shape.Shape;
 import lombok.Data;
 import lombok.NonNull;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 public class PanelShape {
 
@@ -14,4 +17,5 @@ public class PanelShape {
     private @NonNull Shape shape;
     private @NonNull ShapeRenderer<?> renderer;
     private boolean selected;
+    private @NonNull Set<Integer> intersecting = new HashSet<>();
 }

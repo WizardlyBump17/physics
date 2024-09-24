@@ -18,15 +18,12 @@ public class RectangleRenderer implements ShapeRenderer<Rectangle> {
     private @NonNull Color color;
     private @NonNull Color highlightColor;
     private @NonNull PanelShape panelShape;
-
-    public RectangleRenderer(@NonNull Color color, @NonNull Color highlightColor) {
-        this.color = color;
-        this.highlightColor = highlightColor;
-    }
+    private @NonNull Color intersectingColor;
 
     public RectangleRenderer() {
         color = Color.RED;
         highlightColor = Color.BLACK;
+        intersectingColor = Color.ORANGE;
     }
 
     @Override
@@ -43,7 +40,7 @@ public class RectangleRenderer implements ShapeRenderer<Rectangle> {
             graphics.fillRect(x - HIGHLIGHT_SIZE, y - HIGHLIGHT_SIZE, width + HIGHLIGHT_SIZE * 2, height + HIGHLIGHT_SIZE * 2);
         }
 
-        graphics.setColor(color);
+        graphics.setColor(panelShape.getIntersecting().isEmpty() ? color : intersectingColor);
         graphics.fillRect(x, y, width, height);
     }
 }
