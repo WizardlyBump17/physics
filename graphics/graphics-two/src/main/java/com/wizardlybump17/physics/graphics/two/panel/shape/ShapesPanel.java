@@ -3,6 +3,7 @@ package com.wizardlybump17.physics.graphics.two.panel.shape;
 import com.wizardlybump17.physics.graphics.two.listener.panel.shape.ShapePanelMouseListener;
 import com.wizardlybump17.physics.graphics.two.listener.panel.shape.ShapePanelMouseMotionListener;
 import com.wizardlybump17.physics.graphics.two.renderer.shape.ShapeRenderer;
+import com.wizardlybump17.physics.two.intersection.Intersection;
 import com.wizardlybump17.physics.two.shape.Shape;
 import lombok.Getter;
 import lombok.NonNull;
@@ -31,14 +32,23 @@ public class ShapesPanel extends JPanel {
     public void paint(@NonNull Graphics graphics) {
         super.paintComponent(graphics);
 
+        intersections();
+
+        shapes.values().forEach(panelShape -> ((ShapeRenderer<Shape>) panelShape.getRenderer()).render(graphics, panelShape.getShape()));
+        if (selectedShape != null)
+            ((ShapeRenderer<Shape>) selectedShape.getRenderer()).render(graphics, selectedShape.getShape());
+    }
+
+    public void intersections() {
         for (PanelShape shape : shapes.values()) {
             for (PanelShape anotherShape : shapes.values()) {
                 if (shape.getId() == anotherShape.getId())
                     continue;
 
-                if (shape.getShape().intersects(anotherShape.getShape())) {
-                    shape.getIntersecting().add(anotherShape.getId());
-                    anotherShape.getIntersecting().add(shape.getId());
+                Intersection intersection = shape.getShape().intersect(anotherShape.getShape());
+                if (intersection.intersects()) {
+                    shape.getIntersecting().put(anotherShape.getId(), intersection);
+                    anotherShape.getIntersecting().put(shape.getId(), intersection);
                     continue;
                 }
 
@@ -46,10 +56,6 @@ public class ShapesPanel extends JPanel {
                 anotherShape.getIntersecting().remove(shape.getId());
             }
         }
-
-        shapes.values().forEach(panelShape -> ((ShapeRenderer<Shape>) panelShape.getRenderer()).render(graphics, panelShape.getShape()));
-        if (selectedShape != null)
-            ((ShapeRenderer<Shape>) selectedShape.getRenderer()).render(graphics, selectedShape.getShape());
     }
 
     public <S extends Shape, R extends ShapeRenderer<? extends S>> void addShape(@NonNull S shape, @NonNull R renderer) {

@@ -1,10 +1,16 @@
 package com.wizardlybump17.physics.two.shape;
 
+import com.wizardlybump17.physics.two.intersection.Intersection;
+import com.wizardlybump17.physics.two.intersection.rectangle.RectangleToRectangleIntersection;
 import com.wizardlybump17.physics.two.position.Vector2D;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 
 @Getter
+@EqualsAndHashCode
+@ToString
 public class Rectangle extends Shape {
 
     private final @NonNull Vector2D min;
@@ -64,5 +70,33 @@ public class Rectangle extends Shape {
         double width = getWidth() / 2;
         double height = getHeight() / 2;
         return new Rectangle(position.subtract(width, height), position.add(width, height));
+    }
+
+    @Override
+    public @NonNull Intersection intersect(@NonNull Shape other) {
+        return switch (other) {
+            case Rectangle rectangle -> {
+                Vector2D otherMin = rectangle.getMin();
+                Vector2D otherMax = rectangle.getMax();
+
+                double minX = Math.min(max.x(), otherMax.x());
+                double minY = Math.min(max.y(), otherMax.y());
+                double maxX = Math.max(min.x(), otherMin.x());
+                double maxY = Math.max(min.y(), otherMin.y());
+
+                if (minY < maxY || minX < maxX)
+                    yield Intersection.EMPTY;
+
+                yield new RectangleToRectangleIntersection(
+                        this,
+                        rectangle,
+                        new Rectangle(
+                                new Vector2D(maxX, maxY),
+                                new Vector2D(minX, minY)
+                        )
+                );
+            }
+            default -> Intersection.EMPTY;
+        };
     }
 }
