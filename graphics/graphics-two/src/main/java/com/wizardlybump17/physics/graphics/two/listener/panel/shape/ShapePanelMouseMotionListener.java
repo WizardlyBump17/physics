@@ -2,6 +2,7 @@ package com.wizardlybump17.physics.graphics.two.listener.panel.shape;
 
 import com.wizardlybump17.physics.graphics.two.panel.shape.PanelShape;
 import com.wizardlybump17.physics.graphics.two.panel.shape.ShapesPanel;
+import com.wizardlybump17.physics.two.intersection.Intersection;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Shape;
 import lombok.Getter;
@@ -27,8 +28,9 @@ public class ShapePanelMouseMotionListener extends MouseAdapter {
         Vector2D point = new Vector2D(event.getX(), event.getY());
         Shape shape = panelShape.getShape();
 
-        if (!canIntersect && panel.getIntersection(shape.at(point), panelShape.getId()).intersects())
-            return;
+        Intersection intersection = panel.getIntersection(shape.at(point), panelShape.getId());
+        if (!canIntersect && intersection.intersects())
+            point = intersection.getSafePosition();
 
         panelShape.setShape(shape.at(point));
 
