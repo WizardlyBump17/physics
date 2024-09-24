@@ -84,7 +84,7 @@ public class Rectangle extends Shape {
                 double maxX = Math.max(min.x(), otherMin.x());
                 double maxY = Math.max(min.y(), otherMin.y());
 
-                if (minY < maxY || minX < maxX)
+                if ( minX <= maxX || minY <= maxY)
                     yield Intersection.EMPTY;
 
                 yield new RectangleToRectangleIntersection(
