@@ -1,5 +1,6 @@
 package com.wizardlybump17.physics.two.position;
 
+import com.wizardlybump17.physics.two.iterator.Vector2DIterator;
 import com.wizardlybump17.physics.two.util.MathUtil;
 import lombok.NonNull;
 
@@ -105,6 +106,10 @@ public record Vector2D(double x, double y) {
 
     public @NonNull Vector2D y(double y) {
         return new Vector2D(this.x, y);
+    }
+
+    public @NonNull Vector2DIterator iterateTowards(@NonNull Vector2D other, double divisor) {
+        return new Vector2DIterator(this, other, divisor);
     }
 
     public static @NonNull Vector2D randomVector(@NonNull Random random, double minX, double minY, double maxX, double maxY) {
