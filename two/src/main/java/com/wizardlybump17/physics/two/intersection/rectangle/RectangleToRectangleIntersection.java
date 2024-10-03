@@ -20,6 +20,40 @@ public class RectangleToRectangleIntersection implements Intersection {
 
     @Override
     public @NonNull Vector2D getSafePosition() {
-        return second.getPosition();
+        Vector2D firstPosition = first.getPosition();
+        Vector2D secondPosition = second.getPosition();
+        Vector2D firstMin = first.getMin();
+        Vector2D firstMax = first.getMax();
+
+        double secondWidth = second.getWidth() / 2;
+        double secondHeight = second.getHeight() / 2;
+
+        double x;
+        double y;
+        double xRatio;
+        double yRatio;
+
+        double firstX = firstPosition.x();
+        double firstY = firstPosition.y();
+        double secondX = secondPosition.x();
+        double secondY = secondPosition.y();
+
+        if (secondX > firstX) { // right
+            x = firstMax.x() + secondWidth;
+            xRatio = secondX / firstX;
+        } else { // left
+            x = firstMin.x() - secondWidth;
+            xRatio = firstX / secondX;
+        }
+
+        if (secondY > firstY) { // up
+            y = firstMax.y() + secondHeight;
+            yRatio = secondY / firstY;
+        } else { // down
+            y = firstMin.y() - secondHeight;
+            yRatio = firstY / secondY;
+        }
+
+        return new Vector2D(xRatio >= yRatio ? x : secondX, yRatio > xRatio ? y : secondY);
     }
 }
