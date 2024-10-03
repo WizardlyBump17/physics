@@ -48,7 +48,7 @@ public class Rectangle extends Shape {
                 yield min.x() < otherMax.x() && max.x() > otherMin.x()
                         && min.y() < otherMax.y() && max.y() > otherMin.y();
             }
-            default -> throw new IllegalStateException("Unexpected value: " + other);
+            default -> false;
         };
     }
 
