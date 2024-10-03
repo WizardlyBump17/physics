@@ -99,6 +99,14 @@ public record Vector2D(double x, double y) {
         return new Vector2D(x / divisor, y / divisor);
     }
 
+    public @NonNull Vector2D x(double x) {
+        return new Vector2D(x, this.y);
+    }
+
+    public @NonNull Vector2D y(double y) {
+        return new Vector2D(this.x, y);
+    }
+
     public static @NonNull Vector2D randomVector(@NonNull Random random, double minX, double minY, double maxX, double maxY) {
         return new Vector2D(
                 random.nextDouble(minX, maxX),
