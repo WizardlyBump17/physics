@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.ToString;
 
 @Getter
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
 public class Rectangle extends Shape {
 
@@ -84,15 +84,15 @@ public class Rectangle extends Shape {
                 double maxX = Math.max(min.x(), otherMin.x());
                 double maxY = Math.max(min.y(), otherMin.y());
 
-                if ( minX <= maxX || minY <= maxY)
+                if (minX <= maxX || minY <= maxY)
                     yield Intersection.EMPTY;
 
                 yield new RectangleToRectangleIntersection(
                         this,
                         rectangle,
                         new Rectangle(
-                                new Vector2D(maxX, maxY),
-                                new Vector2D(minX, minY)
+                                new Vector2D(minX, minY),
+                                new Vector2D(maxX, maxY)
                         )
                 );
             }
