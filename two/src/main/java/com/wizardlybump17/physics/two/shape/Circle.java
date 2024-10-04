@@ -2,6 +2,7 @@ package com.wizardlybump17.physics.two.shape;
 
 import com.wizardlybump17.physics.two.intersection.Intersection;
 import com.wizardlybump17.physics.two.intersection.rectangle.CircleToCircleIntersection;
+import com.wizardlybump17.physics.two.intersection.rectangle.CircleToRectangleIntersection;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.util.MathUtil;
 import lombok.*;
@@ -29,6 +30,23 @@ public class Circle extends Shape {
     public boolean intersects(@NonNull Shape other) {
         return switch (other) {
             case Circle otherCircle -> position.distanceSquared(otherCircle.position) < MathUtil.square(radius + otherCircle.radius);
+            case Rectangle rectangle -> {
+                Vector2D rectanglePosition = rectangle.getPosition();
+
+                double xDistance = Math.abs(position.x() - rectanglePosition.x());
+                double yDistance = Math.abs(position.y() - rectanglePosition.y());
+
+                double width = rectangle.getWidth() / 2;
+                double height = rectangle.getHeight() / 2;
+
+                if (xDistance > width + radius || yDistance > height + radius)
+                    yield false;
+
+                if (xDistance <= width || yDistance <= height)
+                    yield true;
+
+                yield MathUtil.square(xDistance - width) + MathUtil.square(yDistance - height) <= MathUtil.square(radius);
+            }
             default -> false;
         };
     }
@@ -46,11 +64,8 @@ public class Circle extends Shape {
     @Override
     public @NonNull Intersection intersect(@NonNull Shape other) {
         return switch (other) {
-            case Circle otherCircle -> {
-                if (intersects(otherCircle))
-                    yield new CircleToCircleIntersection(this, otherCircle);
-                yield Intersection.EMPTY;
-            }
+            case Circle otherCircle -> intersects(otherCircle) ? new CircleToCircleIntersection(this, otherCircle) : Intersection.EMPTY;
+            case Rectangle rectangle -> intersects(rectangle) ? new CircleToRectangleIntersection(this, rectangle) : Intersection.EMPTY;
             default -> Intersection.EMPTY;
         };
     }

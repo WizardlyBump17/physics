@@ -1,8 +1,10 @@
 package com.wizardlybump17.physics.two.shape;
 
 import com.wizardlybump17.physics.two.intersection.Intersection;
+import com.wizardlybump17.physics.two.intersection.rectangle.CircleToRectangleIntersection;
 import com.wizardlybump17.physics.two.intersection.rectangle.RectangleToRectangleIntersection;
 import com.wizardlybump17.physics.two.position.Vector2D;
+import com.wizardlybump17.physics.two.util.MathUtil;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
@@ -48,6 +50,25 @@ public class Rectangle extends Shape {
                 yield min.x() < otherMax.x() && max.x() > otherMin.x()
                         && min.y() < otherMax.y() && max.y() > otherMin.y();
             }
+            case Circle circle -> {
+                Vector2D circlePosition = circle.getPosition();
+
+                double xDistance = Math.abs(position.x() - circlePosition.x());
+                double yDistance = Math.abs(position.y() - circlePosition.y());
+
+                double radius = circle.getRadius();
+
+                double width = getWidth() / 2;
+                double height = getHeight() / 2;
+
+                if (xDistance > width + radius || yDistance > height + radius)
+                    yield false;
+
+                if (xDistance <= width || yDistance <= height)
+                    yield true;
+
+                yield MathUtil.square(xDistance - width) + MathUtil.square(yDistance - height) <= MathUtil.square(radius);
+            }
             default -> false;
         };
     }
@@ -75,23 +96,8 @@ public class Rectangle extends Shape {
     @Override
     public @NonNull Intersection intersect(@NonNull Shape other) {
         return switch (other) {
-            case Rectangle rectangle -> {
-                Vector2D otherMin = rectangle.getMin();
-                Vector2D otherMax = rectangle.getMax();
-
-                double minX = Math.min(max.x(), otherMax.x());
-                double minY = Math.min(max.y(), otherMax.y());
-                double maxX = Math.max(min.x(), otherMin.x());
-                double maxY = Math.max(min.y(), otherMin.y());
-
-                if (minX <= maxX || minY <= maxY)
-                    yield Intersection.EMPTY;
-
-                yield new RectangleToRectangleIntersection(
-                        this,
-                        rectangle
-                );
-            }
+            case Rectangle rectangle -> intersects(rectangle) ? new RectangleToRectangleIntersection(this, rectangle) : Intersection.EMPTY;
+            case Circle circle -> intersects(circle) ? new CircleToRectangleIntersection(circle, this) : Intersection.EMPTY;
             default -> Intersection.EMPTY;
         };
     }
