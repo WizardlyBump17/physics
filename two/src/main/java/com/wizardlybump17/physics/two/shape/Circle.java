@@ -1,6 +1,7 @@
 package com.wizardlybump17.physics.two.shape;
 
 import com.wizardlybump17.physics.two.intersection.Intersection;
+import com.wizardlybump17.physics.two.intersection.rectangle.CircleToCircleIntersection;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.util.MathUtil;
 import lombok.*;
@@ -44,6 +45,13 @@ public class Circle extends Shape {
 
     @Override
     public @NonNull Intersection intersect(@NonNull Shape other) {
-        return Intersection.EMPTY;
+        return switch (other) {
+            case Circle otherCircle -> {
+                if (intersects(otherCircle))
+                    yield new CircleToCircleIntersection(this, otherCircle);
+                yield Intersection.EMPTY;
+            }
+            default -> Intersection.EMPTY;
+        };
     }
 }

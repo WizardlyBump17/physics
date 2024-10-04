@@ -14,6 +14,8 @@ import java.awt.*;
 public class CircleRenderer implements ShapeRenderer<Circle> {
 
     public static final double HIGHLIGHT_SIZE = 6;
+    public static final @NonNull Color NOT_INTERSECTING = Color.BLUE;
+    public static final @NonNull Color INTERSECTING = new Color(0, 100, 150);
 
     private @NonNull PanelShape panelShape;
 
@@ -30,7 +32,7 @@ public class CircleRenderer implements ShapeRenderer<Circle> {
             graphics.fillOval((int) (x - HIGHLIGHT_SIZE / 2), (int) (y - HIGHLIGHT_SIZE / 2), (int) (diameter + HIGHLIGHT_SIZE), (int) (diameter + HIGHLIGHT_SIZE));
         }
 
-        graphics.setColor(Color.BLUE);
+        graphics.setColor(panelShape.getIntersecting().isEmpty() ? NOT_INTERSECTING : INTERSECTING);
         graphics.fillOval((int) x, (int) y, (int) diameter, (int) diameter);
     }
 }
