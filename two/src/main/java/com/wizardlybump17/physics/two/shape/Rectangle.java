@@ -89,11 +89,7 @@ public class Rectangle extends Shape {
 
                 yield new RectangleToRectangleIntersection(
                         this,
-                        rectangle,
-                        new Rectangle(
-                                new Vector2D(minX, minY),
-                                new Vector2D(maxX, maxY)
-                        )
+                        rectangle
                 );
             }
             default -> Intersection.EMPTY;

@@ -11,7 +11,7 @@ public class RectangleToRectangleIntersection implements Intersection {
 
     private final @NonNull Rectangle first;
     private final @NonNull Rectangle second;
-    private final @NonNull Rectangle intersection;
+    private Vector2D safePosition;
 
     @Override
     public boolean intersects() {
@@ -20,6 +20,9 @@ public class RectangleToRectangleIntersection implements Intersection {
 
     @Override
     public @NonNull Vector2D getSafePosition() {
+        if (safePosition != null)
+            return safePosition;
+
         Vector2D firstPosition = first.getPosition();
         Vector2D secondPosition = second.getPosition();
         Vector2D firstMin = first.getMin();
@@ -54,6 +57,6 @@ public class RectangleToRectangleIntersection implements Intersection {
             yRatio = firstY / secondY;
         }
 
-        return new Vector2D(xRatio >= yRatio ? x : secondX, yRatio > xRatio ? y : secondY);
+        return safePosition = new Vector2D(xRatio >= yRatio ? x : secondX, yRatio > xRatio ? y : secondY);
     }
 }
