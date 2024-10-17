@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NonNull;
 
 @Data
-public class CircleToRectangleIntersection implements Intersection {
+public class RectangleToCircleIntersection implements Intersection {
 
     private final @NonNull Circle circle;
     private final @NonNull Rectangle rectangle;
@@ -20,6 +20,6 @@ public class CircleToRectangleIntersection implements Intersection {
 
     @Override
     public @NonNull Vector2D getSafePosition() {
-        return rectangle.getPosition();
+        return circle.getPosition();
     }
 }
