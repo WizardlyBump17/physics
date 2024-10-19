@@ -33,7 +33,7 @@ public class CircleToCircleIntersection implements Intersection {
         Vector2D firstPosition = first.getPosition();
         Vector2D secondPosition = second.getPosition();
 
-        double angle = secondPosition.angleTo(firstPosition);
+        double angle = firstPosition.angleTo(secondPosition);
         double distance = firstPosition.distance(secondPosition);
         double toMove = first.getRadius() + second.getRadius() - distance;
 
