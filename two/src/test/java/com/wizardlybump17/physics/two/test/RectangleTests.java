@@ -5,6 +5,7 @@ import com.wizardlybump17.physics.two.intersection.rectangle.RectangleToRectangl
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Rectangle;
 import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -42,37 +43,44 @@ class RectangleTests {
     @Test
     void testIntersections() {
         Assertions.assertEquals(
-                new RectangleToRectangleIntersection(
+                intersection(
                         create(Vector2D.ZERO, new Vector2D(10, 10)),
-                        create(new Vector2D(5, 5), new Vector2D(15, 15)),
-                        create(new Vector2D(5, 5), new Vector2D(10, 10))
+                        create(new Vector2D(5, 5), new Vector2D(15, 15))
                 ),
-                create(Vector2D.ZERO, new Vector2D(10, 10)).intersect(create(new Vector2D(5, 5), new Vector2D(15, 15)))
+                calculateSafePosition(create(Vector2D.ZERO, new Vector2D(10, 10)).intersect(create(new Vector2D(5, 5), new Vector2D(15, 15))))
         );
         Assertions.assertEquals(
-                new RectangleToRectangleIntersection(
+                intersection(
                         create(Vector2D.ZERO, new Vector2D(10, 10)),
-                        create(new Vector2D(5, 5), new Vector2D(7, 7)),
                         create(new Vector2D(5, 5), new Vector2D(7, 7))
                 ),
-                create(Vector2D.ZERO, new Vector2D(10, 10)).intersect(create(new Vector2D(5, 5), new Vector2D(7, 7)))
+                calculateSafePosition(create(Vector2D.ZERO, new Vector2D(10, 10)).intersect(create(new Vector2D(5, 5), new Vector2D(7, 7))))
         );
         Assertions.assertEquals(
-                new RectangleToRectangleIntersection(
+                intersection(
                         create(new Vector2D(-10, 10), Vector2D.ZERO),
-                        create(new Vector2D(5, 5), new Vector2D(-15, 15)),
-                        create(new Vector2D(0, 5), new Vector2D(-10, 10))
+                        create(new Vector2D(5, 5), new Vector2D(-15, 15))
                 ),
-                create(Vector2D.ZERO, new Vector2D(-10, 10)).intersect(create(new Vector2D(5, 5), new Vector2D(-15, 15)))
+                calculateSafePosition(create(Vector2D.ZERO, new Vector2D(-10, 10)).intersect(create(new Vector2D(5, 5), new Vector2D(-15, 15))))
         );
         Assertions.assertEquals(
-                new RectangleToRectangleIntersection(
+                intersection(
                         create(new Vector2D(-10, 7), new Vector2D(0, 10)),
-                        create(new Vector2D(5, 5), new Vector2D(-15, 15)),
-                        create(new Vector2D(-10, 7), new Vector2D(0, 10))
+                        create(new Vector2D(5, 5), new Vector2D(-15, 15))
                 ),
-                create(new Vector2D(-10, 7), new Vector2D(0, 10)).intersect(create(new Vector2D(5, 5), new Vector2D(-15, 15)))
+                calculateSafePosition(create(new Vector2D(-10, 7), new Vector2D(0, 10)).intersect(create(new Vector2D(5, 5), new Vector2D(-15, 15))))
         );
+    }
+
+    static @NotNull RectangleToRectangleIntersection intersection(@NotNull Rectangle staticShape, @NotNull Rectangle movingShape) {
+        RectangleToRectangleIntersection intersection = new RectangleToRectangleIntersection(staticShape, movingShape);
+        intersection.getSafePosition();
+        return intersection;
+    }
+
+    static @NotNull Intersection calculateSafePosition(@NotNull Intersection intersection) {
+        intersection.getSafePosition();
+        return intersection;
     }
 
     @Test

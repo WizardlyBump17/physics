@@ -11,7 +11,7 @@ import lombok.NonNull;
 import lombok.ToString;
 
 @Getter
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @ToString
 public class Rectangle extends Shape {
 
