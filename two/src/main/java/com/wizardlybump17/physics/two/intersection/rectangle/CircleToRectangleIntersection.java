@@ -14,8 +14,8 @@ import org.jetbrains.annotations.NotNull;
 @Data
 public class CircleToRectangleIntersection implements Intersection {
 
-    private final @NonNull Circle circle;
-    private final @NonNull Rectangle rectangle;
+    private final @NonNull Circle movingShape;
+    private final @NonNull Rectangle staticShape;
     @Setter(AccessLevel.NONE)
     private Vector2D safePosition;
 
@@ -34,10 +34,10 @@ public class CircleToRectangleIntersection implements Intersection {
     }
 
     protected @NotNull Vector2D calculateSafePosition() {
-        Vector2D circlePosition = circle.getPosition();
-        Vector2D rectanglePosition = rectangle.getPosition();
-        Vector2D rectangleMin = rectangle.getMin();
-        Vector2D rectangleMax = rectangle.getMax();
+        Vector2D circlePosition = movingShape.getPosition();
+        Vector2D rectanglePosition = staticShape.getPosition();
+        Vector2D rectangleMin = staticShape.getMin();
+        Vector2D rectangleMax = staticShape.getMax();
 
         double circleX = circlePosition.x();
         double circleY = circlePosition.y();
@@ -48,7 +48,7 @@ public class CircleToRectangleIntersection implements Intersection {
         double closestX;
         double closestY;
 
-        if (rectangle.hasPoint(circlePosition)) { //this check is necessary because the circle may get inside the rectangle
+        if (staticShape.hasPoint(circlePosition)) { //this check is necessary because the circle may get inside the rectangle
             double xRatio;
             double yRatio;
 
@@ -56,18 +56,18 @@ public class CircleToRectangleIntersection implements Intersection {
             double realClosestY;
 
             if (circleX >= rectanglePosition.x()) { //right
-                realClosestX = rectangleMax.x() + circle.getRadius() * 2 + MathUtil.EPSILON;
+                realClosestX = rectangleMax.x() + movingShape.getRadius() * 2 + MathUtil.EPSILON;
                 xRatio = circleX / rectanglePosition.x();
             } else { //left
-                realClosestX = rectangleMin.x() - circle.getRadius() * 2 - MathUtil.EPSILON;
+                realClosestX = rectangleMin.x() - movingShape.getRadius() * 2 - MathUtil.EPSILON;
                 xRatio = rectanglePosition.x() / circleX;
             }
 
             if (circleY >= rectanglePosition.y()) { //up
-                realClosestY = rectangleMax.y() + circle.getRadius() * 2 + MathUtil.EPSILON;
+                realClosestY = rectangleMax.y() + movingShape.getRadius() * 2 + MathUtil.EPSILON;
                 yRatio = circleY / rectanglePosition.y();
             } else { //down
-                realClosestY = rectangleMin.y() - circle.getRadius() * 2 - MathUtil.EPSILON;
+                realClosestY = rectangleMin.y() - movingShape.getRadius() * 2 - MathUtil.EPSILON;
                 yRatio = rectanglePosition.y() / circleY;
             }
 
@@ -100,28 +100,6 @@ public class CircleToRectangleIntersection implements Intersection {
         double normalizedX = subtractedX / length;
         double normalizedY = subtractedY / length;
 
-        return new Vector2D(closestX + normalizedX * circle.getRadius(), closestY + normalizedY * circle.getRadius());
-    }
-
-    /**
-     * <p>
-     *     Returns the {@link Circle} related to the intersection.
-     *     The {@link Circle} is the object that is being dragged, for example.
-     * </p>
-     * @return the {@link Circle} related to the intersection
-     */
-    public @NotNull Circle getCircle() {
-        return circle;
-    }
-
-    /**
-     * <p>
-     *     Returns the {@link Rectangle} related to the intersection.
-     *     The {@link Rectangle} is the static object when you are dragging a {@link Circle}, for example.
-     * </p>
-     * @return the {@link Rectangle} related to the intersection
-     */
-    public @NotNull Rectangle getRectangle() {
-        return rectangle;
+        return new Vector2D(closestX + normalizedX * movingShape.getRadius(), closestY + normalizedY * movingShape.getRadius());
     }
 }

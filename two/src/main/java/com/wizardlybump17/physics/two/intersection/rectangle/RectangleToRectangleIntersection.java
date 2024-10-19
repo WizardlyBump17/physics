@@ -9,8 +9,8 @@ import lombok.NonNull;
 @Data
 public class RectangleToRectangleIntersection implements Intersection {
 
-    private final @NonNull Rectangle first;
-    private final @NonNull Rectangle second;
+    private final @NonNull Rectangle staticShape;
+    private final @NonNull Rectangle movingShape;
     private Vector2D safePosition;
 
     @Override
@@ -23,13 +23,13 @@ public class RectangleToRectangleIntersection implements Intersection {
         if (safePosition != null)
             return safePosition;
 
-        Vector2D firstPosition = first.getPosition();
-        Vector2D secondPosition = second.getPosition();
-        Vector2D firstMin = first.getMin();
-        Vector2D firstMax = first.getMax();
+        Vector2D firstPosition = staticShape.getPosition();
+        Vector2D secondPosition = movingShape.getPosition();
+        Vector2D firstMin = staticShape.getMin();
+        Vector2D firstMax = staticShape.getMax();
 
-        double secondWidth = second.getWidth() / 2;
-        double secondHeight = second.getHeight() / 2;
+        double secondWidth = movingShape.getWidth() / 2;
+        double secondHeight = movingShape.getHeight() / 2;
 
         double x;
         double y;

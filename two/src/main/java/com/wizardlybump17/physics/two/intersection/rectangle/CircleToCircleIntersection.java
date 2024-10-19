@@ -6,7 +6,6 @@ import com.wizardlybump17.physics.two.shape.Circle;
 import com.wizardlybump17.physics.two.util.MathUtil;
 import lombok.Data;
 import lombok.NonNull;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * <p>
@@ -16,8 +15,8 @@ import org.jetbrains.annotations.NotNull;
 @Data
 public class CircleToCircleIntersection implements Intersection {
 
-    private final @NonNull Circle first;
-    private final @NonNull Circle second;
+    private final @NonNull Circle staticShape;
+    private final @NonNull Circle movingShape;
     private Vector2D safePosition;
 
     @Override
@@ -30,39 +29,15 @@ public class CircleToCircleIntersection implements Intersection {
         if (safePosition != null)
             return safePosition;
 
-        Vector2D firstPosition = first.getPosition();
-        Vector2D secondPosition = second.getPosition();
+        Vector2D firstPosition = staticShape.getPosition();
+        Vector2D secondPosition = movingShape.getPosition();
 
         double angle = firstPosition.angleTo(secondPosition);
         double distance = firstPosition.distance(secondPosition);
-        double toMove = first.getRadius() + second.getRadius() - distance;
+        double toMove = staticShape.getRadius() + movingShape.getRadius() - distance;
 
         Vector2D safePosition = secondPosition.add(Math.cos(angle) * (toMove + MathUtil.EPSILON), Math.sin(angle) * (toMove + MathUtil.EPSILON));
         this.safePosition = safePosition;
         return safePosition;
-    }
-
-    /**
-     * <p>
-     * Returns the first {@link Circle} of the intersection.
-     * This is the static circle when you are dragging another one, for example.
-     * </p>
-     *
-     * @return the first {@link Circle} of the intersection
-     */
-    public @NotNull Circle getFirst() {
-        return first;
-    }
-
-    /**
-     * <p>
-     * Returns the second {@link Circle} of the intersection.
-     * This is the circle that is being dragged, for example.
-     * </p>
-     *
-     * @return the second {@link Circle} of the intersection
-     */
-    public @NotNull Circle getSecond() {
-        return second;
     }
 }

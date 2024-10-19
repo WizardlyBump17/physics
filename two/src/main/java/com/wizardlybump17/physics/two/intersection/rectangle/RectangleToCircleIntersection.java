@@ -10,8 +10,8 @@ import lombok.NonNull;
 @Data
 public class RectangleToCircleIntersection implements Intersection {
 
-    private final @NonNull Circle circle;
-    private final @NonNull Rectangle rectangle;
+    private final @NonNull Circle staticShape;
+    private final @NonNull Rectangle movingShape;
 
     @Override
     public boolean intersects() {
@@ -20,6 +20,6 @@ public class RectangleToCircleIntersection implements Intersection {
 
     @Override
     public @NonNull Vector2D getSafePosition() {
-        return rectangle.getPosition();
+        return movingShape.getPosition();
     }
 }
