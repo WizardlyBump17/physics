@@ -1,4 +1,4 @@
-package com.wizardlybump17.physics.two.intersection.rectangle;
+package com.wizardlybump17.physics.two.intersection.circle;
 
 import com.wizardlybump17.physics.two.intersection.Intersection;
 import com.wizardlybump17.physics.two.position.Vector2D;

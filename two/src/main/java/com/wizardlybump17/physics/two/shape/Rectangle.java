@@ -1,7 +1,7 @@
 package com.wizardlybump17.physics.two.shape;
 
 import com.wizardlybump17.physics.two.intersection.Intersection;
-import com.wizardlybump17.physics.two.intersection.rectangle.CircleToRectangleIntersection;
+import com.wizardlybump17.physics.two.intersection.circle.CircleToRectangleIntersection;
 import com.wizardlybump17.physics.two.intersection.rectangle.RectangleToRectangleIntersection;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.util.MathUtil;
