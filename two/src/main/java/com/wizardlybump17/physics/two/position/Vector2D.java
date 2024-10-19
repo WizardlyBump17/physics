@@ -129,4 +129,8 @@ public record Vector2D(double x, double y) {
     public static double distanceSquared(double x, double y, double otherX, double otherY) {
         return MathUtil.square(x - otherX) + MathUtil.square(y - otherY);
     }
+
+    public double angleTo(@NonNull Vector2D other) {
+        return Math.atan2(other.x() - x, other.y() - y);
+    }
 }
