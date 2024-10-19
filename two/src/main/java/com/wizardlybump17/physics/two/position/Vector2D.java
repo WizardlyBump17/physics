@@ -125,4 +125,8 @@ public record Vector2D(double x, double y) {
                 random.nextDouble(Math.max(min.y, max.y), Math.max(min.y, max.y))
         );
     }
+
+    public static double distanceSquared(double x, double y, double otherX, double otherY) {
+        return MathUtil.square(x - otherX) + MathUtil.square(y - otherY);
+    }
 }
