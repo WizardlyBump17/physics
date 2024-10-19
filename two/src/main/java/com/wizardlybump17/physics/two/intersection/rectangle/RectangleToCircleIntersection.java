@@ -10,6 +10,8 @@ import lombok.NonNull;
 @Data
 public class RectangleToCircleIntersection implements Intersection {
 
+    public static final double EPSILON = 0.000000001;
+
     private final @NonNull Circle circle;
     private final @NonNull Rectangle rectangle;
 
@@ -25,29 +27,59 @@ public class RectangleToCircleIntersection implements Intersection {
         Vector2D rectangleMin = rectangle.getMin();
         Vector2D rectangleMax = rectangle.getMax();
 
-        double clampedX = Math.clamp(circlePosition.x(), rectangleMin.x(), rectangleMax.x());
-        double clampedY = Math.clamp(circlePosition.y(), rectangleMin.y(), rectangleMax.y());
-        double realClosestX;
-        double realClosestY;
-        double xRatio = 0;
-        double yRatio;
+        double circleX = circlePosition.x();
+        double circleY = circlePosition.y();
+
+        double clampedX = Math.clamp(circleX, rectangleMin.x(), rectangleMax.x());
+        double clampedY = Math.clamp(circleY, rectangleMin.y(), rectangleMax.y());
+
+        double closestX;
+        double closestY;
 
         if (rectangle.hasPoint(circlePosition)) {
-            xRatio = circlePosition.x() / rectanglePosition.x();
-            yRatio = circlePosition.y() / rectanglePosition.y();
+            double xRatio;
+            double yRatio;
 
-            realClosestX = xRatio >= yRatio ? (circlePosition.x() > rectanglePosition.x() ? rectangleMax.x() : rectangleMin.x()) : clampedX;
-            realClosestY = yRatio > xRatio ? (circlePosition.y() > rectanglePosition.y() ? rectangleMax.y() : rectangleMin.y()) : clampedY;
+            double realClosestX;
+            double realClosestY;
+
+            if (circleX >= rectanglePosition.x()) {
+                realClosestX = rectangleMax.x() + circle.getRadius() * 2 + EPSILON;
+                xRatio = circleX / rectanglePosition.x();
+            } else {
+                realClosestX = rectangleMin.x() - circle.getRadius() * 2 - EPSILON;
+                xRatio = rectanglePosition.x() / circleX;
+            }
+
+            if (circleY >= rectanglePosition.y()) {
+                realClosestY = rectangleMax.y() + circle.getRadius() * 2 + EPSILON;
+                yRatio = circleY / rectanglePosition.y();
+            } else {
+                realClosestY = rectangleMin.y() - circle.getRadius() * 2 - EPSILON;
+                yRatio = rectanglePosition.y() / circleY;
+            }
+
+            if (xRatio >= yRatio)
+                closestX = realClosestX;
+            else
+                closestX = clampedX;
+
+            if (yRatio > xRatio)
+                closestY = realClosestY;
+            else
+                closestY = clampedY;
         } else {
-            realClosestX = Math.clamp(circlePosition.x(), rectangleMin.x(), rectangleMax.x());
-            realClosestY = Math.clamp(circlePosition.y(), rectangleMin.y(), rectangleMax.y());
+            if (circleX >= rectanglePosition.x())
+                closestX = clampedX + EPSILON;
+            else
+                closestX = clampedX - EPSILON;
+            if (circleY >= rectanglePosition.y())
+                closestY = clampedY + EPSILON;
+            else
+                closestY = clampedY - EPSILON;
         }
 
-        Vector2D closestPoint = new Vector2D(realClosestX, realClosestY);
-        Vector2D subtract = circlePosition.subtract(closestPoint);
-        Vector2D direction = subtract.normalize();
-
-        double multiplier = circle.getRadius() + 0.00000000001;
-        return closestPoint.add(direction.multiply(xRatio != 0 ? -multiplier : multiplier));
+        Vector2D closest = new Vector2D(closestX, closestY);
+        return closest.add(circlePosition.subtract(closest).normalize().multiply(circle.getRadius()));
     }
 }
