@@ -1,7 +1,7 @@
 package com.wizardlybump17.physics.two.shape;
 
 import com.wizardlybump17.physics.two.intersection.Intersection;
-import com.wizardlybump17.physics.two.intersection.rectangle.RectangleToCircleIntersection;
+import com.wizardlybump17.physics.two.intersection.rectangle.CircleToRectangleIntersection;
 import com.wizardlybump17.physics.two.intersection.rectangle.RectangleToRectangleIntersection;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.util.MathUtil;
@@ -102,7 +102,7 @@ public class Rectangle extends Shape {
     public @NonNull Intersection intersect(@NonNull Shape other) {
         return switch (other) {
             case Rectangle rectangle -> intersects(rectangle) ? new RectangleToRectangleIntersection(this, rectangle) : Intersection.EMPTY;
-            case Circle circle -> intersects(circle) ? new RectangleToCircleIntersection(circle, this) : Intersection.EMPTY;
+            case Circle circle -> intersects(circle) ? new CircleToRectangleIntersection(circle, this) : Intersection.EMPTY;
             default -> Intersection.EMPTY;
         };
     }
