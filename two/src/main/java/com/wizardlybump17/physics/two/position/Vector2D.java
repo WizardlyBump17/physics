@@ -131,6 +131,6 @@ public record Vector2D(double x, double y) {
     }
 
     public double angleTo(@NonNull Vector2D other) {
-        return Math.atan2(other.x() - x, other.y() - y);
+        return Math.atan2(other.y() - y, other.x() - x);
     }
 }
