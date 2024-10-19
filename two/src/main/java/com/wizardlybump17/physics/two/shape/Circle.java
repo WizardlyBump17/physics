@@ -57,6 +57,11 @@ public class Circle extends Shape {
     }
 
     @Override
+    public boolean hasPoint(double x, double y) {
+        return Vector2D.distanceSquared(x, y, position.x(), position.y()) < MathUtil.square(radius);
+    }
+
+    @Override
     public @NonNull Shape at(@NonNull Vector2D position) {
         return new Circle(position, radius);
     }

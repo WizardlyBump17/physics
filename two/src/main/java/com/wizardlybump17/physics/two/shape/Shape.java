@@ -16,6 +16,8 @@ public abstract class Shape {
 
     public abstract boolean hasPoint(@NonNull Vector2D point);
 
+    public abstract boolean hasPoint(double x, double y);
+
     public abstract @NonNull Shape at(@NonNull Vector2D position);
 
     public abstract @NonNull Intersection intersect(@NonNull Shape other);

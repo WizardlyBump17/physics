@@ -78,6 +78,11 @@ public class Rectangle extends Shape {
         return point.isInAABB(min, max);
     }
 
+    @Override
+    public boolean hasPoint(double x, double y) {
+        return Vector2D.isInAABB(x, y, min.x(), min.y(), max.x(), max.y());
+    }
+
     public double getHeight() {
         return max.y() - min.y();
     }
