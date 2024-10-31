@@ -18,7 +18,10 @@ public interface Intersection {
 
     @NotNull Shape getMovingShape();
 
-    class Empty implements Intersection {
+    final class Empty implements Intersection {
+
+        private Empty() {
+        }
 
         @Override
         public boolean intersects() {
