@@ -6,6 +6,7 @@ import com.wizardlybump17.physics.two.intersection.rectangle.RectangleToCircleIn
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.util.MathUtil;
 import lombok.*;
+import org.jetbrains.annotations.NotNull;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)
@@ -73,5 +74,10 @@ public class Circle extends Shape {
             case Rectangle rectangle -> intersects(rectangle) ? new RectangleToCircleIntersection(this, rectangle) : Intersection.EMPTY;
             default -> Intersection.EMPTY;
         };
+    }
+
+    @Override
+    public @NotNull Vector2D getClosestPoint(@NotNull Vector2D origin) {
+        return Vector2D.ZERO;
     }
 }

@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
+import org.jetbrains.annotations.NotNull;
 
 @Getter
 @EqualsAndHashCode(callSuper = false)
@@ -105,5 +106,10 @@ public class Rectangle extends Shape {
             case Circle circle -> intersects(circle) ? new CircleToRectangleIntersection(circle, this) : Intersection.EMPTY;
             default -> Intersection.EMPTY;
         };
+    }
+
+    @Override
+    public @NotNull Vector2D getClosestPoint(@NotNull Vector2D origin) {
+        return Vector2D.ZERO;
     }
 }

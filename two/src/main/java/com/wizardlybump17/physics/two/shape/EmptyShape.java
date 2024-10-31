@@ -51,4 +51,9 @@ public final class EmptyShape extends Shape {
     public @NonNull Intersection intersect(@NonNull Shape other) {
         return Intersection.EMPTY;
     }
+
+    @Override
+    public @NotNull Vector2D getClosestPoint(@NotNull Vector2D origin) {
+        return Vector2D.ZERO;
+    }
 }
