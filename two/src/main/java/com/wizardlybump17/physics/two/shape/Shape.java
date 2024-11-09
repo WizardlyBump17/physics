@@ -24,4 +24,6 @@ public abstract class Shape {
     public abstract @NonNull Intersection intersect(@NonNull Shape other);
 
     public abstract @NotNull Vector2D getClosestPoint(@NotNull Vector2D origin);
+
+    public abstract @NotNull Vector2D getClosestPoint(@NotNull Shape shape);
 }

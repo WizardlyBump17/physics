@@ -111,7 +111,6 @@ public class Rectangle extends Shape {
 
     @Override
     public @NotNull Vector2D getClosestPoint(@NotNull Vector2D origin) {
-        return Vector2D.ZERO;
         if (hasPoint(origin))
             return Vector2D.ZERO;
 
@@ -120,6 +119,18 @@ public class Rectangle extends Shape {
                 Math.clamp(origin.y(), min.y(), max.y())
         );
     }
+
+    @Override
+    public @NotNull Vector2D getClosestPoint(@NotNull Shape shape) {
+        return switch (shape) {
+            case Circle circle -> new Vector2D(
+                    Math.clamp(circle.getPosition().x(), min.x(), max.x()),
+                    Math.clamp(circle.getPosition().y(), min.y(), max.y())
+            );
+            default -> Vector2D.ZERO;
+        };
+    }
+
     public @NotNull Line getUpperLine() {
         return new Line(min.y(max.y()), max);
     }

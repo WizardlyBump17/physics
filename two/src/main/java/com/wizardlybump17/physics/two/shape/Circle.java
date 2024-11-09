@@ -78,9 +78,14 @@ public class Circle extends Shape {
 
     @Override
     public @NotNull Vector2D getClosestPoint(@NotNull Vector2D origin) {
-        return Vector2D.ZERO;
         double angle = position.angleTo(origin);
         return position.add(Math.cos(angle) * radius, Math.sin(angle) * radius);
     }
+
+    @Override
+    public @NotNull Vector2D getClosestPoint(@NotNull Shape shape) {
+        return switch (shape) {
+            default -> Vector2D.ZERO;
+        };
     }
 }

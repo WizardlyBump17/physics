@@ -56,4 +56,9 @@ public final class EmptyShape extends Shape {
     public @NotNull Vector2D getClosestPoint(@NotNull Vector2D origin) {
         return Vector2D.ZERO;
     }
+
+    @Override
+    public @NotNull Vector2D getClosestPoint(@NotNull Shape shape) {
+        return Vector2D.ZERO;
+    }
 }
