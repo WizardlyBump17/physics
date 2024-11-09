@@ -11,8 +11,14 @@ import lombok.NonNull;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
+
 @Data
 public class RectangleToCircleIntersection implements Intersection {
+
+    public static Map<Vector2D, Color> render = new HashMap<>();
 
     private final @NonNull Circle staticShape;
     private final @NonNull Rectangle movingShape;
@@ -36,24 +42,13 @@ public class RectangleToCircleIntersection implements Intersection {
     protected @NotNull Vector2D calculateSafePosition() {
         Vector2D staticPosition = staticShape.getPosition();
         Vector2D movingPosition = movingShape.getPosition();
-        double movingWidth = movingShape.getWidth();
-        double movingHeight = movingShape.getHeight();
 
         double radius = staticShape.getRadius();
         double angle = staticPosition.angleTo(movingPosition);
 
-        double xChange;
-        double yChange;
-
-        if (movingPosition.x() >= staticPosition.x())
-            xChange = movingWidth / 2 + MathUtil.EPSILON;
-        else
-            xChange = -movingWidth / 2 - MathUtil.EPSILON;
-        if (movingPosition.y() >= staticPosition.y())
-            yChange = movingHeight / 2 + MathUtil.EPSILON;
-        else
-            yChange = -movingHeight / 2 - MathUtil.EPSILON;
-
-        return staticPosition.add(Math.cos(angle) * radius + xChange, Math.sin(angle) * radius + yChange);
+        return staticPosition.add(
+                Math.cos(angle) * radius + MathUtil.EPSILON,
+                Math.sin(angle) * radius + MathUtil.EPSILON
+        );
     }
 }
