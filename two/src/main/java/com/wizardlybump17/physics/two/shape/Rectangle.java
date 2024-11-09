@@ -112,7 +112,14 @@ public class Rectangle extends Shape {
     @Override
     public @NotNull Vector2D getClosestPoint(@NotNull Vector2D origin) {
         return Vector2D.ZERO;
+        if (hasPoint(origin))
+            return Vector2D.ZERO;
 
+        return new Vector2D(
+                Math.clamp(origin.x(), min.x(), max.x()),
+                Math.clamp(origin.y(), min.y(), max.y())
+        );
+    }
     public @NotNull Line getUpperLine() {
         return new Line(min.y(max.y()), max);
     }
