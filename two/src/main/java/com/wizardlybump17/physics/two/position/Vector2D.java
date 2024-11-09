@@ -3,6 +3,7 @@ package com.wizardlybump17.physics.two.position;
 import com.wizardlybump17.physics.two.iterator.Vector2DIterator;
 import com.wizardlybump17.physics.two.util.MathUtil;
 import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
@@ -132,5 +133,9 @@ public record Vector2D(double x, double y) {
 
     public double angleTo(@NonNull Vector2D other) {
         return Math.atan2(other.y() - y, other.x() - x);
+    }
+
+    public double dot(@NotNull Vector2D other) {
+        return (x * other.x) + (y * other.y);
     }
 }
