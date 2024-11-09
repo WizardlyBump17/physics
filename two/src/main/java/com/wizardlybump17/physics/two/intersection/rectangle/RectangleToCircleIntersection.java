@@ -4,7 +4,7 @@ import com.wizardlybump17.physics.two.intersection.Intersection;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Circle;
 import com.wizardlybump17.physics.two.shape.Rectangle;
-import com.wizardlybump17.physics.two.util.MathUtil;
+import com.wizardlybump17.physics.two.shape.Shape;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NonNull;
@@ -46,9 +46,14 @@ public class RectangleToCircleIntersection implements Intersection {
         double radius = staticShape.getRadius();
         double angle = staticPosition.angleTo(movingPosition);
 
-        return staticPosition.add(
-                Math.cos(angle) * radius + MathUtil.EPSILON,
-                Math.sin(angle) * radius + MathUtil.EPSILON
+        Vector2D add = staticPosition.add(
+                Math.cos(angle) * (radius + movingShape.getWidth()),
+                Math.sin(angle) * (radius + movingShape.getHeight())
         );
+        Shape newMovingShape = movingShape.at(add);
+        Vector2D closestPoint = newMovingShape.getClosestPoint(staticShape);
+        Vector2D edge = staticPosition.add(Math.cos(angle) * (radius), Math.sin(angle) * (radius));
+
+        return add.subtract(closestPoint.subtract(edge));
     }
 }

@@ -111,8 +111,8 @@ public class Rectangle extends Shape {
 
     @Override
     public @NotNull Vector2D getClosestPoint(@NotNull Vector2D origin) {
-        if (hasPoint(origin))
-            return Vector2D.ZERO;
+//        if (hasPoint(origin))
+//            return Vector2D.ZERO;
 
         return new Vector2D(
                 Math.clamp(origin.x(), min.x(), max.x()),
