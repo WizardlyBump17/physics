@@ -1,5 +1,6 @@
 package com.wizardlybump17.physics.two.shape;
 
+import com.wizardlybump17.physics.two.Line;
 import com.wizardlybump17.physics.two.intersection.Intersection;
 import com.wizardlybump17.physics.two.intersection.circle.CircleToRectangleIntersection;
 import com.wizardlybump17.physics.two.intersection.rectangle.RectangleToRectangleIntersection;
@@ -111,5 +112,20 @@ public class Rectangle extends Shape {
     @Override
     public @NotNull Vector2D getClosestPoint(@NotNull Vector2D origin) {
         return Vector2D.ZERO;
+
+    public @NotNull Line getUpperLine() {
+        return new Line(min.y(max.y()), max);
+    }
+
+    public @NotNull Line getRightLine() {
+        return new Line(max, min.x(max.x()));
+    }
+
+    public @NotNull Line getLowerLine() {
+        return new Line(min.x(max.x()), min);
+    }
+
+    public @NotNull Line getLeftLine() {
+        return new Line(min, min.y(max.y()));
     }
 }
