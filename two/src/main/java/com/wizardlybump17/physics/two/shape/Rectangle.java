@@ -111,8 +111,19 @@ public class Rectangle extends Shape {
 
     @Override
     public @NotNull Vector2D getClosestPoint(@NotNull Vector2D origin) {
-//        if (hasPoint(origin))
-//            return Vector2D.ZERO;
+        if (hasPoint(origin)) {
+            double leftDistance = origin.x() - min.x();
+            double rightDistance = max.x() - origin.x();
+            double bottomDistance = origin.y() - min.y();
+            double topDistance = max.y() - origin.y();
+
+            double minHorizontalDistance = Math.min(leftDistance, rightDistance);
+            double minVerticalDistance = Math.min(bottomDistance, topDistance);
+
+            if (minHorizontalDistance < minVerticalDistance)
+                return new Vector2D(leftDistance < rightDistance ? min.x() : max.x(), origin.y());
+            return new Vector2D(origin.x(), bottomDistance < topDistance ? min.y() : max.y());
+        }
 
         return new Vector2D(
                 Math.clamp(origin.x(), min.x(), max.x()),
