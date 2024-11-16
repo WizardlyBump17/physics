@@ -85,6 +85,7 @@ public class Circle extends Shape {
     @Override
     public @NotNull Vector2D getClosestPoint(@NotNull Shape shape) {
         return switch (shape) {
+            case Circle circle -> getClosestPoint(circle.getPosition());
             default -> Vector2D.ZERO;
         };
     }
