@@ -11,14 +11,8 @@ import lombok.NonNull;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
-
 @Data
 public class RectangleToCircleIntersection implements Intersection {
-
-    public static Map<Vector2D, Color> render = new HashMap<>();
 
     private final @NonNull Circle staticShape;
     private final @NonNull Rectangle movingShape;
