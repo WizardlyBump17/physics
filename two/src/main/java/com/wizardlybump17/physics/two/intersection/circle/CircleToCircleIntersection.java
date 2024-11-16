@@ -29,15 +29,15 @@ public class CircleToCircleIntersection implements Intersection {
         if (safePosition != null)
             return safePosition;
 
-        Vector2D firstPosition = staticShape.getPosition();
-        Vector2D secondPosition = movingShape.getPosition();
+        double angle = staticShape.getPosition().angleTo(movingShape.getPosition());
+        double radius = movingShape.getRadius();
 
-        double angle = firstPosition.angleTo(secondPosition);
-        double distance = firstPosition.distance(secondPosition);
-        double toMove = staticShape.getRadius() + movingShape.getRadius() - distance;
-
-        Vector2D safePosition = secondPosition.add(Math.cos(angle) * (toMove + MathUtil.EPSILON), Math.sin(angle) * (toMove + MathUtil.EPSILON));
-        this.safePosition = safePosition;
-        return safePosition;
+        Vector2D position = staticShape.getClosestPoint(movingShape)
+                .add(
+                        Math.cos(angle) * (radius + MathUtil.EPSILON),
+                        Math.sin(angle) * (radius + MathUtil.EPSILON)
+                );
+        safePosition = position;
+        return position;
     }
 }
