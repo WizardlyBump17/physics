@@ -4,6 +4,7 @@ import com.wizardlybump17.physics.two.intersection.Intersection;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class Shape {
 
@@ -26,4 +27,13 @@ public abstract class Shape {
     public abstract @NotNull Vector2D getClosestPoint(@NotNull Vector2D origin);
 
     public abstract @NotNull Vector2D getClosestPoint(@NotNull Shape shape);
+
+    @Override
+    public abstract boolean equals(@Nullable Object other);
+
+    @Override
+    public abstract int hashCode();
+
+    @Override
+    public abstract String toString();
 }

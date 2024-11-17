@@ -4,6 +4,7 @@ import com.wizardlybump17.physics.two.intersection.Intersection;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class EmptyShape extends Shape {
 
@@ -60,5 +61,20 @@ public final class EmptyShape extends Shape {
     @Override
     public @NotNull Vector2D getClosestPoint(@NotNull Shape shape) {
         return Vector2D.ZERO;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object other) {
+        return other instanceof EmptyShape;
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "EmptyShape";
     }
 }

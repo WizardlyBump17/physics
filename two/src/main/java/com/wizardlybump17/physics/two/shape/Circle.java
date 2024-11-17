@@ -9,7 +9,7 @@ import lombok.*;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @ToString
 @RequiredArgsConstructor
 public class Circle extends Shape {
