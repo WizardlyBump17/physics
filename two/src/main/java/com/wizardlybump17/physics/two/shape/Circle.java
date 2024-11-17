@@ -5,17 +5,28 @@ import com.wizardlybump17.physics.two.intersection.circle.CircleToCircleIntersec
 import com.wizardlybump17.physics.two.intersection.rectangle.RectangleToCircleIntersection;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.util.MathUtil;
-import lombok.*;
 import org.jetbrains.annotations.NotNull;
 
-@Getter
-@EqualsAndHashCode(callSuper = false)
-@ToString
-@RequiredArgsConstructor
+import java.util.Objects;
+
 public class Circle extends Shape {
 
-    private final @NonNull Vector2D position;
+    private final @NotNull Vector2D position;
     private final double radius;
+
+    public Circle(@NotNull Vector2D position, double radius) {
+        this.position = position;
+        this.radius = radius;
+    }
+
+    @Override
+    public @NotNull Vector2D getPosition() {
+        return position;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
 
     @Override
     public double getArea() {
@@ -28,7 +39,7 @@ public class Circle extends Shape {
     }
 
     @Override
-    public boolean intersects(@NonNull Shape other) {
+    public boolean intersects(@NotNull Shape other) {
         return switch (other) {
             case Circle otherCircle -> position.distanceSquared(otherCircle.position) < MathUtil.square(radius + otherCircle.radius);
             case Rectangle rectangle -> {
@@ -53,7 +64,7 @@ public class Circle extends Shape {
     }
 
     @Override
-    public boolean hasPoint(@NonNull Vector2D point) {
+    public boolean hasPoint(@NotNull Vector2D point) {
         return point.distanceSquared(position) < MathUtil.square(radius);
     }
 
@@ -63,12 +74,12 @@ public class Circle extends Shape {
     }
 
     @Override
-    public @NonNull Shape at(@NonNull Vector2D position) {
+    public @NotNull Shape at(@NotNull Vector2D position) {
         return new Circle(position, radius);
     }
 
     @Override
-    public @NonNull Intersection intersect(@NonNull Shape other) {
+    public @NotNull Intersection intersect(@NotNull Shape other) {
         return switch (other) {
             case Circle otherCircle -> intersects(otherCircle) ? new CircleToCircleIntersection(this, otherCircle) : Intersection.EMPTY;
             case Rectangle rectangle -> intersects(rectangle) ? new RectangleToCircleIntersection(this, rectangle) : Intersection.EMPTY;
@@ -88,5 +99,26 @@ public class Circle extends Shape {
             case Circle circle -> getClosestPoint(circle.getPosition());
             default -> Vector2D.ZERO;
         };
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Circle circle = (Circle) o;
+        return Double.compare(radius, circle.radius) == 0 && Objects.equals(position, circle.position);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(position, radius);
+    }
+
+    @Override
+    public String toString() {
+        return "Circle{" +
+                "position=" + position +
+                ", radius=" + radius +
+                '}';
     }
 }

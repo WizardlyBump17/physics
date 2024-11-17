@@ -3,16 +3,15 @@ package com.wizardlybump17.physics.two.intersection;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.EmptyShape;
 import com.wizardlybump17.physics.two.shape.Shape;
-import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 
 public interface Intersection {
 
-    @NonNull Empty EMPTY = new Empty();
+    @NotNull Empty EMPTY = new Empty();
 
     boolean intersects();
 
-    @NonNull Vector2D getSafePosition();
+    @NotNull Vector2D getSafePosition();
 
     @NotNull Shape getStaticShape();
 
@@ -29,7 +28,7 @@ public interface Intersection {
         }
 
         @Override
-        public @NonNull Vector2D getSafePosition() {
+        public @NotNull Vector2D getSafePosition() {
             return Vector2D.ZERO;
         }
 

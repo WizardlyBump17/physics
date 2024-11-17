@@ -6,31 +6,39 @@ import com.wizardlybump17.physics.two.intersection.circle.CircleToRectangleInter
 import com.wizardlybump17.physics.two.intersection.rectangle.RectangleToRectangleIntersection;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.util.MathUtil;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
 
-@Getter
-@EqualsAndHashCode(callSuper = false)
-@ToString
+import java.util.Objects;
+
 public class Rectangle extends Shape {
 
-    private final @NonNull Vector2D min;
-    private final @NonNull Vector2D max;
-    private final @NonNull Vector2D position;
+    private final @NotNull Vector2D min;
+    private final @NotNull Vector2D max;
+    private final @NotNull Vector2D position;
 
-    public Rectangle(@NonNull Vector2D min, @NonNull Vector2D max) {
+    public Rectangle(@NotNull Vector2D min, @NotNull Vector2D max) {
         this.min = Vector2D.min(min, max);
         this.max = Vector2D.max(min, max);
         position = this.min.midpoint(this.max);
     }
 
-    public Rectangle(@NonNull Vector2D position, double width, double height) {
+    public Rectangle(@NotNull Vector2D position, double width, double height) {
         this.position = position;
         this.min = position.subtract(width / 2, height / 2);
         this.max = position.add(width / 2, height / 2);
+    }
+
+    public @NotNull Vector2D getMin() {
+        return min;
+    }
+
+    public @NotNull Vector2D getMax() {
+        return max;
+    }
+
+    @Override
+    public @NotNull Vector2D getPosition() {
+        return position;
     }
 
     @Override
@@ -44,7 +52,7 @@ public class Rectangle extends Shape {
     }
 
     @Override
-    public boolean intersects(@NonNull Shape other) {
+    public boolean intersects(@NotNull Shape other) {
         return switch (other) {
             case Rectangle rectangle -> {
                 Vector2D otherMin = rectangle.getMin();
@@ -76,7 +84,7 @@ public class Rectangle extends Shape {
     }
 
     @Override
-    public boolean hasPoint(@NonNull Vector2D point) {
+    public boolean hasPoint(@NotNull Vector2D point) {
         return point.isInAABB(min, max);
     }
 
@@ -94,14 +102,14 @@ public class Rectangle extends Shape {
     }
 
     @Override
-    public @NonNull Shape at(@NonNull Vector2D position) {
+    public @NotNull Shape at(@NotNull Vector2D position) {
         double width = getWidth() / 2;
         double height = getHeight() / 2;
         return new Rectangle(position.subtract(width, height), position.add(width, height));
     }
 
     @Override
-    public @NonNull Intersection intersect(@NonNull Shape other) {
+    public @NotNull Intersection intersect(@NotNull Shape other) {
         return switch (other) {
             case Rectangle rectangle -> intersects(rectangle) ? new RectangleToRectangleIntersection(this, rectangle) : Intersection.EMPTY;
             case Circle circle -> intersects(circle) ? new CircleToRectangleIntersection(circle, this) : Intersection.EMPTY;
@@ -156,5 +164,27 @@ public class Rectangle extends Shape {
 
     public @NotNull Line getLeftLine() {
         return new Line(min, min.y(max.y()));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Rectangle rectangle = (Rectangle) o;
+        return Objects.equals(min, rectangle.min) && Objects.equals(max, rectangle.max) && Objects.equals(position, rectangle.position);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(min, max, position);
+    }
+
+    @Override
+    public String toString() {
+        return "Rectangle{" +
+                "min=" + min +
+                ", max=" + max +
+                ", position=" + position +
+                '}';
     }
 }

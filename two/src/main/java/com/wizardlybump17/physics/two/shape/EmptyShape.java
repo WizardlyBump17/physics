@@ -2,7 +2,6 @@ package com.wizardlybump17.physics.two.shape;
 
 import com.wizardlybump17.physics.two.intersection.Intersection;
 import com.wizardlybump17.physics.two.position.Vector2D;
-import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,7 +13,7 @@ public final class EmptyShape extends Shape {
     }
 
     @Override
-    public @NonNull Vector2D getPosition() {
+    public @NotNull Vector2D getPosition() {
         return Vector2D.ZERO;
     }
 
@@ -29,12 +28,12 @@ public final class EmptyShape extends Shape {
     }
 
     @Override
-    public boolean intersects(@NonNull Shape other) {
+    public boolean intersects(@NotNull Shape other) {
         return false;
     }
 
     @Override
-    public boolean hasPoint(@NonNull Vector2D point) {
+    public boolean hasPoint(@NotNull Vector2D point) {
         return false;
     }
 
@@ -44,12 +43,12 @@ public final class EmptyShape extends Shape {
     }
 
     @Override
-    public @NonNull Shape at(@NonNull Vector2D position) {
+    public @NotNull Shape at(@NotNull Vector2D position) {
         return INSTANCE;
     }
 
     @Override
-    public @NonNull Intersection intersect(@NonNull Shape other) {
+    public @NotNull Intersection intersect(@NotNull Shape other) {
         return Intersection.EMPTY;
     }
 

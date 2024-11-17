@@ -5,19 +5,30 @@ import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Circle;
 import com.wizardlybump17.physics.two.shape.Rectangle;
 import com.wizardlybump17.physics.two.util.MathUtil;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
-@Data
+import java.util.Objects;
+
 public class CircleToRectangleIntersection implements Intersection {
 
-    private final @NonNull Circle movingShape;
-    private final @NonNull Rectangle staticShape;
-    @Setter(AccessLevel.NONE)
+    private final @NotNull Circle movingShape;
+    private final @NotNull Rectangle staticShape;
     private Vector2D safePosition;
+
+    public CircleToRectangleIntersection(@NotNull Circle movingShape, @NotNull Rectangle staticShape) {
+        this.movingShape = movingShape;
+        this.staticShape = staticShape;
+    }
+
+    @Override
+    public @NotNull Circle getMovingShape() {
+        return movingShape;
+    }
+
+    @Override
+    public @NotNull Rectangle getStaticShape() {
+        return staticShape;
+    }
 
     @Override
     public boolean intersects() {
@@ -25,7 +36,7 @@ public class CircleToRectangleIntersection implements Intersection {
     }
 
     @Override
-    public @NonNull Vector2D getSafePosition() {
+    public @NotNull Vector2D getSafePosition() {
         if (safePosition != null)
             return safePosition;
 
@@ -48,5 +59,27 @@ public class CircleToRectangleIntersection implements Intersection {
                 Math.cos(angle) * (radius + MathUtil.EPSILON),
                 Math.sin(angle) * (radius + MathUtil.EPSILON)
         );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass())
+            return false;
+        CircleToRectangleIntersection that = (CircleToRectangleIntersection) o;
+        return Objects.equals(movingShape, that.movingShape) && Objects.equals(staticShape, that.staticShape) && Objects.equals(safePosition, that.safePosition);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(movingShape, staticShape, safePosition);
+    }
+
+    @Override
+    public String toString() {
+        return "CircleToRectangleIntersection{" +
+                "movingShape=" + movingShape +
+                ", staticShape=" + staticShape +
+                ", safePosition=" + safePosition +
+                '}';
     }
 }
