@@ -8,6 +8,9 @@ import java.util.Objects;
 
 public class Physics {
 
+    public static final double GRAVITATIONAL_CONSTANT = 9.8;
+    public static final @NotNull Vector2D GRAVITY_VECTOR = new Vector2D(0, GRAVITATIONAL_CONSTANT);
+
     private final @NotNull PhysicsObject object;
     private @NotNull Vector2D velocity;
     private @NotNull Vector2D acceleration;
