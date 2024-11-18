@@ -93,6 +93,21 @@ public class ObjectsPanel extends JPanel {
             object.tick(System.currentTimeMillis() / (double) lastTick);
         }
 
+        teleportToSafePositions();
+
         repaint();
+    }
+
+    public void teleportToSafePositions() {
+        for (PanelObject panelObject : shapes.values()) {
+            for (Intersection intersection : panelObject.getIntersecting().values()) {
+                if (!intersection.intersects())
+                    continue;
+
+                PhysicsObject object = panelObject.getObject();
+                if (object.getShape().equals(intersection.getMovingShape()))
+                    object.teleport(intersection.getSafePosition());
+            }
+        }
     }
 }
