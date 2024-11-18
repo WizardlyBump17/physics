@@ -90,7 +90,7 @@ public class ObjectsPanel extends JPanel {
             } else
                 physics.setAcceleration(new Vector2D(0, 0.1));
 
-            object.tick(System.currentTimeMillis() / (double) lastTick);
+            object.tick((System.currentTimeMillis() - lastTick) / 1000.0);
         }
 
         teleportToSafePositions();
