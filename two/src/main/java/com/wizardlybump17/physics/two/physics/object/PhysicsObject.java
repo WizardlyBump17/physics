@@ -9,16 +9,22 @@ import java.util.Objects;
 
 public class PhysicsObject {
 
+    private final int id;
     private @NotNull Shape shape;
     private @NotNull Vector2D velocity;
     private @NotNull Vector2D acceleration;
     private @NotNull Physics physics;
 
-    public PhysicsObject(@NotNull Shape shape, @NotNull Vector2D velocity, @NotNull Vector2D acceleration, @NotNull Physics physics) {
+    public PhysicsObject(int id, @NotNull Shape shape, @NotNull Vector2D velocity, @NotNull Vector2D acceleration, @NotNull Physics physics) {
+        this.id = id;
         this.shape = shape;
         this.velocity = velocity;
         this.acceleration = acceleration;
         this.physics = physics;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public @NotNull Vector2D getPosition() {
@@ -70,19 +76,20 @@ public class PhysicsObject {
         if (o == null || getClass() != o.getClass())
             return false;
         PhysicsObject that = (PhysicsObject) o;
-        return Objects.equals(shape, that.shape) && Objects.equals(velocity, that.velocity) && Objects.equals(acceleration, that.acceleration)
-                && Objects.equals(physics, that.physics);
+        return id == that.id && Objects.equals(shape, that.shape) && Objects.equals(velocity, that.velocity)
+                && Objects.equals(acceleration, that.acceleration) && Objects.equals(physics, that.physics);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(shape, velocity, acceleration, physics);
+        return Objects.hash(id, shape, velocity, acceleration, physics);
     }
 
     @Override
     public String toString() {
         return "PhysicsObject{" +
-                "shape=" + shape +
+                "id=" + id +
+                ", shape=" + shape +
                 ", velocity=" + velocity +
                 ", acceleration=" + acceleration +
                 ", physics=" + physics +
