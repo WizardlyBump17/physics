@@ -36,6 +36,7 @@ public class ObjectsPanel extends JPanel {
         super.paintComponent(graphics);
 
         intersections();
+        teleportToSafePositions();
 
         shapes.values().forEach(panelShape -> ((ShapeRenderer<Shape>) panelShape.getRenderer()).render(graphics, panelShape.getShape()));
         if (selectedShape != null)
@@ -92,8 +93,6 @@ public class ObjectsPanel extends JPanel {
 
             object.tick((System.currentTimeMillis() - lastTick) / 1000.0);
         }
-
-        teleportToSafePositions();
 
         repaint();
     }
