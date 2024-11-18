@@ -68,7 +68,7 @@ public class PhysicsObject {
     }
 
     public void tick(double deltaTime) {
-        physics.tick(this, deltaTime);
+        physics.tick(deltaTime);
     }
 
     @Override
