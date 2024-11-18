@@ -4,12 +4,15 @@ import com.wizardlybump17.physics.graphics.two.frame.MainFrame;
 import com.wizardlybump17.physics.graphics.two.panel.object.ObjectsPanel;
 import com.wizardlybump17.physics.graphics.two.renderer.shape.CircleRenderer;
 import com.wizardlybump17.physics.graphics.two.renderer.shape.RectangleRenderer;
+import com.wizardlybump17.physics.two.Constants;
 import com.wizardlybump17.physics.two.physics.object.PhysicsObject;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Circle;
 import com.wizardlybump17.physics.two.shape.Rectangle;
 
 import java.awt.*;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Main {
@@ -47,5 +50,13 @@ public class Main {
                     new CircleRenderer()
             );
         }
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                frame.tick();
+            }
+        }, 1000 / Constants.TICKS_PER_SECOND);
     }
 }
