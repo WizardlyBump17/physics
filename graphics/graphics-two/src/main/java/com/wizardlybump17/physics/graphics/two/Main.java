@@ -52,11 +52,11 @@ public class Main {
         }
 
         Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
+        timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 frame.tick();
             }
-        }, 1000 / Constants.TICKS_PER_SECOND);
+        }, 0, 1000 / Constants.TICKS_PER_SECOND);
     }
 }
