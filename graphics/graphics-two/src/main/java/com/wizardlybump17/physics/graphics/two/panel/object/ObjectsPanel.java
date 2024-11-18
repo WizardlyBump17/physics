@@ -1,9 +1,10 @@
-package com.wizardlybump17.physics.graphics.two.panel.shape;
+package com.wizardlybump17.physics.graphics.two.panel.object;
 
 import com.wizardlybump17.physics.graphics.two.listener.panel.shape.ShapePanelMouseListener;
 import com.wizardlybump17.physics.graphics.two.listener.panel.shape.ShapePanelMouseMotionListener;
 import com.wizardlybump17.physics.graphics.two.renderer.shape.ShapeRenderer;
 import com.wizardlybump17.physics.two.intersection.Intersection;
+import com.wizardlybump17.physics.two.physics.object.PhysicsObject;
 import com.wizardlybump17.physics.two.shape.Shape;
 import lombok.Getter;
 import lombok.NonNull;
@@ -17,12 +18,12 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class ShapesPanel extends JPanel {
+public class ObjectsPanel extends JPanel {
 
-    private final @NonNull Map<Integer, PanelShape> shapes = new HashMap<>();
-    private @Nullable PanelShape selectedShape;
+    private final @NonNull Map<Integer, PanelObject> shapes = new HashMap<>();
+    private @Nullable PanelObject selectedShape;
 
-    public ShapesPanel() {
+    public ObjectsPanel() {
         addMouseListener(new ShapePanelMouseListener(this));
         addMouseMotionListener(new ShapePanelMouseMotionListener(this, false));
     }
@@ -40,8 +41,8 @@ public class ShapesPanel extends JPanel {
     }
 
     public void intersections() {
-        for (PanelShape shape : shapes.values()) {
-            for (PanelShape anotherShape : shapes.values()) {
+        for (PanelObject shape : shapes.values()) {
+            for (PanelObject anotherShape : shapes.values()) {
                 if (shape.getId() == anotherShape.getId())
                     continue;
 
@@ -59,20 +60,20 @@ public class ShapesPanel extends JPanel {
     }
 
     public @NonNull Intersection getIntersection(@NonNull Shape shape, int id) {
-        for (PanelShape otherPanelShape : shapes.values()) {
-            if (otherPanelShape.getId() == id)
+        for (PanelObject otherPanelObject : shapes.values()) {
+            if (otherPanelObject.getId() == id)
                 continue;
 
-            Intersection intersection = otherPanelShape.getShape().intersect(shape);
+            Intersection intersection = otherPanelObject.getShape().intersect(shape);
             if (intersection.intersects())
                 return intersection;
         }
         return Intersection.EMPTY;
     }
 
-    public <S extends Shape, R extends ShapeRenderer<? extends S>> void addShape(@NonNull S shape, @NonNull R renderer) {
-        PanelShape panelShape = new PanelShape(shape, renderer);
-        shapes.put(panelShape.getId(), panelShape);
-        renderer.setPanelShape(panelShape);
+    public <R extends ShapeRenderer<?>> void addShape(@NonNull PhysicsObject object, @NonNull R renderer) {
+        PanelObject panelObject = new PanelObject(object, renderer);
+        shapes.put(panelObject.getId(), panelObject);
+        renderer.setPanelObject(panelObject);
     }
 }

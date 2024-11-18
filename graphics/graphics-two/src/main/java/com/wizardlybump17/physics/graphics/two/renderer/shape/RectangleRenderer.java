@@ -1,6 +1,6 @@
 package com.wizardlybump17.physics.graphics.two.renderer.shape;
 
-import com.wizardlybump17.physics.graphics.two.panel.shape.PanelShape;
+import com.wizardlybump17.physics.graphics.two.panel.object.PanelObject;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Rectangle;
 import lombok.Getter;
@@ -17,7 +17,7 @@ public class RectangleRenderer implements ShapeRenderer<Rectangle> {
 
     private @NonNull Color color;
     private @NonNull Color highlightColor;
-    private @NonNull PanelShape panelShape;
+    private @NonNull PanelObject panelObject;
     private @NonNull Color intersectingColor;
 
     public RectangleRenderer() {
@@ -35,12 +35,12 @@ public class RectangleRenderer implements ShapeRenderer<Rectangle> {
         int width = (int) value.getWidth();
         int height = (int) value.getHeight();
 
-        if (panelShape.isSelected()) {
+        if (panelObject.isSelected()) {
             graphics.setColor(highlightColor);
             graphics.fillRect(x - HIGHLIGHT_SIZE, y - HIGHLIGHT_SIZE, width + HIGHLIGHT_SIZE * 2, height + HIGHLIGHT_SIZE * 2);
         }
 
-        graphics.setColor(panelShape.getIntersecting().isEmpty() ? color : intersectingColor);
+        graphics.setColor(panelObject.getIntersecting().isEmpty() ? color : intersectingColor);
         graphics.fillRect(x, y, width, height);
     }
 }

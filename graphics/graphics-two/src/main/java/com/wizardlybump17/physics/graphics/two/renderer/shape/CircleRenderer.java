@@ -1,6 +1,6 @@
 package com.wizardlybump17.physics.graphics.two.renderer.shape;
 
-import com.wizardlybump17.physics.graphics.two.panel.shape.PanelShape;
+import com.wizardlybump17.physics.graphics.two.panel.object.PanelObject;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Circle;
 import lombok.Getter;
@@ -17,7 +17,7 @@ public class CircleRenderer implements ShapeRenderer<Circle> {
     public static final @NonNull Color NOT_INTERSECTING = Color.BLUE;
     public static final @NonNull Color INTERSECTING = new Color(0, 100, 150);
 
-    private @NonNull PanelShape panelShape;
+    private @NonNull PanelObject panelObject;
 
     @Override
     public void render(@NonNull Graphics graphics, @NonNull Circle value) {
@@ -27,12 +27,12 @@ public class CircleRenderer implements ShapeRenderer<Circle> {
         double y = position.y() - radius;
         double diameter = radius * 2;
 
-        if (panelShape.isSelected()) {
+        if (panelObject.isSelected()) {
             graphics.setColor(Color.BLACK);
             graphics.fillOval((int) (x - HIGHLIGHT_SIZE / 2), (int) (y - HIGHLIGHT_SIZE / 2), (int) (diameter + HIGHLIGHT_SIZE), (int) (diameter + HIGHLIGHT_SIZE));
         }
 
-        graphics.setColor(panelShape.getIntersecting().isEmpty() ? NOT_INTERSECTING : INTERSECTING);
+        graphics.setColor(panelObject.getIntersecting().isEmpty() ? NOT_INTERSECTING : INTERSECTING);
         graphics.fillOval((int) x, (int) y, (int) diameter, (int) diameter);
     }
 }
