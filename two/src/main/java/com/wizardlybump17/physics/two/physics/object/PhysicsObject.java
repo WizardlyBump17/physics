@@ -11,24 +11,18 @@ public class PhysicsObject {
 
     private final int id;
     private @NotNull Shape shape;
-    private @NotNull Vector2D velocity;
-    private @NotNull Vector2D acceleration;
     private @NotNull Physics physics;
 
-    public PhysicsObject(int id, @NotNull Shape shape, @NotNull Vector2D velocity, @NotNull Vector2D acceleration, @NotNull Physics physics) {
+    public PhysicsObject(int id, @NotNull Shape shape, @NotNull Physics physics) {
         this.id = id;
         this.shape = shape;
-        this.velocity = velocity;
-        this.acceleration = acceleration;
         this.physics = physics;
     }
 
     public PhysicsObject(int id, @NotNull Shape shape) {
         this.id = id;
         this.shape = shape;
-        this.velocity = Vector2D.ZERO;
-        this.acceleration = Vector2D.ZERO;
-        this.physics = new Physics(this);
+        this.physics = new Physics(this, Vector2D.ZERO, Vector2D.ZERO);
     }
 
     public int getId() {
@@ -51,22 +45,6 @@ public class PhysicsObject {
         this.shape = shape;
     }
 
-    public @NotNull Vector2D getVelocity() {
-        return velocity;
-    }
-
-    public void setVelocity(@NotNull Vector2D velocity) {
-        this.velocity = velocity;
-    }
-
-    public @NotNull Vector2D getAcceleration() {
-        return acceleration;
-    }
-
-    public void setAcceleration(@NotNull Vector2D acceleration) {
-        this.acceleration = acceleration;
-    }
-
     public @NotNull Physics getPhysics() {
         return physics;
     }
@@ -84,13 +62,12 @@ public class PhysicsObject {
         if (o == null || getClass() != o.getClass())
             return false;
         PhysicsObject that = (PhysicsObject) o;
-        return id == that.id && Objects.equals(shape, that.shape) && Objects.equals(velocity, that.velocity)
-                && Objects.equals(acceleration, that.acceleration) && Objects.equals(physics, that.physics);
+        return id == that.id && Objects.equals(shape, that.shape) && Objects.equals(physics, that.physics);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, shape, velocity, acceleration, physics);
+        return Objects.hash(id, shape, physics);
     }
 
     @Override
@@ -98,8 +75,6 @@ public class PhysicsObject {
         return "PhysicsObject{" +
                 "id=" + id +
                 ", shape=" + shape +
-                ", velocity=" + velocity +
-                ", acceleration=" + acceleration +
                 ", physics=" + physics +
                 '}';
     }
