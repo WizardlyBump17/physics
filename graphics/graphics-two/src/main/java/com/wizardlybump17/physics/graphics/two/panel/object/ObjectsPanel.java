@@ -33,6 +33,8 @@ public class ObjectsPanel extends JPanel {
     @SuppressWarnings("unchecked")
     @Override
     public void paint(@NonNull Graphics graphics) {
+        Toolkit.getDefaultToolkit().sync();
+
         super.paintComponent(graphics);
 
         intersections();
