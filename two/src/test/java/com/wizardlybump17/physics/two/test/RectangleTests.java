@@ -4,7 +4,6 @@ import com.wizardlybump17.physics.two.intersection.Intersection;
 import com.wizardlybump17.physics.two.intersection.rectangle.RectangleToRectangleIntersection;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Rectangle;
-import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -99,7 +98,7 @@ class RectangleTests {
         );
     }
 
-    static @NonNull Rectangle create(@NonNull Vector2D min, @NonNull Vector2D max) {
+    static @NotNull Rectangle create(@NotNull Vector2D min, @NotNull Vector2D max) {
         return new Rectangle(min, max);
     }
 }
