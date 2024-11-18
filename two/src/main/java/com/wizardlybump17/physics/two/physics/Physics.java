@@ -9,4 +9,9 @@ public class Physics {
         object.setVelocity(object.getVelocity().add(object.getAcceleration()));
         object.teleport(object.getPosition().add(object.getVelocity()));
     }
+
+    @Override
+    public String toString() {
+        return "Physics{}";
+    }
 }
