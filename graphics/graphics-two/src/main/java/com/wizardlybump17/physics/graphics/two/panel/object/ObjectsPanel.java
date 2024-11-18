@@ -22,8 +22,8 @@ import java.util.Map;
 @Setter
 public class ObjectsPanel extends JPanel {
 
-    private final @NonNull Map<Integer, PanelObject> shapes = new HashMap<>();
-    private @Nullable PanelObject selectedShape;
+    private final transient @NonNull Map<Integer, PanelObject> shapes = new HashMap<>();
+    private transient @Nullable PanelObject selectedShape;
 
     public ObjectsPanel() {
         addMouseListener(new ShapePanelMouseListener(this));
