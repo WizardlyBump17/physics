@@ -9,9 +9,13 @@ import java.util.Objects;
 public class PhysicsObject {
 
     private @NotNull Shape shape;
+    private @NotNull Vector2D velocity;
+    private @NotNull Vector2D acceleration;
 
-    public PhysicsObject(@NotNull Shape shape) {
+    public PhysicsObject(@NotNull Shape shape, @NotNull Vector2D velocity, @NotNull Vector2D acceleration) {
         this.shape = shape;
+        this.velocity = velocity;
+        this.acceleration = acceleration;
     }
 
     public @NotNull Vector2D getPosition() {
@@ -30,23 +34,41 @@ public class PhysicsObject {
         this.shape = shape;
     }
 
+    public @NotNull Vector2D getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(@NotNull Vector2D velocity) {
+        this.velocity = velocity;
+    }
+
+    public @NotNull Vector2D getAcceleration() {
+        return acceleration;
+    }
+
+    public void setAcceleration(@NotNull Vector2D acceleration) {
+        this.acceleration = acceleration;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass())
             return false;
         PhysicsObject that = (PhysicsObject) o;
-        return Objects.equals(shape, that.shape);
+        return Objects.equals(shape, that.shape) && Objects.equals(velocity, that.velocity) && Objects.equals(acceleration, that.acceleration);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(shape);
+        return Objects.hash(shape, velocity, acceleration);
     }
 
     @Override
     public String toString() {
         return "PhysicsObject{" +
                 "shape=" + shape +
+                ", velocity=" + velocity +
+                ", acceleration=" + acceleration +
                 '}';
     }
 }
