@@ -1,10 +1,6 @@
 package com.wizardlybump17.physics.graphics.two.frame;
 
 import com.wizardlybump17.physics.graphics.two.panel.object.ObjectsPanel;
-import com.wizardlybump17.physics.graphics.two.panel.object.PanelObject;
-import com.wizardlybump17.physics.two.physics.Physics;
-import com.wizardlybump17.physics.two.physics.object.PhysicsObject;
-import com.wizardlybump17.physics.two.position.Vector2D;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -26,21 +22,7 @@ public class MainFrame extends JFrame {
     }
 
     public void tick() {
-        for (PanelObject panelObject : objectsPanel.getShapes().values()) {
-            PhysicsObject object = panelObject.getObject();
-
-            Physics physics = object.getPhysics();
-            if (panelObject.isSelected()) {
-                physics.setAcceleration(Vector2D.ZERO);
-                physics.setVelocity(Vector2D.ZERO);
-            } else
-                physics.setAcceleration(new Vector2D(0, 0.1));
-
-            object.tick((System.currentTimeMillis() - lastTick) / 1000.0);
-        }
-
-        repaint();
-
+        objectsPanel.tick(lastTick);
         lastTick = System.currentTimeMillis();
     }
 }
