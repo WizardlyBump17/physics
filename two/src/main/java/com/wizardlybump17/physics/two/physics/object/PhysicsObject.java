@@ -61,6 +61,10 @@ public class PhysicsObject {
         this.physics = physics;
     }
 
+    public void tick(double deltaTime) {
+        physics.tick(this, deltaTime);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass())
