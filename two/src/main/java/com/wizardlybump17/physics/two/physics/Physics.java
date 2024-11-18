@@ -18,6 +18,12 @@ public class Physics {
         this.acceleration = acceleration;
     }
 
+    public Physics(@NotNull PhysicsObject object) {
+        this.object = object;
+        velocity = Vector2D.ZERO;
+        acceleration = Vector2D.ZERO;
+    }
+
     public @NotNull PhysicsObject getObject() {
         return object;
     }
