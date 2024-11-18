@@ -22,7 +22,7 @@ public class PhysicsObject {
     public PhysicsObject(int id, @NotNull Shape shape) {
         this.id = id;
         this.shape = shape;
-        this.physics = new Physics(this, Vector2D.ZERO, Vector2D.ZERO);
+        this.physics = new Physics(this);
     }
 
     public int getId() {
