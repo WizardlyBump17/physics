@@ -45,8 +45,8 @@ public class Physics {
     }
 
     public void tick(double deltaTime) {
-        velocity = velocity.add(acceleration);
-        object.teleport(object.getPosition().add(velocity));
+        velocity = velocity.add(acceleration.multiply(deltaTime));
+        object.teleport(object.getPosition().add(velocity.multiply(deltaTime)));
     }
 
     @Override
