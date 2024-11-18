@@ -1,5 +1,6 @@
 package com.wizardlybump17.physics.two.physics.object;
 
+import com.wizardlybump17.physics.two.physics.Physics;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Shape;
 import org.jetbrains.annotations.NotNull;
@@ -11,11 +12,13 @@ public class PhysicsObject {
     private @NotNull Shape shape;
     private @NotNull Vector2D velocity;
     private @NotNull Vector2D acceleration;
+    private @NotNull Physics physics;
 
-    public PhysicsObject(@NotNull Shape shape, @NotNull Vector2D velocity, @NotNull Vector2D acceleration) {
+    public PhysicsObject(@NotNull Shape shape, @NotNull Vector2D velocity, @NotNull Vector2D acceleration, @NotNull Physics physics) {
         this.shape = shape;
         this.velocity = velocity;
         this.acceleration = acceleration;
+        this.physics = physics;
     }
 
     public @NotNull Vector2D getPosition() {
@@ -50,17 +53,26 @@ public class PhysicsObject {
         this.acceleration = acceleration;
     }
 
+    public @NotNull Physics getPhysics() {
+        return physics;
+    }
+
+    public void setPhysics(@NotNull Physics physics) {
+        this.physics = physics;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass())
             return false;
         PhysicsObject that = (PhysicsObject) o;
-        return Objects.equals(shape, that.shape) && Objects.equals(velocity, that.velocity) && Objects.equals(acceleration, that.acceleration);
+        return Objects.equals(shape, that.shape) && Objects.equals(velocity, that.velocity) && Objects.equals(acceleration, that.acceleration)
+                && Objects.equals(physics, that.physics);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(shape, velocity, acceleration);
+        return Objects.hash(shape, velocity, acceleration, physics);
     }
 
     @Override
@@ -69,6 +81,7 @@ public class PhysicsObject {
                 "shape=" + shape +
                 ", velocity=" + velocity +
                 ", acceleration=" + acceleration +
+                ", physics=" + physics +
                 '}';
     }
 }
