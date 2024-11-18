@@ -91,7 +91,7 @@ public class ObjectsPanel extends JPanel {
                 physics.setAcceleration(Vector2D.ZERO);
                 physics.setVelocity(Vector2D.ZERO);
             } else
-                physics.setAcceleration(new Vector2D(0, 9.8));
+                physics.setAcceleration(Physics.GRAVITY_VECTOR);
 
             object.tick((System.currentTimeMillis() - lastTick) / 1000.0);
         }
