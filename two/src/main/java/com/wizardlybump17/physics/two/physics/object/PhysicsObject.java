@@ -23,6 +23,14 @@ public class PhysicsObject {
         this.physics = physics;
     }
 
+    public PhysicsObject(int id, @NotNull Shape shape) {
+        this.id = id;
+        this.shape = shape;
+        this.velocity = Vector2D.ZERO;
+        this.acceleration = Vector2D.ZERO;
+        this.physics = new Physics(this);
+    }
+
     public int getId() {
         return id;
     }
