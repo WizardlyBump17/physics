@@ -54,4 +54,8 @@ public class PanelObject {
     public void clearIntersections() {
         intersecting.clear();
     }
+
+    public boolean hasIntersections() {
+        return !intersecting.isEmpty();
+    }
 }
