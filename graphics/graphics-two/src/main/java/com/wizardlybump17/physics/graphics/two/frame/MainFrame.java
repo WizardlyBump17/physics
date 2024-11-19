@@ -10,7 +10,6 @@ import javax.swing.*;
 public class MainFrame extends JFrame {
 
     private final @NonNull ObjectsPanel objectsPanel;
-    private long lastTick = System.currentTimeMillis();
 
     public MainFrame(@NonNull String title) {
         super(title);
@@ -19,10 +18,5 @@ public class MainFrame extends JFrame {
         setLocationRelativeTo(null);
 
         add(objectsPanel = new ObjectsPanel());
-    }
-
-    public void tick() {
-        objectsPanel.tick(lastTick);
-        lastTick = System.currentTimeMillis();
     }
 }
