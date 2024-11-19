@@ -3,12 +3,14 @@ package com.wizardlybump17.physics.graphics.two.panel.object;
 import com.wizardlybump17.physics.graphics.two.listener.panel.shape.ShapePanelMouseListener;
 import com.wizardlybump17.physics.graphics.two.listener.panel.shape.ShapePanelMouseMotionListener;
 import com.wizardlybump17.physics.graphics.two.renderer.shape.ShapeRenderer;
+import com.wizardlybump17.physics.two.container.PhysicsObjectContainer;
 import com.wizardlybump17.physics.two.intersection.Intersection;
 import com.wizardlybump17.physics.two.physics.object.PhysicsObject;
 import com.wizardlybump17.physics.two.shape.Shape;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -21,6 +23,7 @@ import java.util.Map;
 public class ObjectsPanel extends JPanel {
 
     private final transient @NonNull Map<Integer, PanelObject> shapes = new HashMap<>();
+    private @NotNull PhysicsObjectContainer objectContainer;
     private transient @Nullable PanelObject selectedShape;
 
     public ObjectsPanel() {
@@ -48,18 +51,30 @@ public class ObjectsPanel extends JPanel {
             for (PanelObject anotherShape : shapes.values()) {
                 if (shape.getId() == anotherShape.getId())
                     continue;
-
-                Intersection intersection = shape.getShape().intersect(anotherShape.getShape());
-                if (intersection.intersects()) {
-                    shape.getIntersecting().put(anotherShape.getId(), intersection);
-                    anotherShape.getIntersecting().put(shape.getId(), intersection);
+                
+                if (shape.isSelected()) {
+                    intersect(anotherShape, shape);
                     continue;
                 }
 
-                shape.getIntersecting().remove(anotherShape.getId());
-                anotherShape.getIntersecting().remove(shape.getId());
+                intersect(shape, anotherShape);
             }
         }
+    }
+
+    protected void intersect(@NotNull PanelObject staticObject, @NotNull PanelObject movingObject) {
+        Map<Integer, Intersection> staticIntersections = staticObject.getIntersecting();
+        Map<Integer, Intersection> movingIntersections = movingObject.getIntersecting();
+
+        Intersection intersection = staticObject.getShape().intersect(movingObject.getShape());
+        if (intersection.intersects()) {
+            staticIntersections.put(movingObject.getId(), intersection);
+            movingIntersections.put(staticObject.getId(), intersection);
+            return;
+        }
+
+        staticIntersections.remove(movingObject.getId());
+        movingIntersections.remove(staticObject.getId());
     }
 
     public @NonNull Intersection getIntersection(@NonNull Shape shape, int id) {
@@ -74,10 +89,12 @@ public class ObjectsPanel extends JPanel {
         return Intersection.EMPTY;
     }
 
-    public <R extends ShapeRenderer<?>> void addShape(@NonNull PhysicsObject object, @NonNull R renderer) {
+    public <R extends ShapeRenderer<?>> void addObject(@NonNull PhysicsObject object, @NonNull R renderer) {
         PanelObject panelObject = new PanelObject(object, renderer);
         shapes.put(panelObject.getId(), panelObject);
         renderer.setPanelObject(panelObject);
+
+        objectContainer.addObject(object);
     }
 
     public void teleportToSafePositions() {
