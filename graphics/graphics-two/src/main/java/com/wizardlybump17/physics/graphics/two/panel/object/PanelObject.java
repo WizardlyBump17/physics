@@ -29,4 +29,8 @@ public class PanelObject {
     public void setShape(@NotNull Shape shape) {
         object.setShape(shape);
     }
+
+    public @NonNull Map<Integer, Intersection> getIntersecting() {
+        return Map.copyOf(intersecting);
+    }
 }
