@@ -63,18 +63,15 @@ public class ObjectsPanel extends JPanel {
     }
 
     protected void intersect(@NotNull PanelObject staticObject, @NotNull PanelObject movingObject) {
-        Map<Integer, Intersection> staticIntersections = staticObject.getIntersecting();
-        Map<Integer, Intersection> movingIntersections = movingObject.getIntersecting();
-
         Intersection intersection = staticObject.getShape().intersect(movingObject.getShape());
         if (intersection.intersects()) {
-            staticIntersections.put(movingObject.getId(), intersection);
-            movingIntersections.put(staticObject.getId(), intersection);
+            staticObject.addIntersection(movingObject.getId(), intersection);
+            movingObject.addIntersection(staticObject.getId(), intersection);
             return;
         }
 
-        staticIntersections.remove(movingObject.getId());
-        movingIntersections.remove(staticObject.getId());
+        staticObject.removeIntersection(movingObject.getId());
+        movingObject.removeIntersection(staticObject.getId());
     }
 
     public @NonNull Intersection getIntersection(@NonNull Shape shape, int id) {
@@ -99,13 +96,23 @@ public class ObjectsPanel extends JPanel {
 
     public void teleportToSafePositions() {
         for (PanelObject panelObject : shapes.values()) {
-            for (Intersection intersection : panelObject.getIntersecting().values()) {
+            int objectId = panelObject.getId();
+
+            for (Map.Entry<Integer, Intersection> entry : panelObject.getIntersecting().entrySet()) {
+                int id = entry.getKey();
+                Intersection intersection = entry.getValue();
+
                 if (!intersection.intersects())
                     continue;
 
                 PhysicsObject object = panelObject.getObject();
-                if (object.getShape().equals(intersection.getMovingShape()))
-                    object.teleport(intersection.getSafePosition());
+                if (!object.getShape().equals(intersection.getMovingShape()))
+                    continue;
+
+                object.teleport(intersection.getSafePosition());
+
+                panelObject.removeIntersection(id);
+                shapes.get(id).removeIntersection(objectId);
             }
         }
     }
