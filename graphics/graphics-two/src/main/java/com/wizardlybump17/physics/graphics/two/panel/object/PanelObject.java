@@ -7,6 +7,7 @@ import com.wizardlybump17.physics.two.shape.Shape;
 import lombok.Data;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,5 +33,25 @@ public class PanelObject {
 
     public @NonNull Map<Integer, Intersection> getIntersecting() {
         return Map.copyOf(intersecting);
+    }
+
+    public void addIntersection(int id, @NotNull Intersection intersection) {
+        intersecting.put(id, intersection);
+    }
+
+    public boolean hasIntersection(int id) {
+        return intersecting.containsKey(id);
+    }
+
+    public void removeIntersection(int id) {
+        intersecting.remove(id);
+    }
+
+    public @Nullable Intersection getIntersection(int id) {
+        return intersecting.get(id);
+    }
+
+    public void clearIntersections() {
+        intersecting.clear();
     }
 }
