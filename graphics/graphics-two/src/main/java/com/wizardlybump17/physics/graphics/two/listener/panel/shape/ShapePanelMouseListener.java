@@ -39,6 +39,5 @@ public class ShapePanelMouseListener extends MouseAdapter {
 
         if (!success)
             panel.setSelectedShape(null);
-        panel.repaint();
     }
 }
