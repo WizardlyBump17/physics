@@ -40,7 +40,7 @@ public class RectangleRenderer implements ShapeRenderer<Rectangle> {
             graphics.fillRect(x - HIGHLIGHT_SIZE, y - HIGHLIGHT_SIZE, width + HIGHLIGHT_SIZE * 2, height + HIGHLIGHT_SIZE * 2);
         }
 
-        graphics.setColor(panelObject.getIntersecting().isEmpty() ? color : intersectingColor);
+        graphics.setColor(panelObject.hasIntersections() ? intersectingColor : color);
         graphics.fillRect(x, y, width, height);
     }
 }

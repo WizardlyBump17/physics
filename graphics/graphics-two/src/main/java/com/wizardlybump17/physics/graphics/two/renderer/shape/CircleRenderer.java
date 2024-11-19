@@ -32,7 +32,7 @@ public class CircleRenderer implements ShapeRenderer<Circle> {
             graphics.fillOval((int) (x - HIGHLIGHT_SIZE / 2), (int) (y - HIGHLIGHT_SIZE / 2), (int) (diameter + HIGHLIGHT_SIZE), (int) (diameter + HIGHLIGHT_SIZE));
         }
 
-        graphics.setColor(panelObject.getIntersecting().isEmpty() ? NOT_INTERSECTING : INTERSECTING);
+        graphics.setColor(panelObject.hasIntersections() ? INTERSECTING : NOT_INTERSECTING);
         graphics.fillOval((int) x, (int) y, (int) diameter, (int) diameter);
     }
 }
