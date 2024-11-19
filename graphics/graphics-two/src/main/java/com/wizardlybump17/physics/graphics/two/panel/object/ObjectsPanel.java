@@ -7,9 +7,6 @@ import com.wizardlybump17.physics.two.container.PhysicsObjectContainer;
 import com.wizardlybump17.physics.two.intersection.Intersection;
 import com.wizardlybump17.physics.two.physics.object.PhysicsObject;
 import com.wizardlybump17.physics.two.shape.Shape;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,22 +15,20 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-@Getter
-@Setter
 public class ObjectsPanel extends JPanel {
 
-    private final transient @NonNull Map<Integer, PanelObject> shapes = new HashMap<>();
-    private @NotNull PhysicsObjectContainer objectContainer;
+    private final transient @NotNull Map<Integer, PanelObject> shapes = new HashMap<>();
+    private transient PhysicsObjectContainer objectContainer;
     private transient @Nullable PanelObject selectedShape;
 
     public ObjectsPanel() {
         addMouseListener(new ShapePanelMouseListener(this));
-        addMouseMotionListener(new ShapePanelMouseMotionListener(this, false));
+        addMouseMotionListener(new ShapePanelMouseMotionListener(this));
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public void paint(@NonNull Graphics graphics) {
+    public void paint(@NotNull Graphics graphics) {
         Toolkit.getDefaultToolkit().sync();
 
         super.paintComponent(graphics);
@@ -74,7 +69,7 @@ public class ObjectsPanel extends JPanel {
         movingObject.removeIntersection(staticObject.getId());
     }
 
-    public @NonNull Intersection getIntersection(@NonNull Shape shape, int id) {
+    public @NotNull Intersection getIntersection(@NotNull Shape shape, int id) {
         for (PanelObject otherPanelObject : shapes.values()) {
             if (otherPanelObject.getId() == id)
                 continue;
@@ -86,7 +81,7 @@ public class ObjectsPanel extends JPanel {
         return Intersection.EMPTY;
     }
 
-    public <R extends ShapeRenderer<?>> void addObject(@NonNull PhysicsObject object, @NonNull R renderer) {
+    public <R extends ShapeRenderer<?>> void addObject(@NotNull PhysicsObject object, @NotNull R renderer) {
         PanelObject panelObject = new PanelObject(object, renderer);
         shapes.put(panelObject.getId(), panelObject);
         renderer.setPanelObject(panelObject);
@@ -115,5 +110,25 @@ public class ObjectsPanel extends JPanel {
                 shapes.get(id).removeIntersection(objectId);
             }
         }
+    }
+
+    public @NotNull Map<Integer, PanelObject> getShapes() {
+        return shapes;
+    }
+
+    public PhysicsObjectContainer getObjectContainer() {
+        return objectContainer;
+    }
+
+    public void setObjectContainer(@NotNull PhysicsObjectContainer objectContainer) {
+        this.objectContainer = objectContainer;
+    }
+
+    public @Nullable PanelObject getSelectedShape() {
+        return selectedShape;
+    }
+
+    public void setSelectedShape(@Nullable PanelObject selectedShape) {
+        this.selectedShape = selectedShape;
     }
 }

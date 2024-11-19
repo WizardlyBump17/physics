@@ -3,21 +3,21 @@ package com.wizardlybump17.physics.graphics.two.listener.panel.shape;
 import com.wizardlybump17.physics.graphics.two.panel.object.ObjectsPanel;
 import com.wizardlybump17.physics.graphics.two.panel.object.PanelObject;
 import com.wizardlybump17.physics.two.position.Vector2D;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-@RequiredArgsConstructor
-@Getter
 public class ShapePanelMouseListener extends MouseAdapter {
 
-    private final @NonNull ObjectsPanel panel;
+    private final @NotNull ObjectsPanel panel;
+
+    public ShapePanelMouseListener(@NotNull ObjectsPanel panel) {
+        this.panel = panel;
+    }
 
     @Override
-    public void mouseClicked(@NonNull MouseEvent event) {
+    public void mouseClicked(@NotNull MouseEvent event) {
         Vector2D point = new Vector2D(event.getX(), event.getY());
 
         boolean success = false;
@@ -39,5 +39,9 @@ public class ShapePanelMouseListener extends MouseAdapter {
 
         if (!success)
             panel.setSelectedShape(null);
+    }
+
+    public @NotNull ObjectsPanel getPanel() {
+        return panel;
     }
 }

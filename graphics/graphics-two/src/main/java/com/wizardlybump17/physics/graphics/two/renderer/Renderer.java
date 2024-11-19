@@ -1,10 +1,10 @@
 package com.wizardlybump17.physics.graphics.two.renderer;
 
-import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
 public interface Renderer<T> {
 
-    void render(@NonNull Graphics graphics, @NonNull T value);
+    void render(@NotNull Graphics graphics, @NotNull T value);
 }

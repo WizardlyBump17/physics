@@ -3,24 +3,20 @@ package com.wizardlybump17.physics.graphics.two.renderer.shape;
 import com.wizardlybump17.physics.graphics.two.panel.object.PanelObject;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Circle;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
-@Getter
-@Setter
 public class CircleRenderer implements ShapeRenderer<Circle> {
 
     public static final double HIGHLIGHT_SIZE = 6;
-    public static final @NonNull Color NOT_INTERSECTING = Color.BLUE;
-    public static final @NonNull Color INTERSECTING = new Color(0, 100, 150);
+    public static final @NotNull Color NOT_INTERSECTING = Color.BLUE;
+    public static final @NotNull Color INTERSECTING = new Color(0, 100, 150);
 
-    private @NonNull PanelObject panelObject;
+    private PanelObject panelObject;
 
     @Override
-    public void render(@NonNull Graphics graphics, @NonNull Circle value) {
+    public void render(@NotNull Graphics graphics, @NotNull Circle value) {
         Vector2D position = value.getPosition();
         double radius = value.getRadius();
         double x = position.x() - radius;
@@ -34,5 +30,15 @@ public class CircleRenderer implements ShapeRenderer<Circle> {
 
         graphics.setColor(panelObject.hasIntersections() ? INTERSECTING : NOT_INTERSECTING);
         graphics.fillOval((int) x, (int) y, (int) diameter, (int) diameter);
+    }
+
+    @Override
+    public @NotNull PanelObject getPanelObject() {
+        return panelObject;
+    }
+
+    @Override
+    public void setPanelObject(@NotNull PanelObject panelObject) {
+        this.panelObject = panelObject;
     }
 }
