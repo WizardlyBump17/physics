@@ -5,6 +5,7 @@ import com.wizardlybump17.physics.graphics.two.panel.object.ObjectsPanel;
 import com.wizardlybump17.physics.graphics.two.renderer.shape.CircleRenderer;
 import com.wizardlybump17.physics.graphics.two.renderer.shape.RectangleRenderer;
 import com.wizardlybump17.physics.two.Constants;
+import com.wizardlybump17.physics.two.container.PhysicsObjectContainer;
 import com.wizardlybump17.physics.two.physics.object.PhysicsObject;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Circle;
@@ -23,11 +24,14 @@ public class Main {
 
         Dimension size = frame.getSize();
         ThreadLocalRandom current = ThreadLocalRandom.current();
+        PhysicsObjectContainer objectContainer = new PhysicsObjectContainer();
 
         ObjectsPanel objectsPanel = frame.getObjectsPanel();
+        objectsPanel.setObjectContainer(objectContainer);
+
         int objectCount = 0;
         for (int i = 0; i < 10; i++) {
-            objectsPanel.addShape(
+            objectsPanel.addObject(
                     new PhysicsObject(
                             objectCount++,
                             new Rectangle(
@@ -39,7 +43,7 @@ public class Main {
                     new RectangleRenderer()
             );
 
-            objectsPanel.addShape(
+            objectsPanel.addObject(
                     new PhysicsObject(
                             objectCount++,
                             new Circle(
@@ -55,7 +59,8 @@ public class Main {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                frame.tick();
+                objectContainer.run();
+                frame.repaint();
             }
         }, 0, 1000 / Constants.TICKS_PER_SECOND);
     }
