@@ -38,6 +38,11 @@ public class RectangleToRectangleIntersection implements Intersection {
         if (safePosition != null)
             return safePosition;
 
+        safePosition = calculateSafePosition();
+        return safePosition;
+    }
+
+    protected @NotNull Vector2D calculateSafePosition() {
         Vector2D firstPosition = staticShape.getPosition();
         Vector2D secondPosition = movingShape.getPosition();
         Vector2D firstMin = staticShape.getMin();
@@ -72,8 +77,9 @@ public class RectangleToRectangleIntersection implements Intersection {
             yRatio = firstY / secondY;
         }
 
-        return safePosition = new Vector2D(xRatio >= yRatio ? x : secondX, yRatio > xRatio ? y : secondY);
+        return new Vector2D(xRatio >= yRatio ? x : secondX, yRatio > xRatio ? y : secondY);
     }
+
 
     @Override
     public boolean equals(Object o) {
