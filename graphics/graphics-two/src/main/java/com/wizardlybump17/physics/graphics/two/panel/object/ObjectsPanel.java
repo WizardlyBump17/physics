@@ -4,9 +4,7 @@ import com.wizardlybump17.physics.graphics.two.listener.panel.shape.ShapePanelMo
 import com.wizardlybump17.physics.graphics.two.listener.panel.shape.ShapePanelMouseMotionListener;
 import com.wizardlybump17.physics.graphics.two.renderer.shape.ShapeRenderer;
 import com.wizardlybump17.physics.two.intersection.Intersection;
-import com.wizardlybump17.physics.two.physics.Physics;
 import com.wizardlybump17.physics.two.physics.object.PhysicsObject;
-import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Shape;
 import lombok.Getter;
 import lombok.NonNull;
@@ -80,23 +78,6 @@ public class ObjectsPanel extends JPanel {
         PanelObject panelObject = new PanelObject(object, renderer);
         shapes.put(panelObject.getId(), panelObject);
         renderer.setPanelObject(panelObject);
-    }
-
-    public void tick(long lastTick) {
-        for (PanelObject panelObject : shapes.values()) {
-            PhysicsObject object = panelObject.getObject();
-
-            Physics physics = object.getPhysics();
-            if (panelObject.isSelected()) {
-                physics.setAcceleration(Vector2D.ZERO);
-                physics.setVelocity(Vector2D.ZERO);
-            } else
-                physics.setAcceleration(Physics.GRAVITY_VECTOR);
-
-            object.tick((System.currentTimeMillis() - lastTick) / 1000.0);
-        }
-
-        repaint();
     }
 
     public void teleportToSafePositions() {
