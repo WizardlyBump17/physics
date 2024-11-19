@@ -3,6 +3,7 @@ package com.wizardlybump17.physics.two.container;
 import com.wizardlybump17.physics.two.physics.object.PhysicsObject;
 import com.wizardlybump17.physics.two.tick.Ticker;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,5 +39,9 @@ public class PhysicsObjectContainer implements Ticker {
 
     public boolean hasObject(int id) {
         return objects.containsKey(id);
+    }
+
+    public @Nullable PhysicsObject getObject(int id) {
+        return objects.get(id);
     }
 }
