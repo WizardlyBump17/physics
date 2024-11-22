@@ -5,12 +5,15 @@ import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Shape;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class BaseObject {
 
     private final int id;
     private @NotNull Shape shape;
+    private final @NotNull Map<Integer, BaseObject> collisions = new HashMap<>();
 
     public BaseObject(int id, @NotNull Shape shape) {
         this.id = id;
@@ -70,6 +73,8 @@ public class BaseObject {
      * @param intersection the {@link Intersection}
      */
     public void onCollide(@NotNull BaseObject other, @NotNull Intersection intersection) {
+        collisions.put(other.getId(), other);
+        other.collisions.put(id, this);
     }
 
     /**
@@ -81,5 +86,15 @@ public class BaseObject {
      * @param intersection the {@link Intersection}
      */
     public void onBeingCollided(@NotNull BaseObject collider, @NotNull Intersection intersection) {
+        collisions.put(collider.getId(), collider);
+        collider.collisions.put(id, this);
+    }
+
+    public @NotNull Map<Integer, BaseObject> getCollisions() {
+        return Map.copyOf(collisions);
+    }
+
+    protected @NotNull Map<Integer, BaseObject> getCollisionsInternal() {
+        return collisions;
     }
 }
