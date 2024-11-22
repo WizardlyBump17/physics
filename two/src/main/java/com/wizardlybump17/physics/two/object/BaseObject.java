@@ -82,6 +82,7 @@ public class BaseObject {
      */
     public void onCollide(@NotNull BaseObject other, @NotNull Intersection intersection) {
         collisions.put(other.getId(), new Collision(other, intersection));
+        teleport(intersection.getSafePosition());
     }
 
     /**
