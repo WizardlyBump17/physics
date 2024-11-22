@@ -2,7 +2,7 @@ package com.wizardlybump17.physics.graphics.two.panel.object;
 
 import com.wizardlybump17.physics.graphics.two.renderer.shape.ShapeRenderer;
 import com.wizardlybump17.physics.two.intersection.Intersection;
-import com.wizardlybump17.physics.two.physics.object.PhysicsObject;
+import com.wizardlybump17.physics.two.object.BaseObject;
 import com.wizardlybump17.physics.two.shape.Shape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,12 +15,12 @@ public class PanelObject {
     protected static int currentId;
 
     private final int id = currentId++;
-    private @NotNull PhysicsObject object;
+    private @NotNull BaseObject object;
     private @NotNull ShapeRenderer<?> renderer;
     private boolean selected;
     private final @NotNull Map<Integer, Intersection> intersecting = new HashMap<>();
 
-    public PanelObject(@NotNull PhysicsObject object, @NotNull ShapeRenderer<?> renderer) {
+    public PanelObject(@NotNull BaseObject object, @NotNull ShapeRenderer<?> renderer) {
         this.object = object;
         this.renderer = renderer;
     }
@@ -65,11 +65,11 @@ public class PanelObject {
         return id;
     }
 
-    public @NotNull PhysicsObject getObject() {
+    public @NotNull BaseObject getObject() {
         return object;
     }
 
-    public void setObject(@NotNull PhysicsObject object) {
+    public void setObject(@NotNull BaseObject object) {
         this.object = object;
     }
 

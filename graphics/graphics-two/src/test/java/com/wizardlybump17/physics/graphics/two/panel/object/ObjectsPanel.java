@@ -3,9 +3,9 @@ package com.wizardlybump17.physics.graphics.two.panel.object;
 import com.wizardlybump17.physics.graphics.two.listener.panel.shape.ShapePanelMouseListener;
 import com.wizardlybump17.physics.graphics.two.listener.panel.shape.ShapePanelMouseMotionListener;
 import com.wizardlybump17.physics.graphics.two.renderer.shape.ShapeRenderer;
-import com.wizardlybump17.physics.two.container.PhysicsObjectContainer;
+import com.wizardlybump17.physics.two.container.BaseObjectContainer;
 import com.wizardlybump17.physics.two.intersection.Intersection;
-import com.wizardlybump17.physics.two.physics.object.PhysicsObject;
+import com.wizardlybump17.physics.two.object.BaseObject;
 import com.wizardlybump17.physics.two.shape.Shape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +18,7 @@ import java.util.Map;
 public class ObjectsPanel extends JPanel {
 
     private final transient @NotNull Map<Integer, PanelObject> shapes = new HashMap<>();
-    private transient PhysicsObjectContainer objectContainer;
+    private transient BaseObjectContainer objectContainer;
     private transient @Nullable PanelObject selectedShape;
 
     public ObjectsPanel() {
@@ -81,7 +81,7 @@ public class ObjectsPanel extends JPanel {
         return Intersection.EMPTY;
     }
 
-    public <R extends ShapeRenderer<?>> void addObject(@NotNull PhysicsObject object, @NotNull R renderer) {
+    public <R extends ShapeRenderer<?>> void addObject(@NotNull BaseObject object, @NotNull R renderer) {
         PanelObject panelObject = new PanelObject(object, renderer);
         shapes.put(panelObject.getId(), panelObject);
         renderer.setPanelObject(panelObject);
@@ -100,7 +100,7 @@ public class ObjectsPanel extends JPanel {
                 if (!intersection.intersects())
                     continue;
 
-                PhysicsObject object = panelObject.getObject();
+                BaseObject object = panelObject.getObject();
                 if (!object.getShape().equals(intersection.getMovingShape()))
                     continue;
 
@@ -116,11 +116,11 @@ public class ObjectsPanel extends JPanel {
         return shapes;
     }
 
-    public PhysicsObjectContainer getObjectContainer() {
+    public BaseObjectContainer getObjectContainer() {
         return objectContainer;
     }
 
-    public void setObjectContainer(@NotNull PhysicsObjectContainer objectContainer) {
+    public void setObjectContainer(@NotNull BaseObjectContainer objectContainer) {
         this.objectContainer = objectContainer;
     }
 
