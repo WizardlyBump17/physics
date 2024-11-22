@@ -5,43 +5,46 @@ import com.wizardlybump17.physics.two.tick.Ticker;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collection;
 
-public class BaseObjectContainer implements Ticker {
+public abstract class BaseObjectContainer implements Ticker {
 
-    private final @NotNull Map<Integer, BaseObject> objects = new HashMap<>();
     private long lastTick;
 
     @Override
     public void run() {
-        for (BaseObject object : objects.values())
+        for (BaseObject object : getObjectsInternal())
             object.tick((System.currentTimeMillis() - lastTick) / 1000.0);
 
         lastTick = System.currentTimeMillis();
-    }
-
-    public @NotNull Map<Integer, BaseObject> getObjects() {
-        return Map.copyOf(objects);
     }
 
     public long getLastTick() {
         return lastTick;
     }
 
-    public void addObject(@NotNull BaseObject object) {
-        objects.put(object.getId(), object);
-    }
+    public abstract void addObject(@NotNull BaseObject object);
 
-    public void removeObject(int id) {
-        objects.remove(id);
-    }
+    public abstract void removeObject(int id);
 
-    public boolean hasObject(int id) {
-        return objects.containsKey(id);
-    }
+    public abstract boolean hasObject(int id);
 
-    public @Nullable BaseObject getObject(int id) {
-        return objects.get(id);
-    }
+    public abstract @Nullable BaseObject getObject(int id);
+
+    public abstract @NotNull Collection<BaseObject> getObjects();
+
+    /**
+     * <p>
+     * This method returns all {@link BaseObject}s in this container.
+     * The difference between this method returns a mutable {@link Collection}, generally the real
+     * {@link Collection} holding the {@link BaseObject}s.
+     * </p>
+     *
+     * @return the {@link Collection} of {@link BaseObject}s
+     * @implSpec it is recommended that this method returns the actual {@link Collection} of {@link BaseObject}s so we can
+     * save some bits in memory, because this method will be used in some internal code like in {@link #run()}
+     */
+    protected abstract @NotNull Collection<BaseObject> getObjectsInternal();
+
+    public abstract void clear();
 }
