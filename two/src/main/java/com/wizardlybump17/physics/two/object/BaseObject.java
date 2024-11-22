@@ -82,7 +82,6 @@ public class BaseObject {
      */
     public void onCollide(@NotNull BaseObject other, @NotNull Intersection intersection) {
         collisions.put(other.getId(), new Collision(other, intersection));
-        other.collisions.put(id, new Collision(this, intersection));
     }
 
     /**
@@ -95,7 +94,6 @@ public class BaseObject {
      */
     public void onBeingCollided(@NotNull BaseObject collider, @NotNull Intersection intersection) {
         collisions.put(collider.getId(), new Collision(collider, intersection));
-        collider.collisions.put(id, new Collision(this, intersection));
     }
 
     public @NotNull Map<Integer, Collision> getCollisions() {
