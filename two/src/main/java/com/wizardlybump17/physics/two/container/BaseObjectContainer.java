@@ -55,6 +55,8 @@ public abstract class BaseObjectContainer implements Ticker {
      * Handles the collision for the given object.
      * This method calls the {@link BaseObject#onCollide(BaseObject, Intersection)} of that object,
      * passing the other object (in the loop) and their {@link Intersection}s.
+     * This method also calls the {@link BaseObject#onBeingCollided(BaseObject, Intersection)} of the other object (in the loop),
+     * passing the given object parameter and their {@link Intersection}s.
      * </p>
      *
      * @param object the object to handle
@@ -69,6 +71,7 @@ public abstract class BaseObjectContainer implements Ticker {
                 continue;
 
             object.onCollide(other, intersection);
+            other.onBeingCollided(object, intersection);
         }
     }
 }
