@@ -14,7 +14,7 @@ public class BaseObject {
 
     private final int id;
     private @NotNull Shape shape;
-    private final @NotNull Map<Integer, BaseObject> collisions = new HashMap<>();
+    private final @NotNull Map<Integer, Collision> collisions = new HashMap<>();
     private final @NotNull BaseObjectContainer container;
 
     public BaseObject(@NotNull BaseObjectContainer container, int id, @NotNull Shape shape) {
@@ -81,8 +81,8 @@ public class BaseObject {
      * @param intersection the {@link Intersection}
      */
     public void onCollide(@NotNull BaseObject other, @NotNull Intersection intersection) {
-        collisions.put(other.getId(), other);
-        other.collisions.put(id, this);
+        collisions.put(other.getId(), new Collision(other, intersection));
+        other.collisions.put(id, new Collision(this, intersection));
     }
 
     /**
@@ -94,19 +94,22 @@ public class BaseObject {
      * @param intersection the {@link Intersection}
      */
     public void onBeingCollided(@NotNull BaseObject collider, @NotNull Intersection intersection) {
-        collisions.put(collider.getId(), collider);
-        collider.collisions.put(id, this);
+        collisions.put(collider.getId(), new Collision(collider, intersection));
+        collider.collisions.put(id, new Collision(this, intersection));
     }
 
-    public @NotNull Map<Integer, BaseObject> getCollisions() {
+    public @NotNull Map<Integer, Collision> getCollisions() {
         return Map.copyOf(collisions);
     }
 
-    protected @NotNull Map<Integer, BaseObject> getCollisionsInternal() {
+    protected @NotNull Map<Integer, Collision> getCollisionsInternal() {
         return collisions;
     }
 
     public @NotNull BaseObjectContainer getContainer() {
         return container;
+    }
+
+    public record Collision(@NotNull BaseObject object, @NotNull Intersection intersection) {
     }
 }
