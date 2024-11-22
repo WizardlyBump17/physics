@@ -24,7 +24,7 @@ public class Main {
 
         Dimension size = frame.getSize();
         ThreadLocalRandom current = ThreadLocalRandom.current();
-        BaseObjectContainer objectContainer = new BaseObjectContainer();
+        BaseObjectContainer objectContainer = new BasicBaseObjectContainer();
 
         ObjectsPanel objectsPanel = frame.getObjectsPanel();
         objectsPanel.setObjectContainer(objectContainer);
