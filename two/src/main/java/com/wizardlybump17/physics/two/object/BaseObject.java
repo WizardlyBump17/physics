@@ -106,6 +106,18 @@ public class BaseObject {
         return collisions;
     }
 
+    public void addCollision(@NotNull Collision collision) {
+        collisions.put(collision.object.id, collision);
+    }
+
+    public boolean isCollidingWith(@NotNull BaseObject other) {
+        return collisions.containsKey(other.id);
+    }
+
+    public void removeCollision(int id) {
+        collisions.remove(id);
+    }
+
     public @NotNull BaseObjectContainer getContainer() {
         return container;
     }
