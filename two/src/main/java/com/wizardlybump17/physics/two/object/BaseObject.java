@@ -44,6 +44,11 @@ public class BaseObject {
     }
 
     public void tick(double deltaTime) {
+        handleCollisions();
+    }
+
+    protected void handleCollisions() {
+        container.collisions(this);
     }
 
     @Override
