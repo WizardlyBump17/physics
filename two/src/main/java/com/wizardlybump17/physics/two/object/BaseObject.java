@@ -128,6 +128,10 @@ public class BaseObject {
         removeCollision(collider.id);
     }
 
+    public boolean hasCollisions() {
+        return !collisions.isEmpty();
+    }
+
     public record Collision(@NotNull BaseObject object, @NotNull Intersection intersection) {
     }
 }
