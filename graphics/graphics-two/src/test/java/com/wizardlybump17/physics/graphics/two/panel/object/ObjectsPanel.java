@@ -35,6 +35,7 @@ public class ObjectsPanel extends JPanel {
 
         intersections();
         teleportToSafePositions();
+        intersections();
 
         shapes.values().forEach(panelShape -> ((ShapeRenderer<Shape>) panelShape.getRenderer()).render(graphics, panelShape.getShape()));
         if (selectedShape != null)
