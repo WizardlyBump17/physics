@@ -1,5 +1,6 @@
 package com.wizardlybump17.physics.two.physics.object;
 
+import com.wizardlybump17.physics.two.container.BaseObjectContainer;
 import com.wizardlybump17.physics.two.object.BaseObject;
 import com.wizardlybump17.physics.two.physics.Physics;
 import com.wizardlybump17.physics.two.shape.Shape;
@@ -11,13 +12,13 @@ public class PhysicsObject extends BaseObject {
 
     private @NotNull Physics physics;
 
-    public PhysicsObject(int id, @NotNull Shape shape, @NotNull Physics physics) {
-        super(id, shape);
+    public PhysicsObject(@NotNull BaseObjectContainer container, int id, @NotNull Shape shape, @NotNull Physics physics) {
+        super(container, id, shape);
         this.physics = physics;
     }
 
-    public PhysicsObject(int id, @NotNull Shape shape) {
-        super(id, shape);
+    public PhysicsObject(@NotNull BaseObjectContainer container, int id, @NotNull Shape shape) {
+        super(container, id, shape);
         this.physics = new Physics(this);
     }
 

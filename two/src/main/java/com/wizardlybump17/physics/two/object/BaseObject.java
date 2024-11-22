@@ -1,5 +1,6 @@
 package com.wizardlybump17.physics.two.object;
 
+import com.wizardlybump17.physics.two.container.BaseObjectContainer;
 import com.wizardlybump17.physics.two.intersection.Intersection;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Shape;
@@ -14,8 +15,10 @@ public class BaseObject {
     private final int id;
     private @NotNull Shape shape;
     private final @NotNull Map<Integer, BaseObject> collisions = new HashMap<>();
+    private final @NotNull BaseObjectContainer container;
 
-    public BaseObject(int id, @NotNull Shape shape) {
+    public BaseObject(@NotNull BaseObjectContainer container, int id, @NotNull Shape shape) {
+        this.container = container;
         this.id = id;
         this.shape = shape;
     }
@@ -96,5 +99,9 @@ public class BaseObject {
 
     protected @NotNull Map<Integer, BaseObject> getCollisionsInternal() {
         return collisions;
+    }
+
+    public @NotNull BaseObjectContainer getContainer() {
+        return container;
     }
 }

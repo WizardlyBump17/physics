@@ -6,6 +6,7 @@ import com.wizardlybump17.physics.graphics.two.renderer.shape.CircleRenderer;
 import com.wizardlybump17.physics.graphics.two.renderer.shape.RectangleRenderer;
 import com.wizardlybump17.physics.two.Constants;
 import com.wizardlybump17.physics.two.container.BaseObjectContainer;
+import com.wizardlybump17.physics.two.container.BasicBaseObjectContainer;
 import com.wizardlybump17.physics.two.object.BaseObject;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Circle;
@@ -33,6 +34,7 @@ public class Main {
         for (int i = 0; i < 10; i++) {
             objectsPanel.addObject(
                     new BaseObject(
+                            objectContainer,
                             objectCount++,
                             new Rectangle(
                                     Vector2D.randomVector(current, 0, 0, size.getWidth(), size.getHeight()),
@@ -45,6 +47,7 @@ public class Main {
 
             objectsPanel.addObject(
                     new BaseObject(
+                            objectContainer,
                             objectCount++,
                             new Circle(
                                     Vector2D.randomVector(current, 0, 0, size.getWidth(), size.getHeight()),
