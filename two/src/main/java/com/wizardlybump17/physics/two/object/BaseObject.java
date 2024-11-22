@@ -120,6 +120,14 @@ public class BaseObject {
         return container;
     }
 
+    public void onCollisionStop(@NotNull BaseObject other) {
+        removeCollision(other.id);
+    }
+
+    public void onStopBeingCollided(@NotNull BaseObject collider) {
+        removeCollision(collider.id);
+    }
+
     public record Collision(@NotNull BaseObject object, @NotNull Intersection intersection) {
     }
 }
