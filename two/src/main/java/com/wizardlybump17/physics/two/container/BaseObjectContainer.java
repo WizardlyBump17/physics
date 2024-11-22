@@ -67,8 +67,11 @@ public abstract class BaseObjectContainer implements Ticker {
             Shape otherShape = other.getShape();
 
             Intersection intersection = objectShape.intersect(otherShape);
-            if (!intersection.intersects())
+            if (!intersection.intersects()) {
+                object.onCollisionStop(other);
+                other.onStopBeingCollided(object);
                 continue;
+            }
 
             object.onCollide(other, intersection);
             other.onBeingCollided(object, intersection);
