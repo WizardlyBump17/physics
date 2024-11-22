@@ -1,5 +1,6 @@
 package com.wizardlybump17.physics.two.object;
 
+import com.wizardlybump17.physics.two.intersection.Intersection;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Shape;
 import org.jetbrains.annotations.NotNull;
@@ -58,5 +59,27 @@ public class BaseObject {
                 "id=" + id +
                 ", shape=" + shape +
                 '}';
+    }
+
+    /**
+     * <p>
+     *     This method is called when this object collides with another one.
+     *     The {@link Intersection#getMovingShape()} is this object and the {@link Intersection#getStaticShape()} is the other object.
+     * </p>
+     * @param other the {@link BaseObject} that will be collided with
+     * @param intersection the {@link Intersection}
+     */
+    public void onCollide(@NotNull BaseObject other, @NotNull Intersection intersection) {
+    }
+
+    /**
+     * <p>
+     *     This method is called when this object is collided by another one.
+     *     The {@link Intersection#getStaticShape()} is this object and the {@link Intersection#getMovingShape()} is the other object.
+     * </p>
+     * @param collider the {@link BaseObject} that is colliding with this one
+     * @param intersection the {@link Intersection}
+     */
+    public void onBeingCollided(@NotNull BaseObject collider, @NotNull Intersection intersection) {
     }
 }
