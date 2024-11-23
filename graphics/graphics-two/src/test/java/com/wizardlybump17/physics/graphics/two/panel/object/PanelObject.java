@@ -2,6 +2,7 @@ package com.wizardlybump17.physics.graphics.two.panel.object;
 
 import com.wizardlybump17.physics.graphics.two.renderer.shape.ShapeRenderer;
 import com.wizardlybump17.physics.two.object.BaseObject;
+import com.wizardlybump17.physics.two.physics.object.PhysicsObject;
 import com.wizardlybump17.physics.two.shape.Shape;
 import org.jetbrains.annotations.NotNull;
 
@@ -53,6 +54,6 @@ public class PanelObject {
     }
 
     public boolean hasIntersections() {
-        return object.hasCollisions();
+        return object instanceof PhysicsObject physicsObject && physicsObject.hasCollisions();
     }
 }
