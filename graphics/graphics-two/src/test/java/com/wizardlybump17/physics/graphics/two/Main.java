@@ -5,10 +5,12 @@ import com.wizardlybump17.physics.graphics.two.panel.object.ObjectsPanel;
 import com.wizardlybump17.physics.graphics.two.renderer.shape.CircleRenderer;
 import com.wizardlybump17.physics.graphics.two.renderer.shape.RectangleRenderer;
 import com.wizardlybump17.physics.two.Constants;
+import com.wizardlybump17.physics.two.Engine;
 import com.wizardlybump17.physics.two.container.BaseObjectContainer;
 import com.wizardlybump17.physics.two.container.BasicBaseObjectContainer;
 import com.wizardlybump17.physics.two.object.BaseObject;
 import com.wizardlybump17.physics.two.position.Vector2D;
+import com.wizardlybump17.physics.two.scheduler.Scheduler;
 import com.wizardlybump17.physics.two.shape.Circle;
 import com.wizardlybump17.physics.two.shape.Rectangle;
 
@@ -26,6 +28,9 @@ public class Main {
         Dimension size = frame.getSize();
         ThreadLocalRandom current = ThreadLocalRandom.current();
         BaseObjectContainer objectContainer = new BasicBaseObjectContainer();
+        Scheduler scheduler = new Scheduler();
+
+        Engine.setScheduler(scheduler);
 
         ObjectsPanel objectsPanel = frame.getObjectsPanel();
         objectsPanel.setObjectContainer(objectContainer);
@@ -62,6 +67,7 @@ public class Main {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
+                scheduler.run();
                 objectContainer.run();
                 frame.repaint();
             }
