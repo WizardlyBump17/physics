@@ -90,4 +90,12 @@ public class Physics {
                 ", acceleration=" + acceleration +
                 '}';
     }
+
+    public @NotNull Vector2D getEffectiveVelocity(double deltaTime) {
+        return velocity.add(acceleration.multiply(deltaTime)).multiply(deltaTime);
+    }
+
+    public @NotNull Vector2D getTargetPosition(double deltaTime) {
+        return object.getPosition().add(getEffectiveVelocity(deltaTime));
+    }
 }
