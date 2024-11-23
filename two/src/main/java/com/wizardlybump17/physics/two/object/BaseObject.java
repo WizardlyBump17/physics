@@ -74,27 +74,19 @@ public class BaseObject {
 
     /**
      * <p>
-     *     This method is called when this object collides with another one.
-     *     The {@link Intersection#getMovingShape()} is this object and the {@link Intersection#getStaticShape()} is the other object.
+     * This method is called when this object collides with another one.
      * </p>
-     * @param other the {@link BaseObject} that will be collided with
+     *
+     * @param other        the {@link BaseObject} is colliding with this one
      * @param intersection the {@link Intersection}
      */
     public void onCollide(@NotNull BaseObject other, @NotNull Intersection intersection) {
         collisions.put(other.getId(), new Collision(other, intersection));
+        System.out.println(intersection.getStaticShape());
+        System.out.println(intersection.getMovingShape());
+        System.out.println(shape);
+        System.out.println(id);
         teleport(intersection.getSafePosition());
-    }
-
-    /**
-     * <p>
-     *     This method is called when this object is collided by another one.
-     *     The {@link Intersection#getStaticShape()} is this object and the {@link Intersection#getMovingShape()} is the other object.
-     * </p>
-     * @param collider the {@link BaseObject} that is colliding with this one
-     * @param intersection the {@link Intersection}
-     */
-    public void onBeingCollided(@NotNull BaseObject collider, @NotNull Intersection intersection) {
-        collisions.put(collider.getId(), new Collision(collider, intersection));
     }
 
     public @NotNull Map<Integer, Collision> getCollisions() {
@@ -123,10 +115,6 @@ public class BaseObject {
 
     public void onCollisionStop(@NotNull BaseObject other) {
         removeCollision(other.id);
-    }
-
-    public void onStopBeingCollided(@NotNull BaseObject collider) {
-        removeCollision(collider.id);
     }
 
     public boolean hasCollisions() {

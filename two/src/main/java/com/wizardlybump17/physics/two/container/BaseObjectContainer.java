@@ -76,14 +76,14 @@ public abstract class BaseObjectContainer implements Ticker {
                 if (object.isCollidingWith(other))
                     object.onCollisionStop(other);
                 if (other.isCollidingWith(object))
-                    other.onStopBeingCollided(object);
+                    other.onCollisionStop(object);
                 continue;
             }
 
             if (!object.isCollidingWith(other))
                 object.onCollide(other, intersection);
             if (!other.isCollidingWith(object))
-                other.onBeingCollided(object, intersection);
+                other.onCollide(object, intersection);
         }
     }
 }
