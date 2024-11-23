@@ -13,6 +13,9 @@ public abstract class BaseObjectContainer implements Ticker {
 
     @Override
     public void run() {
+        if (lastTick == 0)
+            lastTick = System.currentTimeMillis();
+
         for (BaseObject object : getObjectsInternal())
             object.tick((System.currentTimeMillis() - lastTick) / 1000.0);
 
