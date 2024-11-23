@@ -4,9 +4,11 @@ import com.wizardlybump17.physics.two.container.BaseObjectContainer;
 import com.wizardlybump17.physics.two.intersection.Intersection;
 import com.wizardlybump17.physics.two.object.BaseObject;
 import com.wizardlybump17.physics.two.physics.Physics;
+import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Shape;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -37,8 +39,8 @@ public class PhysicsObject extends BaseObject {
     @Override
     public void tick(double deltaTime) {
         super.tick(deltaTime);
-        handleCollisions();
         physics.tick(deltaTime);
+        handleCollisions(deltaTime);
     }
 
     @Override
@@ -63,7 +65,36 @@ public class PhysicsObject extends BaseObject {
                 "} " + super.toString();
     }
 
-    protected void handleCollisions() {
+    protected void handleCollisions(double deltaTime) {
+        Collection<BaseObject> objects = getContainer().getObjects();
+
+        Vector2D velocity = physics.getEffectiveVelocity(deltaTime);
+        if (velocity.zero())
+            return;
+
+        Vector2D target = physics.getTargetPosition(deltaTime);
+
+        for (BaseObject other : objects) {
+            if (other.getId() == getId())
+                continue;
+
+            Shape otherShape = other.getShape();
+            Shape shape = getShape().at(target);
+
+            Intersection intersection = otherShape.intersect(shape);
+            if (!intersection.intersects()) {
+                onCollisionStop(other);
+                if (other instanceof PhysicsObject otherPhysicsObject)
+                    otherPhysicsObject.onCollisionStop(this);
+                continue;
+            }
+
+            onCollide(other, intersection);
+            if (other instanceof PhysicsObject otherPhysicsObject)
+                otherPhysicsObject.onCollide(this, intersection);
+
+            teleport(intersection.getSafePosition());
+        }
     }
 
     /**
