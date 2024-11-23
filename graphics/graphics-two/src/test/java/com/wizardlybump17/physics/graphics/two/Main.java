@@ -8,7 +8,7 @@ import com.wizardlybump17.physics.two.Constants;
 import com.wizardlybump17.physics.two.Engine;
 import com.wizardlybump17.physics.two.container.BaseObjectContainer;
 import com.wizardlybump17.physics.two.container.BasicBaseObjectContainer;
-import com.wizardlybump17.physics.two.object.BaseObject;
+import com.wizardlybump17.physics.two.physics.object.PhysicsObject;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.scheduler.Scheduler;
 import com.wizardlybump17.physics.two.shape.Circle;
@@ -38,7 +38,7 @@ public class Main {
         int objectCount = 0;
         for (int i = 0; i < 10; i++) {
             objectsPanel.addObject(
-                    new BaseObject(
+                    new PhysicsObject(
                             objectContainer,
                             objectCount++,
                             new Rectangle(
@@ -51,7 +51,7 @@ public class Main {
             );
 
             objectsPanel.addObject(
-                    new BaseObject(
+                    new PhysicsObject(
                             objectContainer,
                             objectCount++,
                             new Circle(
