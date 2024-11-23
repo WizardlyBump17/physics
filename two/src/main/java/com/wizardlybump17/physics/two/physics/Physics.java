@@ -39,12 +39,28 @@ public class Physics {
         this.velocity = velocity;
     }
 
+    public void addVelocity(@NotNull Vector2D velocity) {
+        setVelocity(this.velocity.add(velocity));
+    }
+
+    public void subtractVelocity(@NotNull Vector2D velocity) {
+        setVelocity(this.velocity.subtract(velocity));
+    }
+
     public @NotNull Vector2D getAcceleration() {
         return acceleration;
     }
 
     public void setAcceleration(@NotNull Vector2D acceleration) {
         this.acceleration = acceleration;
+    }
+
+    public void addAcceleration(@NotNull Vector2D acceleration) {
+        setAcceleration(this.acceleration.add(acceleration));
+    }
+
+    public void subtractAcceleration(@NotNull Vector2D acceleration) {
+        setAcceleration(this.acceleration.subtract(acceleration));
     }
 
     public void tick(double deltaTime) {
