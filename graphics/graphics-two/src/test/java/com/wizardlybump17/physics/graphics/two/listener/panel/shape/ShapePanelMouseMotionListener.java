@@ -2,6 +2,7 @@ package com.wizardlybump17.physics.graphics.two.listener.panel.shape;
 
 import com.wizardlybump17.physics.graphics.two.panel.object.ObjectsPanel;
 import com.wizardlybump17.physics.graphics.two.panel.object.PanelObject;
+import com.wizardlybump17.physics.two.Engine;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +21,7 @@ public class ShapePanelMouseMotionListener extends MouseAdapter {
     public void mouseDragged(@NotNull MouseEvent event) {
         PanelObject panelObject = panel.getSelectedShape();
         if (panelObject != null)
-            panelObject.getObject().teleport(new Vector2D(event.getX(), event.getY()));
+            Engine.getScheduler().schedule(() -> panelObject.getObject().teleport(new Vector2D(event.getX(), event.getY())));
     }
 
     public @NotNull ObjectsPanel getPanel() {
