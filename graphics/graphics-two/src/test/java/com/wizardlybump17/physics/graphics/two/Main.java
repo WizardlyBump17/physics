@@ -8,6 +8,7 @@ import com.wizardlybump17.physics.two.Constants;
 import com.wizardlybump17.physics.two.Engine;
 import com.wizardlybump17.physics.two.container.BaseObjectContainer;
 import com.wizardlybump17.physics.two.container.BasicBaseObjectContainer;
+import com.wizardlybump17.physics.two.physics.Physics;
 import com.wizardlybump17.physics.two.physics.object.PhysicsObject;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.scheduler.Scheduler;
@@ -63,10 +64,26 @@ public class Main {
             );
         }
 
+            PhysicsObject object = new PhysicsObject(
+                    objectContainer,
+                    objectCount++,
+                    new Circle(
+                            Vector2D.randomVector(current, 0, 0, size.getWidth(), size.getHeight()),
+                            current.nextDouble(50) + 10
+                    )
+            );
+            objectsPanel.addObject(
+                    object,
+                    new CircleRenderer()
+            );
+
+
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
+                object.getPhysics().setAcceleration(Physics.GRAVITY_VECTOR);
+
                 scheduler.run();
                 objectContainer.run();
                 frame.repaint();
