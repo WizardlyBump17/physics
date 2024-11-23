@@ -137,4 +137,11 @@ public record Vector2D(double x, double y) {
     public double dot(@NotNull Vector2D other) {
         return (x * other.x) + (y * other.y);
     }
+
+    /**
+     * @return if this vector {@link #lengthSquared()} is less or equals to {@link MathUtil#EPSILON}
+     */
+    public boolean zero() {
+        return lengthSquared() <= MathUtil.EPSILON;
+    }
 }
