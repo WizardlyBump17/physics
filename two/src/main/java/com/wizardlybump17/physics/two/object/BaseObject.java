@@ -82,11 +82,6 @@ public class BaseObject {
      */
     public void onCollide(@NotNull BaseObject other, @NotNull Intersection intersection) {
         collisions.put(other.getId(), new Collision(other, intersection));
-        System.out.println(intersection.getStaticShape());
-        System.out.println(intersection.getMovingShape());
-        System.out.println(shape);
-        System.out.println(id);
-        teleport(intersection.getSafePosition());
     }
 
     public @NotNull Map<Integer, Collision> getCollisions() {
