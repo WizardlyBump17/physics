@@ -1,8 +1,6 @@
 package com.wizardlybump17.physics.two.container;
 
-import com.wizardlybump17.physics.two.intersection.Intersection;
 import com.wizardlybump17.physics.two.object.BaseObject;
-import com.wizardlybump17.physics.two.shape.Shape;
 import com.wizardlybump17.physics.two.tick.Ticker;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -49,41 +47,4 @@ public abstract class BaseObjectContainer implements Ticker {
     protected abstract @NotNull Collection<BaseObject> getObjectsInternal();
 
     public abstract void clear();
-
-    /**
-     * <p>
-     * Handles the collision for the given object.
-     * This method calls the {@link BaseObject#onCollide(BaseObject, Intersection)} of that object,
-     * passing the other object (in the loop) and their {@link Intersection}s.
-     * This method also calls the {@link BaseObject#onBeingCollided(BaseObject, Intersection)} of the other object (in the loop),
-     * passing the given object parameter and their {@link Intersection}s.
-     * </p>
-     *
-     * @param object the object to handle
-     */
-    public void collisions(@NotNull BaseObject object) {
-        int objectId = object.getId();
-        Shape objectShape = object.getShape();
-
-        for (BaseObject other : getObjectsInternal()) {
-            if (other.getId() == objectId)
-                continue;
-
-            Shape otherShape = other.getShape();
-
-            Intersection intersection = otherShape.intersect(objectShape);
-            if (!intersection.intersects()) {
-                if (object.isCollidingWith(other))
-                    object.onCollisionStop(other);
-                if (other.isCollidingWith(object))
-                    other.onCollisionStop(object);
-                continue;
-            }
-
-            if (!object.isCollidingWith(other))
-                object.onCollide(other, intersection);
-            if (!other.isCollidingWith(object))
-                other.onCollide(object, intersection);
-        }
-    }
 }
