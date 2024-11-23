@@ -14,7 +14,7 @@ public class BaseObject {
 
     private final int id;
     private @NotNull Shape shape;
-    private final @NotNull Map<Integer, Collision> collisions = new HashMap<>();
+    protected final @NotNull Map<Integer, Collision> collisions = new HashMap<>();
     private final @NotNull BaseObjectContainer container;
 
     public BaseObject(@NotNull BaseObjectContainer container, int id, @NotNull Shape shape) {
@@ -86,10 +86,6 @@ public class BaseObject {
 
     public @NotNull Map<Integer, Collision> getCollisions() {
         return Map.copyOf(collisions);
-    }
-
-    protected @NotNull Map<Integer, Collision> getCollisionsInternal() {
-        return collisions;
     }
 
     public void addCollision(@NotNull Collision collision) {
