@@ -1,5 +1,7 @@
 rootProject.name = "physics"
 
+include("shared")
+
 include("two")
 
 include("graphics")
