@@ -16,6 +16,7 @@ public abstract class BaseObjectContainer implements Ticker {
         if (lastTick == 0)
             lastTick = System.currentTimeMillis();
 
+        handleCollisions();
         for (BaseObject object : getObjectsInternal())
             object.tick((System.currentTimeMillis() - lastTick) / 1000.0);
 
@@ -50,4 +51,15 @@ public abstract class BaseObjectContainer implements Ticker {
     protected abstract @NotNull Collection<BaseObject> getObjectsInternal();
 
     public abstract void clear();
+
+    protected void handleCollisions() {
+        collisionBroadPhase();
+        collisionNarrowPhase();
+    }
+
+    protected void collisionBroadPhase() {
+    }
+
+    protected void collisionNarrowPhase() {
+    }
 }
