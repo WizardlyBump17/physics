@@ -1,24 +1,30 @@
 package com.wizardlybump17.physics.two.container;
 
+import com.wizardlybump17.physics.Pair;
 import com.wizardlybump17.physics.two.object.BaseObject;
+import com.wizardlybump17.physics.two.physics.object.PhysicsObject;
 import com.wizardlybump17.physics.two.tick.Ticker;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 public abstract class BaseObjectContainer implements Ticker {
 
     private long lastTick;
+    private final @NotNull List<Pair<Integer, Integer>> collisions = new LinkedList<>();
+    private final @NotNull List<Pair<Integer, Integer>> endedCollisions = new LinkedList<>();
 
     @Override
     public void run() {
         if (lastTick == 0)
             lastTick = System.currentTimeMillis();
 
-        handleCollisions();
         for (BaseObject object : getObjectsInternal())
             object.tick((System.currentTimeMillis() - lastTick) / 1000.0);
+        handleCollisions();
 
         lastTick = System.currentTimeMillis();
     }
@@ -53,13 +59,67 @@ public abstract class BaseObjectContainer implements Ticker {
     public abstract void clear();
 
     protected void handleCollisions() {
+        collisions.clear();
+        endedCollisions.clear();
+
         collisionBroadPhase();
         collisionNarrowPhase();
+
+        endCollisions();
     }
 
     protected void collisionBroadPhase() {
+        for (BaseObject base : getObjectsInternal()) {
+            if (!(base instanceof PhysicsObject baseObject) || !baseObject.isCollidable())
+                continue;
+
+            int baseId = base.getId();
+
+            for (BaseObject target : getObjectsInternal()) {
+                int targetId = target.getId();
+                if (baseId == targetId)
+                    continue;
+
+                if (!(target instanceof PhysicsObject targetObject) || !targetObject.isCollidable())
+                    continue;
+
+                Pair<Integer, Integer> pair = new Pair<>(baseId, targetId);
+
+                if (!base.getShape().intersects(target.getShape())) {
+                    endedCollisions.add(pair);
+                    continue;
+                }
+
+                collisions.add(pair);
+            }
+        }
     }
 
     protected void collisionNarrowPhase() {
+        for (Pair<Integer, Integer> pair : collisions) {
+            PhysicsObject firstObject = (PhysicsObject) getObject(pair.first());
+            PhysicsObject secondObject = (PhysicsObject) getObject(pair.second());
+
+            if (firstObject == null || secondObject == null)
+                return;
+
+            firstObject.onCollide(secondObject);
+            secondObject.onCollide(firstObject);
+        }
+    }
+
+    protected void endCollisions() {
+        for (Pair<Integer, Integer> pair : endedCollisions) {
+            PhysicsObject firstObject = (PhysicsObject) getObject(pair.first());
+            PhysicsObject secondObject = (PhysicsObject) getObject(pair.second());
+
+            if (firstObject == null || secondObject == null)
+                return;
+
+            if (firstObject.isCollidingWith(secondObject))
+                firstObject.onCollisionStop(secondObject);
+            if (secondObject.isCollidingWith(firstObject))
+                secondObject.onCollisionStop(firstObject);
+        }
     }
 }
