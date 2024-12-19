@@ -1,10 +1,17 @@
 package com.wizardlybump17.physics.graphics.two.panel.object;
 
+import com.wizardlybump17.physics.graphics.two.listener.panel.shape.ShapePanelKeyboardListener;
 import com.wizardlybump17.physics.graphics.two.listener.panel.shape.ShapePanelMouseListener;
 import com.wizardlybump17.physics.graphics.two.listener.panel.shape.ShapePanelMouseMotionListener;
+import com.wizardlybump17.physics.graphics.two.renderer.shape.CircleRenderer;
+import com.wizardlybump17.physics.graphics.two.renderer.shape.RectangleRenderer;
 import com.wizardlybump17.physics.graphics.two.renderer.shape.ShapeRenderer;
 import com.wizardlybump17.physics.two.container.BaseObjectContainer;
 import com.wizardlybump17.physics.two.object.BaseObject;
+import com.wizardlybump17.physics.two.physics.object.PhysicsObject;
+import com.wizardlybump17.physics.two.position.Vector2D;
+import com.wizardlybump17.physics.two.shape.Circle;
+import com.wizardlybump17.physics.two.shape.Rectangle;
 import com.wizardlybump17.physics.two.shape.Shape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,16 +20,72 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class ObjectsPanel extends JPanel {
 
     private final transient @NotNull Map<Integer, PanelObject> shapes = new HashMap<>();
     private transient BaseObjectContainer objectContainer;
     private transient @Nullable PanelObject selectedShape;
+    private transient PhysicsObject fallingBall;
+    private transient int objectCount;
 
     public ObjectsPanel() {
+        setFocusable(true);
+        requestFocus();
+
         addMouseListener(new ShapePanelMouseListener(this));
         addMouseMotionListener(new ShapePanelMouseMotionListener(this));
+        addKeyListener(new ShapePanelKeyboardListener(this));
+    }
+
+    public PhysicsObject getFallingBall() {
+        return fallingBall;
+    }
+
+    public void regenerate() {
+        shapes.clear();
+        objectContainer.clear();
+
+        Random random = new Random();
+        Dimension size = getSize();
+
+        for (int i = 0; i < 10; i++) {
+            addObject(
+                    new PhysicsObject(
+                            objectContainer,
+                            objectCount++,
+                            new Rectangle(
+                                    Vector2D.randomVector(random, 0, 0, size.getWidth(), size.getHeight()),
+                                    random.nextDouble(90) + 10,
+                                    random.nextDouble(90) + 10
+                            )
+                    ),
+                    new RectangleRenderer()
+            );
+
+            addObject(
+                    new PhysicsObject(
+                            objectContainer,
+                            objectCount++,
+                            new Circle(
+                                    Vector2D.randomVector(random, 0, 0, size.getWidth(), size.getHeight()),
+                                    random.nextDouble(50) + 10
+                            )
+                    ),
+                    new CircleRenderer()
+            );
+        }
+
+        fallingBall = new PhysicsObject(
+                objectContainer,
+                objectCount++,
+                new Circle(
+                        Vector2D.randomVector(random, 0, 0, size.getWidth(), size.getHeight()),
+                        random.nextDouble(50) + 10
+                )
+        );
+        addObject(fallingBall, new CircleRenderer());
     }
 
     @SuppressWarnings("unchecked")

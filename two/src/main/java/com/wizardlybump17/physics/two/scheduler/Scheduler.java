@@ -17,12 +17,11 @@ public class Scheduler implements Ticker {
     //TODO: run as many tasks it can run
     @Override
     public void run() {
-        ScheduledTask task = tasks.poll();
-        if (task == null)
-            return;
-
-        task.run();
-        if (task.reschedule())
-            tasks.add(task);
+        ScheduledTask task;
+        while ((task = tasks.poll()) != null) {
+            task.run();
+            if (task.reschedule())
+                tasks.add(task);
+        }
     }
 }
