@@ -37,7 +37,7 @@ public class Main {
                 () -> {
                     System.out.println("Hi! " + dateFormat.format(System.currentTimeMillis()));
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(3000);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -58,6 +58,11 @@ public class Main {
                         return true;
                     }
                 }
+        );
+        scheduler.schedule(
+                () -> System.out.println(scheduler.getCurrentTick()),
+                0,
+                17
         );
 
         Timer timer = new Timer();

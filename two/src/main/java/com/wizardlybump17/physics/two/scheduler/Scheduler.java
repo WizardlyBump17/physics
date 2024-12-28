@@ -1,6 +1,5 @@
 package com.wizardlybump17.physics.two.scheduler;
 
-import com.wizardlybump17.physics.two.Constants;
 import com.wizardlybump17.physics.two.scheduler.task.Task;
 import com.wizardlybump17.physics.two.tick.Ticker;
 import org.jetbrains.annotations.NotNull;
@@ -32,6 +31,31 @@ public class Scheduler implements Ticker {
             scheduledTicks.computeIfAbsent(tickCounter + delay, $ -> new Tick(tickCounter + delay)).addTask(task);
     }
 
+    public void schedule(@NotNull Runnable task, long delay, long period) {
+        if (period < 1) {
+            schedule(task::run, delay);
+            return;
+        }
+
+        long targetTick = tickCounter + delay;
+        schedule(new Task() {
+            @Override
+            public void run() {
+                task.run();
+            }
+
+            @Override
+            public boolean canRun() {
+                return (tickCounter - targetTick) % period == 0;
+            }
+
+            @Override
+            public boolean isPersistent() {
+                return true;
+            }
+        }, delay);
+    }
+
     @Override
     public void run() {
         Tick currentTick = this.currentTick;
@@ -47,12 +71,12 @@ public class Scheduler implements Ticker {
         this.nextTick = scheduledTicks.computeIfAbsent(++tickCounter, $ -> new Tick(tickCounter));
 
         currentTick.end();
-
-        long elapsedTime = currentTick.getElapsedTime();
-        if (elapsedTime > Constants.MILLIS_PER_TICK)
-            System.out.println(Constants.MILLIS_PER_TICK / elapsedTime * Constants.TICKS_PER_SECOND);
-        else
-            System.out.println(Constants.TICKS_PER_SECOND);
+//
+//        long elapsedTime = currentTick.getElapsedTime();
+//        if (elapsedTime > Constants.MILLIS_PER_TICK)
+//            System.out.println(Constants.MILLIS_PER_TICK / elapsedTime * Constants.TICKS_PER_SECOND);
+//        else
+//            System.out.println(Constants.TICKS_PER_SECOND);
     }
 
     public long getCurrentTick() {
