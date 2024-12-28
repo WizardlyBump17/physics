@@ -44,8 +44,7 @@ public class Scheduler implements Ticker {
         this.currentTick = this.nextTick;
         this.currentTick.addTasks(currentTick.getTasksToReschedule());
 
-        long nextTickCount = this.currentTick.getTick() + 1;
-        this.nextTick = scheduledTicks.computeIfAbsent(nextTickCount, $ -> new Tick(nextTickCount));
+        this.nextTick = scheduledTicks.computeIfAbsent(++tickCounter, $ -> new Tick(tickCounter));
 
         currentTick.end();
 
