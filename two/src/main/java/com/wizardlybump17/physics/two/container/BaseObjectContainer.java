@@ -93,10 +93,8 @@ public abstract class BaseObjectContainer implements Ticker {
             if (firstObject == null || secondObject == null)
                 return;
 
-//            if (!firstObject.isCollidingWith(secondObject))
-                firstObject.onCollide(secondObject);
-//            if (!secondObject.isCollidingWith(firstObject))
-                secondObject.onCollide(firstObject);
+            firstObject.onCollide(secondObject);
+            secondObject.onCollide(firstObject);
         }
     }
 
