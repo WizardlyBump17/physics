@@ -34,7 +34,11 @@ public class ShapePanelMouseMotionListener extends MouseAdapter {
             if (object instanceof PhysicsObject physicsObject) {
                 Physics physics = physicsObject.getPhysics();
                 physics.setAcceleration(Vector2D.ZERO);
-                physics.setVelocity(target.subtract(position).multiply(Constants.TICKS_PER_SECOND / 2.0));
+                physics.setVelocity(target.subtract(position).multiply(Constants.TICKS_PER_SECOND));
+                Engine.getScheduler().schedule(() -> {
+                    physics.setAcceleration(Vector2D.ZERO);
+                    physics.setVelocity(Vector2D.ZERO);
+                }, 2);
             } else
                 object.teleport(target);
         });
