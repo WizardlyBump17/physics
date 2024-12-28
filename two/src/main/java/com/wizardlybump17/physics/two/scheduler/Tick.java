@@ -58,7 +58,8 @@ public final class Tick {
     public void tick() {
         Task task;
         while ((task = tasks.poll()) != null) {
-            task.run();
+            if (task.canRun())
+                task.run();
             if (task.reschedule())
                 tasksToReschedule.add(task);
         }
