@@ -6,6 +6,10 @@ public interface Task extends Runnable {
         return false;
     }
 
+    default boolean isPersistent() {
+        return false;
+    }
+
     default boolean canRun() {
         return true;
     }

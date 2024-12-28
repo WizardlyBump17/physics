@@ -60,7 +60,7 @@ public final class Tick {
         while ((task = tasks.poll()) != null) {
             if (task.canRun())
                 task.run();
-            if (task.reschedule())
+            if (task.isPersistent() || task.reschedule())
                 tasksToReschedule.add(task);
         }
     }
