@@ -48,7 +48,9 @@ public class Main {
                 new Task() {
                     @Override
                     public void run() {
+                        objectsPanel.getFallingBall().getPhysics().setAcceleration(Physics.GRAVITY_VECTOR);
                         objectContainer.run();
+                        frame.repaint();
                     }
 
                     @Override
@@ -62,11 +64,7 @@ public class Main {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                objectsPanel.getFallingBall().getPhysics().setAcceleration(Physics.GRAVITY_VECTOR);
-
-//                objectContainer.run();
                 scheduler.run();
-                frame.repaint();
             }
         }, 0, 1000 / Constants.TICKS_PER_SECOND);
     }
