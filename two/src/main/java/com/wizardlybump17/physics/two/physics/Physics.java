@@ -1,5 +1,6 @@
 package com.wizardlybump17.physics.two.physics;
 
+import com.wizardlybump17.physics.two.Constants;
 import com.wizardlybump17.physics.two.physics.object.PhysicsObject;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import org.jetbrains.annotations.NotNull;
@@ -63,9 +64,9 @@ public class Physics {
         setAcceleration(this.acceleration.subtract(acceleration));
     }
 
-    public void tick(double deltaTime) {
-        velocity = velocity.add(acceleration.multiply(deltaTime));
-        object.teleport(object.getPosition().add(velocity.multiply(deltaTime)));
+    public void tick() {
+        velocity = velocity.add(acceleration.divide(Constants.TICKS_PER_SECOND));
+        object.teleport(object.getPosition().add(velocity.divide(Constants.TICKS_PER_SECOND)));
     }
 
     @Override
@@ -91,11 +92,11 @@ public class Physics {
                 '}';
     }
 
-    public @NotNull Vector2D getEffectiveVelocity(double deltaTime) {
-        return velocity.add(acceleration.multiply(deltaTime)).multiply(deltaTime);
+    public @NotNull Vector2D getEffectiveVelocity() {
+        return velocity.add(acceleration);
     }
 
-    public @NotNull Vector2D getTargetPosition(double deltaTime) {
-        return object.getPosition().add(getEffectiveVelocity(deltaTime));
+    public @NotNull Vector2D getTargetPosition() {
+        return object.getPosition().add(getEffectiveVelocity());
     }
 }

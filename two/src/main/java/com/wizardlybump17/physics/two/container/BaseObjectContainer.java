@@ -13,24 +13,14 @@ import java.util.List;
 
 public abstract class BaseObjectContainer implements Ticker {
 
-    private long lastTick;
     private final @NotNull List<Pair<Integer, Integer>> collisions = new LinkedList<>();
     private final @NotNull List<Pair<Integer, Integer>> endedCollisions = new LinkedList<>();
 
     @Override
     public void run() {
-        if (lastTick == 0)
-            lastTick = System.currentTimeMillis();
-
         for (BaseObject object : getObjectsInternal())
-            object.tick((System.currentTimeMillis() - lastTick) / 1000.0);
+            object.tick();
         handleCollisions();
-
-        lastTick = System.currentTimeMillis();
-    }
-
-    public long getLastTick() {
-        return lastTick;
     }
 
     public abstract void addObject(@NotNull BaseObject object);

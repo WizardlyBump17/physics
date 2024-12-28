@@ -36,9 +36,9 @@ public class PhysicsObject extends BaseObject {
     }
 
     @Override
-    public void tick(double deltaTime) {
-        super.tick(deltaTime);
-        physics.tick(deltaTime);
+    public void tick() {
+        super.tick();
+        physics.tick();
     }
 
     @Override

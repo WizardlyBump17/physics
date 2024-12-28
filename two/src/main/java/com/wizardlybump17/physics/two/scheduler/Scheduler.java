@@ -51,5 +51,7 @@ public class Scheduler implements Ticker {
         long elapsedTime = currentTick.getElapsedTime();
         if (elapsedTime > Constants.MILLIS_PER_TICK)
             System.out.println(Constants.MILLIS_PER_TICK / elapsedTime * Constants.TICKS_PER_SECOND);
+        else
+            System.out.println(Constants.TICKS_PER_SECOND);
     }
 }
