@@ -47,15 +47,21 @@ public final class Tick {
             this.tasks.add(task);
     }
 
-    public void tick() {
+    void start() {
         start = System.currentTimeMillis();
+    }
+
+    void end() {
+        end = System.currentTimeMillis();
+    }
+
+    public void tick() {
         Task task;
         while ((task = tasks.poll()) != null) {
             task.run();
             if (task.reschedule())
                 tasksToReschedule.add(task);
         }
-        end = System.currentTimeMillis();
     }
 
     public long getElapsedTime() {
