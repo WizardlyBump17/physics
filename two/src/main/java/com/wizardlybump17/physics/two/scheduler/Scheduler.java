@@ -29,7 +29,7 @@ public class Scheduler implements Ticker {
         if (delay < 2)
             nextTick.addTask(task);
         else
-            scheduledTicks.computeIfAbsent(delay, $ -> new Tick(delay)).addTask(task);
+            scheduledTicks.computeIfAbsent(tickCounter + delay, $ -> new Tick(tickCounter + delay)).addTask(task);
     }
 
     @Override
