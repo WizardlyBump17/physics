@@ -54,4 +54,8 @@ public class Scheduler implements Ticker {
         else
             System.out.println(Constants.TICKS_PER_SECOND);
     }
+
+    public long getCurrentTick() {
+        return currentTick.getTick();
+    }
 }
