@@ -1,28 +1,56 @@
 package com.wizardlybump17.physics.two.scheduler;
 
+import com.wizardlybump17.physics.two.Constants;
 import com.wizardlybump17.physics.two.scheduler.task.Task;
 import com.wizardlybump17.physics.two.tick.Ticker;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Scheduler implements Ticker {
 
-    private final @NotNull Queue<Task> tasks = new LinkedList<>();
+    private static long tickCounter;
 
-    public void schedule(@NotNull Task task) {
-        tasks.add(task);
+    private @NotNull Tick currentTick = new Tick(tickCounter++);
+    private @NotNull Tick nextTick = new Tick(tickCounter++);
+    private final @NotNull Map<Long, Tick> scheduledTicks = new TreeMap<>();
+
+    public Scheduler() {
+        scheduledTicks.put(currentTick.getTick(), currentTick);
+        scheduledTicks.put(nextTick.getTick(), nextTick);
     }
 
-    //TODO: run as many tasks it can run
+    public void schedule(@NotNull Task task) {
+        nextTick.addTask(task);
+    }
+
+    public void schedule(@NotNull Task task, long delay) {
+        if (delay < 2)
+            nextTick.addTask(task);
+        else
+            scheduledTicks.computeIfAbsent(delay, $ -> new Tick(delay)).addTask(task);
+    }
+
     @Override
     public void run() {
-        Task task;
-        while ((task = tasks.poll()) != null) {
-            task.run();
-            if (task.reschedule())
-                tasks.add(task);
-        }
+        Tick currentTick = this.currentTick;
+        currentTick.start();
+
+        currentTick.tick();
+
+        scheduledTicks.remove(currentTick.getTick());
+
+        this.currentTick = this.nextTick;
+        this.currentTick.addTasks(currentTick.getTasksToReschedule());
+
+        long nextTickCount = this.currentTick.getTick() + 1;
+        this.nextTick = scheduledTicks.computeIfAbsent(nextTickCount, $ -> new Tick(nextTickCount));
+
+        currentTick.end();
+
+        long elapsedTime = currentTick.getElapsedTime();
+        if (elapsedTime > Constants.MILLIS_PER_TICK)
+            System.out.println(Constants.MILLIS_PER_TICK / elapsedTime * Constants.TICKS_PER_SECOND);
     }
 }
