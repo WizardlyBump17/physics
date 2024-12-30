@@ -9,8 +9,7 @@ import java.util.TreeMap;
 
 public class Scheduler implements Ticker {
 
-    private static long tickCounter;
-
+    private long tickCounter;
     private @NotNull Tick currentTick = new Tick(tickCounter++);
     private @NotNull Tick nextTick = new Tick(tickCounter++);
     private final @NotNull Map<Long, Tick> scheduledTicks = new TreeMap<>();
