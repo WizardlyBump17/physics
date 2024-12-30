@@ -1,6 +1,8 @@
 package com.wizardlybump17.physics.two.scheduler.task;
 
 import com.wizardlybump17.physics.two.Engine;
+import com.wizardlybump17.physics.two.scheduler.Scheduler;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class AbstractTask {
 
@@ -9,8 +11,12 @@ public abstract class AbstractTask {
     public abstract void run();
 
     public void schedule() {
+        schedule(Engine.getScheduler());
+    }
+
+    public void schedule(@NotNull Scheduler scheduler) {
         assertNotScheduled();
-        id = Engine.getScheduler().schedule(this);
+        id = scheduler.schedule(this);
     }
 
     private void assertScheduled() {
