@@ -1,5 +1,6 @@
 package com.wizardlybump17.physics.two.scheduler;
 
+import com.wizardlybump17.physics.two.scheduler.task.AbstractTask;
 import com.wizardlybump17.physics.two.scheduler.task.Task;
 import com.wizardlybump17.physics.two.tick.Ticker;
 import org.jetbrains.annotations.NotNull;
@@ -10,31 +11,33 @@ import java.util.TreeMap;
 public class Scheduler implements Ticker {
 
     private long tickCounter;
+    private long taskCounter;
     private @NotNull Tick currentTick = new Tick(tickCounter++);
     private @NotNull Tick nextTick = new Tick(tickCounter++);
     private final @NotNull Map<Long, Tick> scheduledTicks = new TreeMap<>();
+    private final @NotNull Map<Long, AbstractTask> tasks = new TreeMap<>();
 
     public Scheduler() {
         scheduledTicks.put(currentTick.getTick(), currentTick);
         scheduledTicks.put(nextTick.getTick(), nextTick);
     }
 
-    public void schedule(@NotNull Task task) {
+    public long schedule(@NotNull Task task) {
         nextTick.addTask(task);
+        return taskCounter++;
     }
 
-    public void schedule(@NotNull Task task, long delay) {
+    public long schedule(@NotNull Task task, long delay) {
         if (delay < 2)
             nextTick.addTask(task);
         else
             scheduledTicks.computeIfAbsent(tickCounter + delay, $ -> new Tick(tickCounter + delay)).addTask(task);
+        return taskCounter++;
     }
 
-    public void schedule(@NotNull Runnable task, long delay, long period) {
-        if (period < 1) {
-            schedule(task::run, delay);
-            return;
-        }
+    public long schedule(@NotNull Runnable task, long delay, long period) {
+        if (period < 1)
+            return schedule(task::run, delay);
 
         long targetTick = tickCounter + delay;
         schedule(new Task() {
@@ -53,6 +56,7 @@ public class Scheduler implements Ticker {
                 return true;
             }
         }, delay);
+        return taskCounter++;
     }
 
     @Override
