@@ -33,6 +33,12 @@ public class Scheduler implements Ticker {
         return id;
     }
 
+    public long schedule(@NotNull AbstractTask task, long delay, long period) {
+        long id = schedule(task);
+        schedule(task::run, delay, period);
+        return id;
+    }
+
     public long schedule(@NotNull Task task) {
         nextTick.addTask(task);
         return taskCounter++;
