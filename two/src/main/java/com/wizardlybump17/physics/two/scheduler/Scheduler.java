@@ -22,6 +22,11 @@ public class Scheduler implements Ticker {
         scheduledTicks.put(nextTick.getTick(), nextTick);
     }
 
+    public long schedule(@NotNull AbstractTask task) {
+        tasks.put(taskCounter++, task);
+        return taskCounter - 1;
+    }
+
     public long schedule(@NotNull Task task) {
         nextTick.addTask(task);
         return taskCounter++;
