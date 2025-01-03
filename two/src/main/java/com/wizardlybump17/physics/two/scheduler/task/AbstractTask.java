@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class AbstractTask {
 
-    private Long id;
+    private RunningTask task;
 
     public abstract void run();
 
@@ -16,16 +16,16 @@ public abstract class AbstractTask {
 
     public void schedule(@NotNull Scheduler scheduler) {
         assertNotScheduled();
-        id = scheduler.schedule(this);
+        task = scheduler.schedule(this);
     }
 
     private void assertScheduled() {
-        if (id == null)
+        if (task == null)
             throw new IllegalStateException("The task is not scheduled yet.");
     }
 
     private void assertNotScheduled() {
-        if (id != null)
-            throw new IllegalStateException("The task is already scheduled as " + id + ".");
+        if (task != null)
+            throw new IllegalStateException("The task is already scheduled as " + task.getId() + ".");
     }
 }
