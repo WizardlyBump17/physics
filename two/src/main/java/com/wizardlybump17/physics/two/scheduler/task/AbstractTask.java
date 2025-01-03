@@ -44,4 +44,13 @@ public abstract class AbstractTask implements Runnable {
         if (task != null)
             throw new IllegalStateException("The task is already scheduled as " + task.getId() + ".");
     }
+
+    public void cancel(@NotNull Scheduler scheduler) {
+        assertScheduled();
+        scheduler.cancelTask(task.getId());
+    }
+
+    public void cancel() {
+        cancel(Engine.getScheduler());
+    }
 }
