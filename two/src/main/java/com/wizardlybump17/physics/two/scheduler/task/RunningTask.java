@@ -1,6 +1,6 @@
 package com.wizardlybump17.physics.two.scheduler.task;
 
-public interface RunningTask {
+public interface RunningTask extends Runnable {
 
     long getId();
 
