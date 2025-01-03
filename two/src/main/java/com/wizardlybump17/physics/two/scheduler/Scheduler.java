@@ -38,6 +38,11 @@ public class Scheduler implements Ticker {
         return addTask(taskFactory.create(getTaskCount(), task, delay, period, currentTick + 1));
     }
 
+    public void cancelTask(long id) {
+        RunningTask task = tasks.get(id);
+        task.setRunning(false);
+    }
+
     @Override
     public void run() {
         tickStart = System.currentTimeMillis();
