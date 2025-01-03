@@ -16,8 +16,8 @@ public class BasicTask implements RunningTask {
     public BasicTask(long id, long startedAt, long delay, long period, @NotNull Runnable runnable) {
         this.id = id;
         this.startedAt = startedAt;
-        this.delay = delay;
-        this.period = period;
+        this.delay = Math.clamp(delay, 0, Long.MAX_VALUE);
+        this.period = Math.clamp(period, 0, Long.MAX_VALUE);
         this.runnable = runnable;
     }
 
