@@ -11,4 +11,6 @@ public interface RunningTask extends Runnable {
     long getDelay();
 
     long getPeriod();
+
+    long getStartedAt();
 }
