@@ -4,19 +4,35 @@ import com.wizardlybump17.physics.two.Engine;
 import com.wizardlybump17.physics.two.scheduler.Scheduler;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class AbstractTask {
+public abstract class AbstractTask implements Runnable {
 
     private RunningTask task;
-
-    public abstract void run();
 
     public void schedule() {
         schedule(Engine.getScheduler());
     }
 
+    public void schedule(long delay) {
+        schedule(Engine.getScheduler(), delay);
+    }
+
+    public void schedule(long delay, long period) {
+        schedule(Engine.getScheduler(), delay, period);
+    }
+
     public void schedule(@NotNull Scheduler scheduler) {
         assertNotScheduled();
         task = scheduler.schedule(this);
+    }
+
+    public void schedule(@NotNull Scheduler scheduler, long delay) {
+        assertNotScheduled();
+        task = scheduler.schedule(this, delay);
+    }
+
+    public void schedule(@NotNull Scheduler scheduler, long delay, long period) {
+        assertNotScheduled();
+        task = scheduler.schedule(this, delay, period);
     }
 
     private void assertScheduled() {
