@@ -1,6 +1,7 @@
 package com.wizardlybump17.physics.two.scheduler;
 
 import com.wizardlybump17.physics.two.scheduler.task.AbstractTask;
+import com.wizardlybump17.physics.two.scheduler.task.RunningTask;
 import com.wizardlybump17.physics.two.scheduler.task.Task;
 import com.wizardlybump17.physics.two.tick.Ticker;
 import org.jetbrains.annotations.NotNull;
@@ -22,29 +23,29 @@ public class Scheduler implements Ticker {
         scheduledTicks.put(nextTick.getTick(), nextTick);
     }
 
-    public long schedule(@NotNull AbstractTask task) {
+    public @NotNull RunningTask schedule(@NotNull AbstractTask task) {
         tasks.put(taskCounter++, task);
         return taskCounter - 1;
     }
 
-    public long schedule(@NotNull AbstractTask task, long delay) {
+    public @NotNull RunningTask schedule(@NotNull AbstractTask task, long delay) {
         long id = schedule(task);
         schedule(task::run, delay);
         return id;
     }
 
-    public long schedule(@NotNull AbstractTask task, long delay, long period) {
+    public @NotNull RunningTask schedule(@NotNull AbstractTask task, long delay, long period) {
         long id = schedule(task);
         schedule(task::run, delay, period);
         return id;
     }
 
-    public long schedule(@NotNull Task task) {
+    public @NotNull RunningTask schedule(@NotNull Task task) {
         nextTick.addTask(task);
         return taskCounter++;
     }
 
-    public long schedule(@NotNull Task task, long delay) {
+    public @NotNull RunningTask schedule(@NotNull Task task, long delay) {
         if (delay < 2)
             nextTick.addTask(task);
         else
@@ -52,7 +53,7 @@ public class Scheduler implements Ticker {
         return taskCounter++;
     }
 
-    public long schedule(@NotNull Runnable task, long delay, long period) {
+    public @NotNull RunningTask schedule(@NotNull Runnable task, long delay, long period) {
         if (period < 1)
             return schedule(task::run, delay);
 
