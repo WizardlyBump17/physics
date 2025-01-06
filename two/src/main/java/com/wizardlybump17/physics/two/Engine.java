@@ -3,6 +3,7 @@ package com.wizardlybump17.physics.two;
 import com.wizardlybump17.physics.two.registry.BaseObjectContainerRegistry;
 import com.wizardlybump17.physics.two.task.scheduler.TaskScheduler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class Engine {
 
@@ -17,8 +18,7 @@ public final class Engine {
     }
 
     public static void setScheduler(@NotNull TaskScheduler scheduler) {
-        if (Engine.scheduler != null)
-            throw new IllegalStateException("The scheduler is already set");
+        assertNotSet(Engine.scheduler, "scheduler");
         Engine.scheduler = scheduler;
     }
 
@@ -27,8 +27,12 @@ public final class Engine {
     }
 
     public static void setObjectContainerRegistry(@NotNull BaseObjectContainerRegistry objectContainerRegistry) {
-        if (Engine.objectContainerRegistry != null)
-            throw new IllegalStateException("The object container registry is already set.");
+        assertNotSet(Engine.objectContainerRegistry, "object container registry");
         Engine.objectContainerRegistry = objectContainerRegistry;
+    }
+
+    private static void assertNotSet(@Nullable Object object, @NotNull String what) {
+        if (object != null)
+            throw new IllegalStateException("The " + what + " is already set.");
     }
 }
