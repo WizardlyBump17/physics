@@ -1,7 +1,7 @@
 package com.wizardlybump17.physics.two.task.scheduler;
 
 import com.wizardlybump17.physics.Tickable;
-import com.wizardlybump17.physics.two.Timeable;
+import com.wizardlybump17.physics.Timeable;
 import com.wizardlybump17.physics.two.task.RegisteredTask;
 import com.wizardlybump17.physics.two.task.factory.RegisteredTaskFactory;
 import org.jetbrains.annotations.NotNull;

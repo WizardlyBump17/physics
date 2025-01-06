@@ -1,4 +1,4 @@
-package com.wizardlybump17.physics.two;
+package com.wizardlybump17.physics;
 
 import org.jetbrains.annotations.ApiStatus;
 

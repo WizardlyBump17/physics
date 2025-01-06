@@ -2,7 +2,7 @@ package com.wizardlybump17.physics.two.container;
 
 import com.wizardlybump17.physics.Pair;
 import com.wizardlybump17.physics.Tickable;
-import com.wizardlybump17.physics.two.Timeable;
+import com.wizardlybump17.physics.Timeable;
 import com.wizardlybump17.physics.two.object.BaseObject;
 import com.wizardlybump17.physics.two.physics.object.PhysicsObject;
 import org.jetbrains.annotations.NotNull;
