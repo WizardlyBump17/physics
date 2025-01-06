@@ -85,7 +85,7 @@ public class ObjectsPanel extends JPanel {
                         random.nextDouble(50) + 10
                 )
         );
-        addObject(fallingBall, new CircleRenderer());
+        fallingBall.setPhysics(new FallingBallPhysics(addObject(fallingBall, new CircleRenderer())));
     }
 
     @SuppressWarnings("unchecked")
@@ -100,12 +100,14 @@ public class ObjectsPanel extends JPanel {
             ((ShapeRenderer<Shape>) selectedShape.getRenderer()).render(graphics, selectedShape.getShape());
     }
 
-    public <R extends ShapeRenderer<?>> void addObject(@NotNull BaseObject object, @NotNull R renderer) {
+    public <R extends ShapeRenderer<?>> @NotNull PanelObject addObject(@NotNull BaseObject object, @NotNull R renderer) {
         PanelObject panelObject = new PanelObject(object, renderer);
         shapes.put(panelObject.getId(), panelObject);
         renderer.setPanelObject(panelObject);
 
         objectContainer.addObject(object);
+
+        return panelObject;
     }
 
     public @NotNull Map<Integer, PanelObject> getShapes() {
