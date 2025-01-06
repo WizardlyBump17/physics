@@ -1,5 +1,6 @@
 package com.wizardlybump17.physics.two.task.scheduler;
 
+import com.wizardlybump17.physics.two.Timeable;
 import com.wizardlybump17.physics.two.task.RegisteredTask;
 import com.wizardlybump17.physics.two.task.factory.RegisteredTaskFactory;
 import com.wizardlybump17.physics.two.tick.Ticker;
@@ -9,11 +10,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class TaskScheduler implements Ticker {
+public class TaskScheduler implements Ticker, Timeable {
 
     private long currentTick;
-    private long tickStart;
-    private long tickEnd;
+    private long start;
+    private long end;
     private final @NotNull Map<Long, RegisteredTask> tasks = new HashMap<>();
     private final @NotNull Map<Long, RegisteredTask> pendingTasks = new HashMap<>();
     private final @NotNull RegisteredTaskFactory taskFactory;
@@ -47,7 +48,7 @@ public class TaskScheduler implements Ticker {
 
     @Override
     public void run() {
-        tickStart = System.currentTimeMillis();
+        start();
 
         tasks.putAll(pendingTasks);
         pendingTasks.clear();
@@ -74,9 +75,9 @@ public class TaskScheduler implements Ticker {
         pendingTasks.putAll(tasks);
         tasks.clear();
 
-        tickEnd = System.currentTimeMillis();
-
         currentTick++;
+
+        end();
     }
 
     public long getCurrentTick() {
@@ -91,11 +92,23 @@ public class TaskScheduler implements Ticker {
         return taskCounter++;
     }
 
-    public long getTickStart() {
-        return tickStart;
+    @Override
+    public void start() {
+        start = System.currentTimeMillis();
     }
 
-    public long getTickEnd() {
-        return tickEnd;
+    @Override
+    public void end() {
+        end = System.currentTimeMillis();
+    }
+
+    @Override
+    public long getStartedAt() {
+        return start;
+    }
+
+    @Override
+    public long getEndedAt() {
+        return end;
     }
 }
