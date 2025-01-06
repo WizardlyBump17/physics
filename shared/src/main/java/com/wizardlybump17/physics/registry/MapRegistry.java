@@ -3,6 +3,7 @@ package com.wizardlybump17.physics.registry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 
 public abstract class MapRegistry<K, V> implements Registry<K, V> {
 
@@ -57,5 +58,10 @@ public abstract class MapRegistry<K, V> implements Registry<K, V> {
     @Override
     public @NotNull Class<V> getValueType() {
         return valueType;
+    }
+
+    @Override
+    public void forEach(@NotNull BiConsumer<K, V> consumer) {
+        map.forEach(consumer);
     }
 }

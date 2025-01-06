@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiConsumer;
 
 public interface Registry<K, V> {
 
@@ -40,4 +41,6 @@ public interface Registry<K, V> {
     @NotNull Class<V> getValueType();
 
     @NotNull K extractKey(@NotNull V value);
+
+    void forEach(@NotNull BiConsumer<K, V> consumer);
 }
