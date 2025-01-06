@@ -1,7 +1,6 @@
 package com.wizardlybump17.physics.graphics.two.listener.panel.shape;
 
 import com.wizardlybump17.physics.graphics.two.panel.object.ObjectsPanel;
-import com.wizardlybump17.physics.two.Engine;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.KeyAdapter;
@@ -23,13 +22,13 @@ public class ShapePanelKeyboardListener extends KeyAdapter {
     public void keyPressed(@NotNull KeyEvent event) {
         if (event.getKeyCode() != KeyEvent.VK_SPACE)
             return;
-        Engine.getScheduler().schedule(panel::regenerate);
+        panel.regenerate();
     }
 
     @Override
     public void keyTyped(@NotNull KeyEvent event) {
         if (event.getKeyCode() != KeyEvent.VK_SPACE)
             return;
-        Engine.getScheduler().schedule(panel::regenerate);
+        panel.regenerate();
     }
 }

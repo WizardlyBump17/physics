@@ -27,21 +27,19 @@ public class ShapePanelMouseMotionListener extends MouseAdapter {
         if (panelObject == null)
             return;
 
-        Engine.getScheduler().schedule(() -> {
-            BaseObject object = panelObject.getObject();
-            Vector2D position = object.getPosition();
-            Vector2D target = new Vector2D(event.getX(), event.getY());
-            if (object instanceof PhysicsObject physicsObject) {
-                Physics physics = physicsObject.getPhysics();
+        BaseObject object = panelObject.getObject();
+        Vector2D position = object.getPosition();
+        Vector2D target = new Vector2D(event.getX(), event.getY());
+        if (object instanceof PhysicsObject physicsObject) {
+            Physics physics = physicsObject.getPhysics();
+            physics.setAcceleration(Vector2D.ZERO);
+            physics.setVelocity(target.subtract(position).multiply(Constants.TICKS_PER_SECOND));
+            Engine.getScheduler().schedule(() -> {
                 physics.setAcceleration(Vector2D.ZERO);
-                physics.setVelocity(target.subtract(position).multiply(Constants.TICKS_PER_SECOND));
-                Engine.getScheduler().schedule(() -> {
-                    physics.setAcceleration(Vector2D.ZERO);
-                    physics.setVelocity(Vector2D.ZERO);
-                }, 2);
-            } else
-                object.teleport(target);
-        });
+                physics.setVelocity(Vector2D.ZERO);
+            }, 1);
+        } else
+            object.teleport(target);
     }
 
     public @NotNull ObjectsPanel getPanel() {

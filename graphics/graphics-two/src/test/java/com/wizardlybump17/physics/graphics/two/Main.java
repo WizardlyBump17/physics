@@ -8,12 +8,11 @@ import com.wizardlybump17.physics.two.container.BaseObjectContainer;
 import com.wizardlybump17.physics.two.container.BasicBaseObjectContainer;
 import com.wizardlybump17.physics.two.physics.Physics;
 import com.wizardlybump17.physics.two.scheduler.Scheduler;
+import com.wizardlybump17.physics.two.scheduler.SchedulerThread;
 import com.wizardlybump17.physics.two.scheduler.task.factory.BasicTaskFactory;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Main {
 
@@ -56,15 +55,9 @@ public class Main {
         scheduler.schedule(
                 () -> System.out.println(scheduler.getCurrentTick()),
                 0,
-                17
+                Constants.TICKS_PER_SECOND
         );
 
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                scheduler.run();
-            }
-        }, 0, 1000 / Constants.TICKS_PER_SECOND);
+        new SchedulerThread(scheduler).start();
     }
 }
