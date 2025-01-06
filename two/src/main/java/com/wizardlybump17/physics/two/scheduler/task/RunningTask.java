@@ -15,7 +15,8 @@ public interface RunningTask extends Runnable {
     long getStartedAt();
 
     default boolean isTimeToRun(long currentTick) {
-        return currentTick % (getStartedAt() + getDelay() + getPeriod() - 1) == 0;
+        long period = getStartedAt() + getDelay() + getPeriod() - 1;
+        return period == 0 || currentTick % period == 0;
     }
 
     default boolean isRepeatable() {
