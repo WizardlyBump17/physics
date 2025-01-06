@@ -9,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class TaskScheduler implements Tickable, Timeable {
 
@@ -19,13 +21,19 @@ public class TaskScheduler implements Tickable, Timeable {
     private final @NotNull Map<Long, RegisteredTask> pendingTasks = new HashMap<>();
     private final @NotNull RegisteredTaskFactory taskFactory;
     private long taskCounter;
+    private final Lock lock = new ReentrantLock();
 
     public TaskScheduler(@NotNull RegisteredTaskFactory taskFactory) {
         this.taskFactory = taskFactory;
     }
 
     protected @NotNull RegisteredTask addTask(@NotNull RegisteredTask task) {
-        pendingTasks.put(task.getId(), task);
+        lock.lock();
+        try {
+            pendingTasks.put(task.getId(), task);
+        } finally {
+            lock.unlock();
+        }
         return task;
     }
 
@@ -50,34 +58,40 @@ public class TaskScheduler implements Tickable, Timeable {
     public void tick() {
         start();
 
-        tasks.putAll(pendingTasks);
-        pendingTasks.clear();
-        Iterator<RegisteredTask> taskIterator = tasks.values().iterator();
-        while (taskIterator.hasNext()) {
-            RegisteredTask task = taskIterator.next();
-            if (!task.isRunning()) {
-                taskIterator.remove();
-                continue;
+        lock.lock();
+
+        try {
+            tasks.putAll(pendingTasks);
+            pendingTasks.clear();
+            Iterator<RegisteredTask> taskIterator = tasks.values().iterator();
+            while (taskIterator.hasNext()) {
+                RegisteredTask task = taskIterator.next();
+                if (!task.isRunning()) {
+                    taskIterator.remove();
+                    continue;
+                }
+
+                if (task.getStartedAt() > currentTick)
+                    continue;
+
+                if (task.isTimeToRun(currentTick)) {
+                    task.run();
+                    if (!task.isRepeatable())
+                        task.setRunning(false);
+                }
+
+                if (!task.isRunning())
+                    taskIterator.remove();
             }
+            pendingTasks.putAll(tasks);
+            tasks.clear();
 
-            if (task.getStartedAt() > currentTick)
-                continue;
+            currentTick++;
 
-            if (task.isTimeToRun(currentTick)) {
-                task.run();
-                if (!task.isRepeatable())
-                    task.setRunning(false);
-            }
-
-            if (!task.isRunning())
-                taskIterator.remove();
+            end();
+        } finally {
+            lock.unlock();
         }
-        pendingTasks.putAll(tasks);
-        tasks.clear();
-
-        currentTick++;
-
-        end();
     }
 
     public long getCurrentTick() {
