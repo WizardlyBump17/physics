@@ -8,7 +8,7 @@ import com.wizardlybump17.physics.two.container.BaseObjectContainer;
 import com.wizardlybump17.physics.two.container.BasicBaseObjectContainer;
 import com.wizardlybump17.physics.two.physics.Physics;
 import com.wizardlybump17.physics.two.scheduler.Scheduler;
-import com.wizardlybump17.physics.two.scheduler.task.Task;
+import com.wizardlybump17.physics.two.scheduler.task.factory.BasicTaskFactory;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -25,7 +25,7 @@ public class Main {
         frame.setVisible(true);
 
         BaseObjectContainer objectContainer = new BasicBaseObjectContainer();
-        Scheduler scheduler = new Scheduler();
+        Scheduler scheduler = new Scheduler(new BasicTaskFactory());
 
         Engine.setScheduler(scheduler);
 
@@ -45,19 +45,13 @@ public class Main {
                 Constants.TICKS_PER_SECOND * 10 //10 seconds
         );
         scheduler.schedule(
-                new Task() {
-                    @Override
-                    public void run() {
-                        objectsPanel.getFallingBall().getPhysics().setAcceleration(Physics.GRAVITY_VECTOR);
-                        objectContainer.run();
-                        frame.repaint();
-                    }
-
-                    @Override
-                    public boolean reschedule() {
-                        return true;
-                    }
-                }
+                () -> {
+                    objectsPanel.getFallingBall().getPhysics().setAcceleration(Physics.GRAVITY_VECTOR);
+                    objectContainer.run();
+                    frame.repaint();
+                },
+                0,
+                1
         );
         scheduler.schedule(
                 () -> System.out.println(scheduler.getCurrentTick()),
