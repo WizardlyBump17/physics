@@ -10,17 +10,23 @@ public interface Registry<K, V> {
 
     void register(@NotNull K key, @NotNull V value);
 
-    void register(@NotNull V value);
+    default void register(@NotNull V value) {
+        register(extractKey(value), value);
+    }
 
     @NotNull Optional<V> get(@NotNull K key);
 
     boolean hasKey(@NotNull K key);
 
-    boolean hasValue(@NotNull V value);
+    default boolean hasValue(@NotNull V value) {
+        return hasKey(extractKey(value));
+    }
 
     void unregisterKey(@NotNull K key);
 
-    void unregisterValue(@NotNull V value);
+    default void unregisterValue(@NotNull V value) {
+        unregisterKey(extractKey(value));
+    }
 
     @NotNull Set<K> getKeys();
 
@@ -29,4 +35,6 @@ public interface Registry<K, V> {
     @NotNull Class<K> getKeyType();
 
     @NotNull Class<V> getValueType();
+
+    @NotNull K extractKey(@NotNull V value);
 }
