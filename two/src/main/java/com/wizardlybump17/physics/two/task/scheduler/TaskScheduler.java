@@ -1,7 +1,7 @@
-package com.wizardlybump17.physics.two.scheduler;
+package com.wizardlybump17.physics.two.task.scheduler;
 
-import com.wizardlybump17.physics.two.scheduler.task.RunningTask;
-import com.wizardlybump17.physics.two.scheduler.task.factory.RunningTaskFactory;
+import com.wizardlybump17.physics.two.task.RunningTask;
+import com.wizardlybump17.physics.two.task.factory.RunningTaskFactory;
 import com.wizardlybump17.physics.two.tick.Ticker;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class Scheduler implements Ticker {
+public class TaskScheduler implements Ticker {
 
     private long currentTick;
     private long tickStart;
@@ -19,7 +19,7 @@ public class Scheduler implements Ticker {
     private final @NotNull RunningTaskFactory taskFactory;
     private long taskCounter;
 
-    public Scheduler(@NotNull RunningTaskFactory taskFactory) {
+    public TaskScheduler(@NotNull RunningTaskFactory taskFactory) {
         this.taskFactory = taskFactory;
     }
 

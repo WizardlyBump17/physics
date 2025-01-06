@@ -1,7 +1,7 @@
-package com.wizardlybump17.physics.two.scheduler.task;
+package com.wizardlybump17.physics.two.task;
 
 import com.wizardlybump17.physics.two.Engine;
-import com.wizardlybump17.physics.two.scheduler.Scheduler;
+import com.wizardlybump17.physics.two.task.scheduler.TaskScheduler;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class AbstractTask implements Runnable {
@@ -20,17 +20,17 @@ public abstract class AbstractTask implements Runnable {
         schedule(Engine.getScheduler(), delay, period);
     }
 
-    public void schedule(@NotNull Scheduler scheduler) {
+    public void schedule(@NotNull TaskScheduler scheduler) {
         assertNotScheduled();
         task = scheduler.schedule(this);
     }
 
-    public void schedule(@NotNull Scheduler scheduler, long delay) {
+    public void schedule(@NotNull TaskScheduler scheduler, long delay) {
         assertNotScheduled();
         task = scheduler.schedule(this, delay);
     }
 
-    public void schedule(@NotNull Scheduler scheduler, long delay, long period) {
+    public void schedule(@NotNull TaskScheduler scheduler, long delay, long period) {
         assertNotScheduled();
         task = scheduler.schedule(this, delay, period);
     }
@@ -45,7 +45,7 @@ public abstract class AbstractTask implements Runnable {
             throw new IllegalStateException("The task is already scheduled as " + task.getId() + ".");
     }
 
-    public void cancel(@NotNull Scheduler scheduler) {
+    public void cancel(@NotNull TaskScheduler scheduler) {
         assertScheduled();
         scheduler.cancelTask(task.getId());
     }

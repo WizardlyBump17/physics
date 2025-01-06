@@ -1,6 +1,6 @@
-package com.wizardlybump17.physics.two.scheduler.task.factory;
+package com.wizardlybump17.physics.two.task.factory;
 
-import com.wizardlybump17.physics.two.scheduler.task.RunningTask;
+import com.wizardlybump17.physics.two.task.RunningTask;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class RunningTaskFactory {

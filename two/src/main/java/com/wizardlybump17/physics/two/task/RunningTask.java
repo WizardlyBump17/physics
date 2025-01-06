@@ -1,4 +1,4 @@
-package com.wizardlybump17.physics.two.scheduler.task;
+package com.wizardlybump17.physics.two.task;
 
 public interface RunningTask extends Runnable {
 

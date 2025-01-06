@@ -1,19 +1,19 @@
 package com.wizardlybump17.physics.two.thread;
 
 import com.wizardlybump17.physics.two.Constants;
-import com.wizardlybump17.physics.two.scheduler.Scheduler;
+import com.wizardlybump17.physics.two.task.scheduler.TaskScheduler;
 import org.jetbrains.annotations.NotNull;
 
 public class EngineThread extends Thread {
 
-    private final @NotNull Scheduler scheduler;
+    private final @NotNull TaskScheduler scheduler;
     private boolean running = true;
 
-    public EngineThread(@NotNull Scheduler scheduler) {
+    public EngineThread(@NotNull TaskScheduler scheduler) {
         this.scheduler = scheduler;
     }
 
-    public @NotNull Scheduler getScheduler() {
+    public @NotNull TaskScheduler getScheduler() {
         return scheduler;
     }
 

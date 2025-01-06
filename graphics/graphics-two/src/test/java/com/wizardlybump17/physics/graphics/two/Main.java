@@ -7,8 +7,8 @@ import com.wizardlybump17.physics.two.Engine;
 import com.wizardlybump17.physics.two.container.BaseObjectContainer;
 import com.wizardlybump17.physics.two.container.BasicBaseObjectContainer;
 import com.wizardlybump17.physics.two.physics.Physics;
-import com.wizardlybump17.physics.two.scheduler.Scheduler;
-import com.wizardlybump17.physics.two.scheduler.task.factory.BasicTaskFactory;
+import com.wizardlybump17.physics.two.task.factory.BasicTaskFactory;
+import com.wizardlybump17.physics.two.task.scheduler.TaskScheduler;
 import com.wizardlybump17.physics.two.thread.EngineThread;
 
 import java.text.DateFormat;
@@ -24,7 +24,7 @@ public class Main {
         frame.setVisible(true);
 
         BaseObjectContainer objectContainer = new BasicBaseObjectContainer();
-        Scheduler scheduler = new Scheduler(new BasicTaskFactory());
+        TaskScheduler scheduler = new TaskScheduler(new BasicTaskFactory());
 
         Engine.setScheduler(scheduler);
 
@@ -45,7 +45,7 @@ public class Main {
         );
         scheduler.schedule(
                 () -> {
-                    objectsPanel.getFallingBall().getPhysics().setAcceleration(Physics.GRAVITY_VECTOR);
+                    objectsPanel.getFallingBall().getPhysics().setAcceleration(Physics.GRAVITY_VECTOR); //TODO: move to the thread
                     objectContainer.run();
                     frame.repaint();
                 },
