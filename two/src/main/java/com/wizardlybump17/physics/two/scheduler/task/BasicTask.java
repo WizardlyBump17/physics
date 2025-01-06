@@ -56,11 +56,6 @@ public class BasicTask implements RunningTask {
     }
 
     @Override
-    public boolean isTimeToRun(long currentTick) {
-        return currentTick % startedAt + delay == 0;
-    }
-
-    @Override
     public void run() {
         runnable.run();
     }
