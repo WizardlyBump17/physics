@@ -32,6 +32,8 @@ public class Main {
         Engine.setScheduler(scheduler);
         Engine.setObjectContainerRegistry(containerRegistry);
 
+        containerRegistry.register(objectContainer);
+
         ObjectsPanel objectsPanel = frame.getObjectsPanel();
         objectsPanel.setObjectContainer(objectContainer);
         objectsPanel.regenerate();
@@ -50,7 +52,6 @@ public class Main {
         scheduler.schedule(
                 () -> {
                     objectsPanel.getFallingBall().getPhysics().setAcceleration(Physics.GRAVITY_VECTOR); //TODO: move to the thread
-                    objectContainer.tick();
                     frame.repaint();
                 },
                 0,
@@ -62,6 +63,6 @@ public class Main {
                 Constants.TICKS_PER_SECOND
         );
 
-        new EngineThread(scheduler).start();
+        new EngineThread(scheduler, containerRegistry).start();
     }
 }
