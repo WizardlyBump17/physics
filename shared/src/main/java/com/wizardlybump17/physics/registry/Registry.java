@@ -1,6 +1,7 @@
 package com.wizardlybump17.physics.registry;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -28,8 +29,10 @@ public interface Registry<K, V> {
         unregisterKey(extractKey(value));
     }
 
+    @Unmodifiable
     @NotNull Set<K> getKeys();
 
+    @Unmodifiable
     @NotNull Collection<V> getValues();
 
     @NotNull Class<K> getKeyType();
