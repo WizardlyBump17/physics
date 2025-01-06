@@ -62,7 +62,7 @@ public class Scheduler implements Ticker {
             if (task.isTimeToRun(currentTick))
                 task.run();
 
-            if (!task.isRepeatable() || !task.isRunning())
+            if (!task.isRunning())
                 taskIterator.remove();
         }
         pendingTasks.putAll(tasks);
