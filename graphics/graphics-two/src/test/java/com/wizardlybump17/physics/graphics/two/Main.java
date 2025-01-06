@@ -8,8 +8,8 @@ import com.wizardlybump17.physics.two.container.BaseObjectContainer;
 import com.wizardlybump17.physics.two.container.BasicBaseObjectContainer;
 import com.wizardlybump17.physics.two.physics.Physics;
 import com.wizardlybump17.physics.two.scheduler.Scheduler;
-import com.wizardlybump17.physics.two.scheduler.SchedulerThread;
 import com.wizardlybump17.physics.two.scheduler.task.factory.BasicTaskFactory;
+import com.wizardlybump17.physics.two.thread.EngineThread;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -58,6 +58,6 @@ public class Main {
                 Constants.TICKS_PER_SECOND
         );
 
-        new SchedulerThread(scheduler).start();
+        new EngineThread(scheduler).start();
     }
 }
