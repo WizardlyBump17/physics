@@ -4,9 +4,9 @@ import com.wizardlybump17.physics.two.Engine;
 import com.wizardlybump17.physics.two.task.scheduler.TaskScheduler;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class AbstractTask implements Runnable {
+public abstract class Task implements Runnable {
 
-    private RunningTask task;
+    private RegisteredTask registeredTask;
 
     public void schedule() {
         schedule(Engine.getScheduler());
@@ -22,32 +22,32 @@ public abstract class AbstractTask implements Runnable {
 
     public void schedule(@NotNull TaskScheduler scheduler) {
         assertNotScheduled();
-        task = scheduler.schedule(this);
+        registeredTask = scheduler.schedule(this);
     }
 
     public void schedule(@NotNull TaskScheduler scheduler, long delay) {
         assertNotScheduled();
-        task = scheduler.schedule(this, delay);
+        registeredTask = scheduler.schedule(this, delay);
     }
 
     public void schedule(@NotNull TaskScheduler scheduler, long delay, long period) {
         assertNotScheduled();
-        task = scheduler.schedule(this, delay, period);
+        registeredTask = scheduler.schedule(this, delay, period);
     }
 
     private void assertScheduled() {
-        if (task == null)
+        if (registeredTask == null)
             throw new IllegalStateException("The task is not scheduled yet.");
     }
 
     private void assertNotScheduled() {
-        if (task != null)
-            throw new IllegalStateException("The task is already scheduled as " + task.getId() + ".");
+        if (registeredTask != null)
+            throw new IllegalStateException("The task is already scheduled as " + registeredTask.getId() + ".");
     }
 
     public void cancel(@NotNull TaskScheduler scheduler) {
         assertScheduled();
-        scheduler.cancelTask(task.getId());
+        scheduler.cancelTask(registeredTask.getId());
     }
 
     public void cancel() {

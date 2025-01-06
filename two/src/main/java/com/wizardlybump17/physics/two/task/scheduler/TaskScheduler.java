@@ -1,7 +1,7 @@
 package com.wizardlybump17.physics.two.task.scheduler;
 
-import com.wizardlybump17.physics.two.task.RunningTask;
-import com.wizardlybump17.physics.two.task.factory.RunningTaskFactory;
+import com.wizardlybump17.physics.two.task.RegisteredTask;
+import com.wizardlybump17.physics.two.task.factory.RegisteredTaskFactory;
 import com.wizardlybump17.physics.two.tick.Ticker;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,34 +14,34 @@ public class TaskScheduler implements Ticker {
     private long currentTick;
     private long tickStart;
     private long tickEnd;
-    private final @NotNull Map<Long, RunningTask> tasks = new HashMap<>();
-    private final @NotNull Map<Long, RunningTask> pendingTasks = new HashMap<>();
-    private final @NotNull RunningTaskFactory taskFactory;
+    private final @NotNull Map<Long, RegisteredTask> tasks = new HashMap<>();
+    private final @NotNull Map<Long, RegisteredTask> pendingTasks = new HashMap<>();
+    private final @NotNull RegisteredTaskFactory taskFactory;
     private long taskCounter;
 
-    public TaskScheduler(@NotNull RunningTaskFactory taskFactory) {
+    public TaskScheduler(@NotNull RegisteredTaskFactory taskFactory) {
         this.taskFactory = taskFactory;
     }
 
-    protected @NotNull RunningTask addTask(@NotNull RunningTask task) {
+    protected @NotNull RegisteredTask addTask(@NotNull RegisteredTask task) {
         pendingTasks.put(task.getId(), task);
         return task;
     }
 
-    public @NotNull RunningTask schedule(@NotNull Runnable task) {
+    public @NotNull RegisteredTask schedule(@NotNull Runnable task) {
         return addTask(taskFactory.create(nextTaskId(), task, currentTick + 1));
     }
 
-    public @NotNull RunningTask schedule(@NotNull Runnable task, long delay) {
+    public @NotNull RegisteredTask schedule(@NotNull Runnable task, long delay) {
         return addTask(taskFactory.create(nextTaskId(), task, delay, currentTick + 1));
     }
 
-    public @NotNull RunningTask schedule(@NotNull Runnable task, long delay, long period) {
+    public @NotNull RegisteredTask schedule(@NotNull Runnable task, long delay, long period) {
         return addTask(taskFactory.create(nextTaskId(), task, delay, period, currentTick + 1));
     }
 
     public void cancelTask(long id) {
-        RunningTask task = tasks.get(id);
+        RegisteredTask task = tasks.get(id);
         task.setRunning(false);
     }
 
@@ -51,9 +51,9 @@ public class TaskScheduler implements Ticker {
 
         tasks.putAll(pendingTasks);
         pendingTasks.clear();
-        Iterator<RunningTask> taskIterator = tasks.values().iterator();
+        Iterator<RegisteredTask> taskIterator = tasks.values().iterator();
         while (taskIterator.hasNext()) {
-            RunningTask task = taskIterator.next();
+            RegisteredTask task = taskIterator.next();
             if (!task.isRunning()) {
                 taskIterator.remove();
                 continue;
@@ -83,7 +83,7 @@ public class TaskScheduler implements Ticker {
         return currentTick;
     }
 
-    public @NotNull RunningTaskFactory getTaskFactory() {
+    public @NotNull RegisteredTaskFactory getTaskFactory() {
         return taskFactory;
     }
 

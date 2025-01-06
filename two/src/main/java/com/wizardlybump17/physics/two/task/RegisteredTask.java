@@ -4,7 +4,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 @ApiStatus.Internal
-public class BasicTask implements RunningTask {
+public class RegisteredTask {
 
     private final long id;
     private boolean running = true;
@@ -13,7 +13,7 @@ public class BasicTask implements RunningTask {
     private final long period;
     private final @NotNull Runnable runnable;
 
-    public BasicTask(long id, long startedAt, long delay, long period, @NotNull Runnable runnable) {
+    public RegisteredTask(long id, long startedAt, long delay, long period, @NotNull Runnable runnable) {
         this.id = id;
         this.startedAt = startedAt;
         this.delay = Math.clamp(delay, 0, Long.MAX_VALUE);
@@ -21,32 +21,26 @@ public class BasicTask implements RunningTask {
         this.runnable = runnable;
     }
 
-    @Override
     public long getId() {
         return id;
     }
 
-    @Override
     public boolean isRunning() {
         return running;
     }
 
-    @Override
     public void setRunning(boolean running) {
         this.running = running;
     }
 
-    @Override
     public long getStartedAt() {
         return startedAt;
     }
 
-    @Override
     public long getDelay() {
         return delay;
     }
 
-    @Override
     public long getPeriod() {
         return period;
     }
@@ -55,8 +49,18 @@ public class BasicTask implements RunningTask {
         return runnable;
     }
 
-    @Override
     public void run() {
         runnable.run();
+    }
+
+    public boolean isTimeToRun(long currentTick) {
+        if (getDelay() == 0 && getPeriod() == 0 && currentTick > getStartedAt())
+            return true;
+        long period = getStartedAt() + getDelay() + getPeriod() - 1;
+        return period == 0 || currentTick % period == 0;
+    }
+
+    public boolean isRepeatable() {
+        return getPeriod() > 0;
     }
 }

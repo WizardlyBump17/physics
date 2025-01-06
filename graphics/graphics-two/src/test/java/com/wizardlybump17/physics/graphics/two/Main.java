@@ -7,7 +7,7 @@ import com.wizardlybump17.physics.two.Engine;
 import com.wizardlybump17.physics.two.container.BaseObjectContainer;
 import com.wizardlybump17.physics.two.container.BasicBaseObjectContainer;
 import com.wizardlybump17.physics.two.physics.Physics;
-import com.wizardlybump17.physics.two.task.factory.BasicTaskFactory;
+import com.wizardlybump17.physics.two.task.factory.RegisteredTaskFactory;
 import com.wizardlybump17.physics.two.task.scheduler.TaskScheduler;
 import com.wizardlybump17.physics.two.thread.EngineThread;
 
@@ -24,7 +24,7 @@ public class Main {
         frame.setVisible(true);
 
         BaseObjectContainer objectContainer = new BasicBaseObjectContainer();
-        TaskScheduler scheduler = new TaskScheduler(new BasicTaskFactory());
+        TaskScheduler scheduler = new TaskScheduler(new RegisteredTaskFactory());
 
         Engine.setScheduler(scheduler);
 
