@@ -46,7 +46,7 @@ public class Main {
         scheduler.schedule(
                 () -> {
                     objectsPanel.getFallingBall().getPhysics().setAcceleration(Physics.GRAVITY_VECTOR); //TODO: move to the thread
-                    objectContainer.run();
+                    objectContainer.tick();
                     frame.repaint();
                 },
                 0,

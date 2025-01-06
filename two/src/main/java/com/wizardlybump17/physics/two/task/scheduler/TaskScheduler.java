@@ -1,16 +1,16 @@
 package com.wizardlybump17.physics.two.task.scheduler;
 
+import com.wizardlybump17.physics.Tickable;
 import com.wizardlybump17.physics.two.Timeable;
 import com.wizardlybump17.physics.two.task.RegisteredTask;
 import com.wizardlybump17.physics.two.task.factory.RegisteredTaskFactory;
-import com.wizardlybump17.physics.two.tick.Ticker;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class TaskScheduler implements Ticker, Timeable {
+public class TaskScheduler implements Tickable, Timeable {
 
     private long currentTick;
     private long start;
@@ -47,7 +47,7 @@ public class TaskScheduler implements Ticker, Timeable {
     }
 
     @Override
-    public void run() {
+    public void tick() {
         start();
 
         tasks.putAll(pendingTasks);

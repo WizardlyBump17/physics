@@ -43,6 +43,6 @@ public class EngineThread extends Thread {
     }
 
     protected void tickScheduler() {
-        scheduler.run();
+        scheduler.tick();
     }
 }
