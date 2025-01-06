@@ -11,13 +11,23 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class BaseObjectContainer implements Tickable, Timeable {
 
+    private final @NotNull UUID id;
     private final @NotNull List<Pair<Integer, Integer>> collisions = new LinkedList<>();
     private final @NotNull List<Pair<Integer, Integer>> endedCollisions = new LinkedList<>();
     private long startedAt;
     private long endedAt;
+
+    public BaseObjectContainer(@NotNull UUID id) {
+        this.id = id;
+    }
+
+    public @NotNull UUID getId() {
+        return id;
+    }
 
     @Override
     public void tick() {

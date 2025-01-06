@@ -4,14 +4,15 @@ import com.wizardlybump17.physics.two.object.BaseObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BasicBaseObjectContainer extends BaseObjectContainer {
 
     private final @NotNull Map<Integer, BaseObject> objects = new HashMap<>();
+
+    public BasicBaseObjectContainer(@NotNull UUID id) {
+        super(id);
+    }
 
     @Override
     public void addObject(@NotNull BaseObject object) {

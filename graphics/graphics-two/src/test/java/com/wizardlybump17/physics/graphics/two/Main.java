@@ -13,6 +13,7 @@ import com.wizardlybump17.physics.two.thread.EngineThread;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.UUID;
 
 public class Main {
 
@@ -23,7 +24,7 @@ public class Main {
         MainFrame frame = new MainFrame("2D test");
         frame.setVisible(true);
 
-        BaseObjectContainer objectContainer = new BasicBaseObjectContainer();
+        BaseObjectContainer objectContainer = new BasicBaseObjectContainer(UUID.nameUUIDFromBytes("WizardlyBump17".getBytes()));
         TaskScheduler scheduler = new TaskScheduler(new RegisteredTaskFactory());
 
         Engine.setScheduler(scheduler);
