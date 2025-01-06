@@ -2,6 +2,7 @@ package com.wizardlybump17.physics.graphics.two.listener.panel.shape;
 
 import com.wizardlybump17.physics.graphics.two.panel.object.ObjectsPanel;
 import com.wizardlybump17.physics.graphics.two.panel.object.PanelObject;
+import com.wizardlybump17.physics.two.Engine;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,27 +19,29 @@ public class ShapePanelMouseListener extends MouseAdapter {
 
     @Override
     public void mouseClicked(@NotNull MouseEvent event) {
-        Vector2D point = new Vector2D(event.getX(), event.getY());
+        Engine.getScheduler().schedule(() -> {
+            Vector2D point = new Vector2D(event.getX(), event.getY());
 
-        boolean success = false;
-        for (PanelObject shape : panel.getShapes().values()) {
-            boolean selected = shape.getShape().hasPoint(point);
-            shape.setSelected(selected);
+            boolean success = false;
+            for (PanelObject shape : panel.getShapes().values()) {
+                boolean selected = shape.getShape().hasPoint(point);
+                shape.setSelected(selected);
 
-            if (!selected)
-                continue;
+                if (!selected)
+                    continue;
 
-            PanelObject previous = panel.getSelectedShape();
-            if (previous != null && previous.getId() != shape.getId())
-                previous.setSelected(false);
+                PanelObject previous = panel.getSelectedShape();
+                if (previous != null && previous.getId() != shape.getId())
+                    previous.setSelected(false);
 
-            panel.setSelectedShape(shape);
-            success = true;
-            break;
-        }
+                panel.setSelectedShape(shape);
+                success = true;
+                break;
+            }
 
-        if (!success)
-            panel.setSelectedShape(null);
+            if (!success)
+                panel.setSelectedShape(null);
+        });
     }
 
     public @NotNull ObjectsPanel getPanel() {
