@@ -61,4 +61,18 @@ public class EngineThread extends Thread {
             container.tick();
         });
     }
+
+    public static void catchAsync(@NotNull String operation) {
+        if (!isMainThread())
+            throw new IllegalStateException("Can not run asynchronously: " + operation);
+    }
+
+    public static void catchAsync() {
+        if (!isMainThread())
+            throw new IllegalStateException("Can not run asynchronously");
+    }
+
+    public static boolean isMainThread() {
+        return currentThread() instanceof EngineThread;
+    }
 }
