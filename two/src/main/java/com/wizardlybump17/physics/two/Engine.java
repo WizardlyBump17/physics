@@ -9,6 +9,7 @@ public final class Engine {
 
     private static TaskScheduler scheduler;
     private static BaseObjectContainerRegistry objectContainerRegistry;
+    private static Thread thread;
 
     private Engine() {
     }
@@ -34,5 +35,14 @@ public final class Engine {
     private static void assertNotSet(@Nullable Object object, @NotNull String what) {
         if (object != null)
             throw new IllegalStateException("The " + what + " is already set.");
+    }
+
+    public static void setThread(@NotNull Thread thread) {
+        assertNotSet(Engine.thread, "thread");
+        Engine.thread = thread;
+    }
+
+    public static Thread getThread() {
+        return thread;
     }
 }

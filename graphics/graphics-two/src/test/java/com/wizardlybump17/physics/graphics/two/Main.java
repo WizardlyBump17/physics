@@ -59,6 +59,8 @@ public class Main {
                 Constants.TICKS_PER_SECOND
         );
 
-        new EngineThread(scheduler, containerRegistry).start();
+        EngineThread thread = new EngineThread(scheduler, containerRegistry);
+        Engine.setThread(thread);
+        thread.start();
     }
 }
