@@ -6,14 +6,14 @@ import org.jetbrains.annotations.NotNull;
 @ApiStatus.Internal
 public class RegisteredTask {
 
-    private final long id;
+    private final int id;
     private boolean running = true;
     private final long startedAt;
     private final long delay;
     private final long period;
     private final @NotNull Runnable runnable;
 
-    public RegisteredTask(long id, long startedAt, long delay, long period, @NotNull Runnable runnable) {
+    public RegisteredTask(int id, long startedAt, long delay, long period, @NotNull Runnable runnable) {
         this.id = id;
         this.startedAt = startedAt;
         this.delay = Math.clamp(delay, 0, Long.MAX_VALUE);
@@ -21,7 +21,7 @@ public class RegisteredTask {
         this.runnable = runnable;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 

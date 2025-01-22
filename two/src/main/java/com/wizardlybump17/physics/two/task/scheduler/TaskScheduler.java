@@ -9,16 +9,17 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class TaskScheduler implements Tickable, Timeable {
 
     private long currentTick;
     private long start;
     private long end;
-    private final @NotNull Map<Long, RegisteredTask> tasks = new HashMap<>();
-    private final @NotNull Map<Long, RegisteredTask> pendingTasks = new HashMap<>();
+    private final @NotNull Map<Integer, RegisteredTask> tasks = new HashMap<>();
+    private final @NotNull Map<Integer, RegisteredTask> pendingTasks = new HashMap<>();
     private final @NotNull RegisteredTaskFactory taskFactory;
-    private long taskCounter;
+    private final @NotNull AtomicInteger taskCounter = new AtomicInteger();
 
     public TaskScheduler(@NotNull RegisteredTaskFactory taskFactory) {
         this.taskFactory = taskFactory;
@@ -41,7 +42,7 @@ public class TaskScheduler implements Tickable, Timeable {
         return addTask(taskFactory.create(nextTaskId(), task, delay, period, currentTick + 1));
     }
 
-    public void cancelTask(long id) {
+    public void cancelTask(int id) {
         RegisteredTask task = tasks.get(id);
         task.setRunning(false);
     }
@@ -88,8 +89,8 @@ public class TaskScheduler implements Tickable, Timeable {
         return taskFactory;
     }
 
-    protected long nextTaskId() {
-        return taskCounter++;
+    protected int nextTaskId() {
+        return taskCounter.getAndIncrement();
     }
 
     @Override
