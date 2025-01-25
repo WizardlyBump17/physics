@@ -6,9 +6,6 @@ import com.wizardlybump17.physics.two.task.RegisteredTask;
 import com.wizardlybump17.physics.two.task.factory.RegisteredTaskFactory;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class TaskScheduler implements Tickable, Timeable {
@@ -16,8 +13,6 @@ public class TaskScheduler implements Tickable, Timeable {
     private long currentTick;
     private long start;
     private long end;
-    private final @NotNull Map<Integer, RegisteredTask> tasks = new HashMap<>();
-    private final @NotNull Map<Integer, RegisteredTask> pendingTasks = new HashMap<>();
     private final @NotNull RegisteredTaskFactory taskFactory;
     private final @NotNull AtomicInteger taskIdCounter = new AtomicInteger();
 
@@ -26,7 +21,6 @@ public class TaskScheduler implements Tickable, Timeable {
     }
 
     protected @NotNull RegisteredTask addTask(@NotNull RegisteredTask task) {
-        pendingTasks.put(task.getId(), task);
         return task;
     }
 
@@ -43,38 +37,11 @@ public class TaskScheduler implements Tickable, Timeable {
     }
 
     public void cancelTask(int id) {
-        RegisteredTask task = tasks.get(id);
-        task.setRunning(false);
     }
 
     @Override
     public void tick() {
         start();
-
-        tasks.putAll(pendingTasks);
-        pendingTasks.clear();
-        Iterator<RegisteredTask> taskIterator = tasks.values().iterator();
-        while (taskIterator.hasNext()) {
-            RegisteredTask task = taskIterator.next();
-            if (!task.isRunning()) {
-                taskIterator.remove();
-                continue;
-            }
-
-            if (task.getStartedAt() > currentTick)
-                continue;
-
-            if (task.isTimeToRun(currentTick)) {
-                task.run();
-                if (!task.isRepeatable())
-                    task.setRunning(false);
-            }
-
-            if (!task.isRunning())
-                taskIterator.remove();
-        }
-        pendingTasks.putAll(tasks);
-        tasks.clear();
 
         currentTick++;
 
