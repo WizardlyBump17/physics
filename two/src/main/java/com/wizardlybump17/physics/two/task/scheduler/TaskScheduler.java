@@ -19,7 +19,7 @@ public class TaskScheduler implements Tickable, Timeable {
     private final @NotNull Map<Integer, RegisteredTask> tasks = new HashMap<>();
     private final @NotNull Map<Integer, RegisteredTask> pendingTasks = new HashMap<>();
     private final @NotNull RegisteredTaskFactory taskFactory;
-    private final @NotNull AtomicInteger taskCounter = new AtomicInteger();
+    private final @NotNull AtomicInteger taskIdCounter = new AtomicInteger();
 
     public TaskScheduler(@NotNull RegisteredTaskFactory taskFactory) {
         this.taskFactory = taskFactory;
@@ -90,7 +90,7 @@ public class TaskScheduler implements Tickable, Timeable {
     }
 
     protected int nextTaskId() {
-        return taskCounter.getAndIncrement();
+        return taskIdCounter.getAndIncrement();
     }
 
     @Override
