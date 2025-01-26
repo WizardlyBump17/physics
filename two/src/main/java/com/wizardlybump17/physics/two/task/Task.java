@@ -6,6 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class Task implements Runnable {
 
+    public static final int NO_REPEATING = -1;
+
     private RegisteredTask registeredTask;
 
     public void schedule() {
