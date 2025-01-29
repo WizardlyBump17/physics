@@ -34,15 +34,14 @@ public class EngineThread extends Thread {
 
     @Override
     public void run() {
-        long start = System.currentTimeMillis();
-        long ticks = 0;
+        long nextRun;
         while (running) {
-            ticks++;
-
             tickScheduler();
             tickContainers();
 
-            while (System.currentTimeMillis() < start + ticks * Constants.MILLIS_PER_TICK) {
+            nextRun = (long) (System.currentTimeMillis() + Constants.MILLIS_PER_TICK);
+
+            while (System.currentTimeMillis() < nextRun) {
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
