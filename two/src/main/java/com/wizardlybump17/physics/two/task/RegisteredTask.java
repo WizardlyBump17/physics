@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
+import java.util.concurrent.atomic.AtomicReference;
 
 @ApiStatus.Internal
 public class RegisteredTask implements Comparable<RegisteredTask> {
@@ -13,39 +14,31 @@ public class RegisteredTask implements Comparable<RegisteredTask> {
             .comparing(RegisteredTask::getNextRun)
             .thenComparing(RegisteredTask::getStartedAt);
     public static final int NO_REPEATING = -1;
+    public static final int CANCELED = -1;
 
     private final int id;
-    private boolean running = true;
     private final long startedAt;
     private final long delay;
     private final long period;
     private final @NotNull Runnable runnable;
-    private RegisteredTask nextTask;
+    private final @NotNull AtomicReference<RegisteredTask> previousTask = new AtomicReference<>();
     private long nextRun;
 
     public RegisteredTask(int id, long startedAt, long delay, long period, @NotNull Runnable runnable) {
         this.id = id;
         this.startedAt = startedAt;
         this.delay = Math.clamp(delay, 0, Long.MAX_VALUE);
-        this.period = Math.clamp(period, 0, Long.MAX_VALUE);
+        this.period = Math.clamp(period, NO_REPEATING, Long.MAX_VALUE);
         this.runnable = runnable;
         nextRun = startedAt + delay;
     }
 
     public RegisteredTask() {
-        this(-1, 0, 0, 0, () -> {});
+        this(-1, 0, 0, NO_REPEATING, () -> {});
     }
 
     public int getId() {
         return id;
-    }
-
-    public boolean isRunning() {
-        return running;
-    }
-
-    public void setRunning(boolean running) {
-        this.running = running;
     }
 
     public long getStartedAt() {
@@ -69,15 +62,25 @@ public class RegisteredTask implements Comparable<RegisteredTask> {
     }
 
     public boolean isRepeatable() {
-        return period != Task.NO_REPEATING;
+        return period != NO_REPEATING;
     }
 
-    public void setNextTask(@Nullable RegisteredTask nextTask) {
-        this.nextTask = nextTask;
+    public boolean isCancelled() {
+        return nextRun == CANCELED;
     }
 
-    public @Nullable RegisteredTask getNextTask() {
-        return nextTask;
+    public void cancel() {
+        nextRun = CANCELED;
+    }
+
+    public void setPreviousTask(@Nullable RegisteredTask previousTask) {
+        RegisteredTask task = this.previousTask.get();
+        while (!this.previousTask.compareAndSet(task, previousTask))
+            task = this.previousTask.get();
+    }
+
+    public @Nullable RegisteredTask getPreviousTask() {
+        return previousTask.get();
     }
 
     @Override
