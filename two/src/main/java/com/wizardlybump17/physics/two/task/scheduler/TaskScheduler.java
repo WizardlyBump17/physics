@@ -53,8 +53,16 @@ public class TaskScheduler implements Tickable, Timeable {
     }
 
     public void cancelTask(int id) {
-        RegisteredTask task = runningTasks.get(id);
+        RegisteredTask task = runningTasks.remove(id);
         if (task != null) {
+            task.cancel();
+            return;
+        }
+
+        for (task = tailTask.get(); task != null; task = task.getPreviousTask()) {
+            if (task.getId() != id)
+                continue;
+
             task.cancel();
             runningTasks.remove(id);
         }
@@ -67,9 +75,8 @@ public class TaskScheduler implements Tickable, Timeable {
         long now = currentTick.get();
         RegisteredTask tail = tailTask.get();
         for (RegisteredTask task = tail; task != null; task = task.getPreviousTask()) {
-            if (task.getNextRun() > now || task.isCancelled()) {
+            if (task.isInternal() || task.getNextRun() > now || task.isCancelled())
                 continue;
-            }
 
             runningTasks.put(task.getId(), task);
 
