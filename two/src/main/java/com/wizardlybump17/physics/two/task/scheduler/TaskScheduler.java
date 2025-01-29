@@ -68,6 +68,15 @@ public class TaskScheduler implements Tickable, Timeable {
         }
     }
 
+    public boolean isScheduled(int id) {
+        if (runningTasks.containsKey(id))
+            return true;
+        for (RegisteredTask task = tailTask.get(); task != null; task = task.getPreviousTask())
+            if (task.getId() == id)
+                return !task.isCancelled();
+        return false;
+    }
+
     @Override
     public void tick() {
         start();

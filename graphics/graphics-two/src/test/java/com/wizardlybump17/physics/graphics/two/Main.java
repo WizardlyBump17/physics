@@ -7,6 +7,7 @@ import com.wizardlybump17.physics.two.Engine;
 import com.wizardlybump17.physics.two.container.BaseObjectContainer;
 import com.wizardlybump17.physics.two.container.BasicBaseObjectContainer;
 import com.wizardlybump17.physics.two.registry.BaseObjectContainerRegistry;
+import com.wizardlybump17.physics.two.task.RegisteredTask;
 import com.wizardlybump17.physics.two.task.factory.RegisteredTaskFactory;
 import com.wizardlybump17.physics.two.task.scheduler.TaskScheduler;
 import com.wizardlybump17.physics.two.thread.EngineThread;
@@ -58,6 +59,11 @@ public class Main {
                 0,
                 Constants.TICKS_PER_SECOND
         );
+        RegisteredTask killTask = scheduler.schedule(() -> System.exit(0), Constants.TICKS_PER_SECOND * 30);
+        scheduler.schedule(() -> {
+            scheduler.cancelTask(killTask.getId());
+            System.out.println(scheduler.isScheduled(killTask.getId()));
+        }, Constants.TICKS_PER_SECOND * 20);
 
         EngineThread thread = new EngineThread(scheduler, containerRegistry);
         Engine.setThread(thread);
