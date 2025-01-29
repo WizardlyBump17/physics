@@ -11,11 +11,11 @@ public class RegisteredTaskFactory {
         return new RegisteredTask(id, startedAt, delay, period, task);
     }
 
-    public @NotNull RegisteredTask create(int id, @NotNull Runnable task, long startedAt) {
-        return create(id, task, 0, 0, startedAt);
+    public @NotNull RegisteredTask create(int id, @NotNull Runnable task, long delay, long startedAt) {
+        return create(id, task, delay, RegisteredTask.NO_REPEATING, startedAt);
     }
 
-    public @NotNull RegisteredTask create(int id, @NotNull Runnable task, long delay, long startedAt) {
-        return create(id, task, delay, 0, startedAt);
+    public @NotNull RegisteredTask create(int id, @NotNull Runnable task, long startedAt) {
+        return create(id, task, 0, RegisteredTask.NO_REPEATING, startedAt);
     }
 }

@@ -12,6 +12,7 @@ public class RegisteredTask implements Comparable<RegisteredTask> {
     public static final @NotNull Comparator<RegisteredTask> COMPARATOR = Comparator
             .comparing(RegisteredTask::getNextRun)
             .thenComparing(RegisteredTask::getStartedAt);
+    public static final int NO_REPEATING = -1;
 
     private final int id;
     private boolean running = true;
