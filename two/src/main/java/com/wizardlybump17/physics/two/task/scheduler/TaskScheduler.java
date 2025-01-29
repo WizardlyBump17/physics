@@ -55,7 +55,7 @@ public class TaskScheduler implements Tickable, Timeable {
     public void cancelTask(int id) {
         RegisteredTask task = runningTasks.get(id);
         if (task != null) {
-            task.setNextRun(-1);
+            task.cancel();
             runningTasks.remove(id);
         }
     }
