@@ -15,6 +15,7 @@ public class RegisteredTask implements Comparable<RegisteredTask> {
             .thenComparing(RegisteredTask::getStartedAt);
     public static final int NO_REPEATING = -1;
     public static final int CANCELED = -1;
+    public static final int INTERNAL_ID = -1;
 
     private final int id;
     private final long startedAt;
@@ -34,7 +35,7 @@ public class RegisteredTask implements Comparable<RegisteredTask> {
     }
 
     public RegisteredTask() {
-        this(-1, 0, 0, NO_REPEATING, () -> {});
+        this(INTERNAL_ID, 0, 0, NO_REPEATING, () -> {});
     }
 
     public int getId() {
@@ -94,5 +95,9 @@ public class RegisteredTask implements Comparable<RegisteredTask> {
 
     public void setNextRun(long nextRun) {
         this.nextRun = nextRun;
+    }
+
+    public boolean isInternal() {
+        return id == INTERNAL_ID;
     }
 }
