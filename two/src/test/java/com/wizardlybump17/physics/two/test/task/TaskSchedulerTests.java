@@ -189,17 +189,20 @@ class TaskSchedulerTests {
         AtomicInteger executedTasks = new AtomicInteger();
 
         for (int i = 0; i < tasks; i++) {
-            RegisteredTask registeredTask = new Task() {
+            Task task = new Task() {
                 @Override
                 public void run() {
                     executedTasks.incrementAndGet();
                 }
-            }.schedule(scheduler);
+            };
+            RegisteredTask registeredTask = task.schedule(scheduler);
             int id = registeredTask.getId();
 
             Assertions.assertTrue(scheduler.isScheduled(id));
+            Assertions.assertTrue(task.isScheduled());
             registeredTask.cancel();
             Assertions.assertFalse(scheduler.isScheduled(id));
+            Assertions.assertFalse(task.isScheduled());
         }
 
         Assertions.assertEquals(0, executedTasks.get());
