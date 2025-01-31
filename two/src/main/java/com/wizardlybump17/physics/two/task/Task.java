@@ -9,31 +9,31 @@ public abstract class Task implements Runnable {
 
     private RegisteredTask registeredTask;
 
-    public void schedule() {
-        schedule(Engine.getScheduler());
+    public @NotNull RegisteredTask schedule() {
+        return schedule(Engine.getScheduler());
     }
 
-    public void schedule(long delay) {
-        schedule(Engine.getScheduler(), delay);
+    public @NotNull RegisteredTask schedule(long delay) {
+        return schedule(Engine.getScheduler(), delay);
     }
 
-    public void schedule(long delay, long period) {
-        schedule(Engine.getScheduler(), delay, period);
+    public @NotNull RegisteredTask schedule(long delay, long period) {
+        return schedule(Engine.getScheduler(), delay, period);
     }
 
-    public void schedule(@NotNull TaskScheduler scheduler) {
+    public @NotNull RegisteredTask schedule(@NotNull TaskScheduler scheduler) {
         assertNotScheduled();
-        registeredTask = scheduler.schedule(this);
+        return registeredTask = scheduler.schedule(this);
     }
 
-    public void schedule(@NotNull TaskScheduler scheduler, long delay) {
+    public @NotNull RegisteredTask schedule(@NotNull TaskScheduler scheduler, long delay) {
         assertNotScheduled();
-        registeredTask = scheduler.schedule(this, delay);
+        return registeredTask = scheduler.schedule(this, delay);
     }
 
-    public void schedule(@NotNull TaskScheduler scheduler, long delay, long period) {
+    public @NotNull RegisteredTask schedule(@NotNull TaskScheduler scheduler, long delay, long period) {
         assertNotScheduled();
-        registeredTask = scheduler.schedule(this, delay, period);
+        return registeredTask = scheduler.schedule(this, delay, period);
     }
 
     private void assertScheduled() {
