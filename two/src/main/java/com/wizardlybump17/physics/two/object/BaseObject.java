@@ -39,7 +39,7 @@ public class BaseObject {
         shape = shape.at(position);
     }
 
-    public void tick(double deltaTime) {
+    public void tick() {
     }
 
     @Override

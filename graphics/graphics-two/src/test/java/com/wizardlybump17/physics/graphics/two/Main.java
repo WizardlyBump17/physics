@@ -6,38 +6,68 @@ import com.wizardlybump17.physics.two.Constants;
 import com.wizardlybump17.physics.two.Engine;
 import com.wizardlybump17.physics.two.container.BaseObjectContainer;
 import com.wizardlybump17.physics.two.container.BasicBaseObjectContainer;
-import com.wizardlybump17.physics.two.physics.Physics;
-import com.wizardlybump17.physics.two.scheduler.Scheduler;
+import com.wizardlybump17.physics.two.registry.BaseObjectContainerRegistry;
+import com.wizardlybump17.physics.two.task.factory.RegisteredTaskFactory;
+import com.wizardlybump17.physics.two.task.registered.RegisteredTask;
+import com.wizardlybump17.physics.two.task.scheduler.TaskScheduler;
+import com.wizardlybump17.physics.two.thread.EngineThread;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.UUID;
 
 public class Main {
 
     public static void main(String[] args) {
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        System.out.println(dateFormat.format(System.currentTimeMillis()));
+
         MainFrame frame = new MainFrame("2D test");
         frame.setVisible(true);
 
-        BaseObjectContainer objectContainer = new BasicBaseObjectContainer();
-        Scheduler scheduler = new Scheduler();
+        BaseObjectContainer objectContainer = new BasicBaseObjectContainer(UUID.nameUUIDFromBytes("WizardlyBump17".getBytes()));
+        TaskScheduler scheduler = new TaskScheduler(new RegisteredTaskFactory());
+        BaseObjectContainerRegistry containerRegistry = new BaseObjectContainerRegistry();
 
         Engine.setScheduler(scheduler);
+        Engine.setObjectContainerRegistry(containerRegistry);
+
+        containerRegistry.register(objectContainer);
 
         ObjectsPanel objectsPanel = frame.getObjectsPanel();
         objectsPanel.setObjectContainer(objectContainer);
         objectsPanel.regenerate();
 
+        scheduler.schedule(
+                () -> {
+                    System.out.println("Hi! " + dateFormat.format(System.currentTimeMillis()));
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                },
+                Constants.TICKS_PER_SECOND * 10 //10 seconds
+        );
+        scheduler.schedule(
+                frame::repaint,
+                0,
+                1
+        );
+        scheduler.schedule(
+                () -> System.out.println(scheduler.getCurrentTick()),
+                0,
+                Constants.TICKS_PER_SECOND
+        );
+        RegisteredTask killTask = scheduler.schedule(() -> System.exit(0), Constants.TICKS_PER_SECOND * 30);
+        scheduler.schedule(() -> {
+            System.out.println(scheduler.isScheduled(killTask.getId()));
+            scheduler.cancelTask(killTask.getId());
+            System.out.println(scheduler.isScheduled(killTask.getId()));
+        }, Constants.TICKS_PER_SECOND * 20);
 
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                objectsPanel.getFallingBall().getPhysics().setAcceleration(Physics.GRAVITY_VECTOR);
-
-                objectContainer.run();
-                scheduler.run();
-                frame.repaint();
-            }
-        }, 0, 1000 / Constants.TICKS_PER_SECOND);
+        EngineThread thread = new EngineThread(scheduler, containerRegistry);
+        Engine.setThread(thread);
+        thread.start();
     }
 }

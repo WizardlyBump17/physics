@@ -1,36 +1,63 @@
 package com.wizardlybump17.physics.two.container;
 
 import com.wizardlybump17.physics.Pair;
+import com.wizardlybump17.physics.Tickable;
+import com.wizardlybump17.physics.Timeable;
 import com.wizardlybump17.physics.two.object.BaseObject;
 import com.wizardlybump17.physics.two.physics.object.PhysicsObject;
-import com.wizardlybump17.physics.two.tick.Ticker;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
-public abstract class BaseObjectContainer implements Ticker {
+public abstract class BaseObjectContainer implements Tickable, Timeable {
 
-    private long lastTick;
+    private final @NotNull UUID id;
     private final @NotNull List<Pair<Integer, Integer>> collisions = new LinkedList<>();
     private final @NotNull List<Pair<Integer, Integer>> endedCollisions = new LinkedList<>();
+    private long startedAt;
+    private long endedAt;
 
-    @Override
-    public void run() {
-        if (lastTick == 0)
-            lastTick = System.currentTimeMillis();
-
-        for (BaseObject object : getObjectsInternal())
-            object.tick((System.currentTimeMillis() - lastTick) / 1000.0);
-        handleCollisions();
-
-        lastTick = System.currentTimeMillis();
+    public BaseObjectContainer(@NotNull UUID id) {
+        this.id = id;
     }
 
-    public long getLastTick() {
-        return lastTick;
+    public @NotNull UUID getId() {
+        return id;
+    }
+
+    @Override
+    public void tick() {
+        start();
+
+        for (BaseObject object : getObjectsInternal())
+            object.tick();
+        handleCollisions();
+
+        end();
+    }
+
+    @Override
+    public void start() {
+        startedAt = System.currentTimeMillis();
+    }
+
+    @Override
+    public void end() {
+        endedAt = System.currentTimeMillis();
+    }
+
+    @Override
+    public long getStartedAt() {
+        return startedAt;
+    }
+
+    @Override
+    public long getEndedAt() {
+        return endedAt;
     }
 
     public abstract void addObject(@NotNull BaseObject object);
@@ -52,7 +79,7 @@ public abstract class BaseObjectContainer implements Ticker {
      *
      * @return the {@link Collection} of {@link BaseObject}s
      * @implSpec it is recommended that this method returns the actual {@link Collection} of {@link BaseObject}s so we can
-     * save some bits in memory, because this method will be used in some internal code like in {@link #run()}
+     * save some bits in memory, because this method will be used in some internal code like in {@link #tick()}
      */
     protected abstract @NotNull Collection<BaseObject> getObjectsInternal();
 
@@ -103,10 +130,8 @@ public abstract class BaseObjectContainer implements Ticker {
             if (firstObject == null || secondObject == null)
                 return;
 
-//            if (!firstObject.isCollidingWith(secondObject))
-                firstObject.onCollide(secondObject);
-//            if (!secondObject.isCollidingWith(firstObject))
-                secondObject.onCollide(firstObject);
+            firstObject.onCollide(secondObject);
+            secondObject.onCollide(firstObject);
         }
     }
 

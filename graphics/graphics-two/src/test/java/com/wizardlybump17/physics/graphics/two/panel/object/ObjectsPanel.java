@@ -18,13 +18,14 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 public class ObjectsPanel extends JPanel {
 
-    private final transient @NotNull Map<Integer, PanelObject> shapes = new HashMap<>();
+    private final transient @NotNull Map<Integer, PanelObject> shapes = Collections.synchronizedMap(new HashMap<>());
     private transient BaseObjectContainer objectContainer;
     private transient @Nullable PanelObject selectedShape;
     private transient PhysicsObject fallingBall;
@@ -44,68 +45,76 @@ public class ObjectsPanel extends JPanel {
     }
 
     public void regenerate() {
-        shapes.clear();
-        objectContainer.clear();
+        synchronized (shapes) {
+            shapes.clear();
+            objectContainer.clear();
 
-        Random random = new Random();
-        Dimension size = getSize();
+            selectedShape = null;
 
-        for (int i = 0; i < 10; i++) {
-            addObject(
-                    new PhysicsObject(
-                            objectContainer,
-                            objectCount++,
-                            new Rectangle(
-                                    Vector2D.randomVector(random, 0, 0, size.getWidth(), size.getHeight()),
-                                    random.nextDouble(90) + 10,
-                                    random.nextDouble(90) + 10
-                            )
-                    ),
-                    new RectangleRenderer()
+            Random random = new Random();
+            Dimension size = getSize();
+
+            for (int i = 0; i < 10; i++) {
+                addObject(
+                        new PhysicsObject(
+                                objectContainer,
+                                objectCount++,
+                                new Rectangle(
+                                        Vector2D.randomVector(random, 0, 0, size.getWidth(), size.getHeight()),
+                                        random.nextDouble(90) + 10,
+                                        random.nextDouble(90) + 10
+                                )
+                        ),
+                        new RectangleRenderer()
+                );
+
+                addObject(
+                        new PhysicsObject(
+                                objectContainer,
+                                objectCount++,
+                                new Circle(
+                                        Vector2D.randomVector(random, 0, 0, size.getWidth(), size.getHeight()),
+                                        random.nextDouble(50) + 10
+                                )
+                        ),
+                        new CircleRenderer()
+                );
+            }
+
+            fallingBall = new PhysicsObject(
+                    objectContainer,
+                    objectCount++,
+                    new Circle(
+                            Vector2D.randomVector(random, 0, 0, size.getWidth(), size.getHeight()),
+                            random.nextDouble(50) + 10
+                    )
             );
-
-            addObject(
-                    new PhysicsObject(
-                            objectContainer,
-                            objectCount++,
-                            new Circle(
-                                    Vector2D.randomVector(random, 0, 0, size.getWidth(), size.getHeight()),
-                                    random.nextDouble(50) + 10
-                            )
-                    ),
-                    new CircleRenderer()
-            );
+            fallingBall.setPhysics(new FallingBallPhysics(addObject(fallingBall, new CircleRenderer())));
         }
-
-        fallingBall = new PhysicsObject(
-                objectContainer,
-                objectCount++,
-                new Circle(
-                        Vector2D.randomVector(random, 0, 0, size.getWidth(), size.getHeight()),
-                        random.nextDouble(50) + 10
-                )
-        );
-        addObject(fallingBall, new CircleRenderer());
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public void paint(@NotNull Graphics graphics) {
-        Toolkit.getDefaultToolkit().sync();
+        synchronized (shapes) {
+            Toolkit.getDefaultToolkit().sync();
 
-        super.paintComponent(graphics);
+            super.paintComponent(graphics);
 
-        shapes.values().forEach(panelShape -> ((ShapeRenderer<Shape>) panelShape.getRenderer()).render(graphics, panelShape.getShape()));
-        if (selectedShape != null)
-            ((ShapeRenderer<Shape>) selectedShape.getRenderer()).render(graphics, selectedShape.getShape());
+            shapes.values().forEach(panelShape -> ((ShapeRenderer<Shape>) panelShape.getRenderer()).render(graphics, panelShape.getShape()));
+            if (selectedShape != null)
+                ((ShapeRenderer<Shape>) selectedShape.getRenderer()).render(graphics, selectedShape.getShape());
+        }
     }
 
-    public <R extends ShapeRenderer<?>> void addObject(@NotNull BaseObject object, @NotNull R renderer) {
+    public <R extends ShapeRenderer<?>> @NotNull PanelObject addObject(@NotNull BaseObject object, @NotNull R renderer) {
         PanelObject panelObject = new PanelObject(object, renderer);
         shapes.put(panelObject.getId(), panelObject);
         renderer.setPanelObject(panelObject);
 
         objectContainer.addObject(object);
+
+        return panelObject;
     }
 
     public @NotNull Map<Integer, PanelObject> getShapes() {

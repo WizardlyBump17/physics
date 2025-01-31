@@ -1,10 +1,8 @@
 package com.wizardlybump17.physics.two.physics.object;
 
 import com.wizardlybump17.physics.two.container.BaseObjectContainer;
-import com.wizardlybump17.physics.two.intersection.Intersection;
 import com.wizardlybump17.physics.two.object.BaseObject;
 import com.wizardlybump17.physics.two.physics.Physics;
-import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Shape;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,9 +34,9 @@ public class PhysicsObject extends BaseObject {
     }
 
     @Override
-    public void tick(double deltaTime) {
-        super.tick(deltaTime);
-        physics.tick(deltaTime);
+    public void tick() {
+        super.tick();
+        physics.tick();
     }
 
     @Override
@@ -72,14 +70,6 @@ public class PhysicsObject extends BaseObject {
      */
     public void onCollide(@NotNull BaseObject other) {
         collidingWith.put(other.getId(), other);
-
-        Intersection intersection = other.getShape().intersect(getShape());
-        if (!intersection.intersects())
-            return;
-
-        double angle = other.getPosition().angleTo(getPosition());
-        teleport(intersection.getSafePosition());
-        physics.setAcceleration(new Vector2D(Math.cos(angle) * 300, Math.sin(angle) * 300));
     }
 
     public @NotNull Map<Integer, BaseObject> getCollidingWith() {

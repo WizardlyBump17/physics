@@ -21,15 +21,13 @@ public class ShapePanelKeyboardListener extends KeyAdapter {
 
     @Override
     public void keyPressed(@NotNull KeyEvent event) {
-        if (event.getKeyCode() != KeyEvent.VK_SPACE)
-            return;
-        Engine.getScheduler().schedule(panel::regenerate);
+        if (event.getKeyCode() == KeyEvent.VK_SPACE)
+            Engine.getScheduler().schedule(panel::regenerate);
     }
 
     @Override
     public void keyTyped(@NotNull KeyEvent event) {
-        if (event.getKeyCode() != KeyEvent.VK_SPACE)
-            return;
-        Engine.getScheduler().schedule(panel::regenerate);
+        if (event.getKeyCode() == KeyEvent.VK_SPACE)
+            Engine.getScheduler().schedule(panel::regenerate);
     }
 }
