@@ -6,7 +6,7 @@ import com.wizardlybump17.physics.two.task.RegisteredTask;
 import com.wizardlybump17.physics.two.task.factory.RegisteredTaskFactory;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -19,9 +19,11 @@ public class TaskScheduler implements Tickable, Timeable {
     private long end;
     private final @NotNull RegisteredTaskFactory taskFactory;
     private final @NotNull AtomicInteger taskIdCounter = new AtomicInteger();
-    private final @NotNull RegisteredTask headTask = new RegisteredTask();
+    private @NotNull RegisteredTask headTask = new RegisteredTask();
     private final @NotNull AtomicReference<RegisteredTask> tailTask = new AtomicReference<>(headTask);
     private final @NotNull Map<Integer, RegisteredTask> runningTasks = new ConcurrentHashMap<>();
+    private final @NotNull Deque<RegisteredTask> pendingTasks = new ArrayDeque<>();
+    private final @NotNull List<RegisteredTask> tempPendingTasks = new ArrayList<>();
 
     public TaskScheduler(@NotNull RegisteredTaskFactory taskFactory) {
         this.taskFactory = taskFactory;
@@ -29,7 +31,7 @@ public class TaskScheduler implements Tickable, Timeable {
 
     protected @NotNull RegisteredTask addTask(@NotNull RegisteredTask task) {
         RegisteredTask previous = tailTask.get();
-        task.setPreviousTask(previous);
+        previous.setNextTask(task);
         setTailTask(task);
         return task;
     }
@@ -59,19 +61,20 @@ public class TaskScheduler implements Tickable, Timeable {
             return;
         }
 
-        for (task = tailTask.get(); task != null; task = task.getPreviousTask()) {
+        for (task = headTask; task != null; task = task.getNextTask()) {
             if (task.getId() != id)
                 continue;
 
             task.cancel();
             runningTasks.remove(id);
+            return;
         }
     }
 
     public boolean isScheduled(int id) {
         if (runningTasks.containsKey(id))
             return true;
-        for (RegisteredTask task = tailTask.get(); task != null; task = task.getPreviousTask())
+        for (RegisteredTask task = headTask; task != null; task = task.getNextTask())
             if (task.getId() == id)
                 return !task.isCancelled();
         return false;
@@ -82,25 +85,54 @@ public class TaskScheduler implements Tickable, Timeable {
         start();
 
         long now = currentTick.get();
-        RegisteredTask tail = tailTask.get();
-        for (RegisteredTask task = tail; task != null; task = task.getPreviousTask()) {
-            if (task.isInternal() || task.getNextRun() > now || task.isCancelled())
-                continue;
 
-            runningTasks.put(task.getId(), task);
+        parse();
+        while (!pendingTasks.isEmpty()) {
+            RegisteredTask task = pendingTasks.pollLast();
+            if (task.isCancelled()) {
+                parse();
+                continue;
+            }
+
+            if (task.getNextRun() > now) {
+                tempPendingTasks.add(task);
+                parse();
+                continue;
+            }
 
             task.run();
-            if (task.isRepeatable())
+
+            if (task.isRepeatable()) {
                 task.setNextRun(now + task.getPeriod());
-            else {
-                runningTasks.remove(task.getId());
+                tempPendingTasks.add(task);
+            } else {
                 task.cancel();
+                runningTasks.remove(task.getId());
             }
+
+            parse();
         }
+
+        pendingTasks.addAll(tempPendingTasks);
+        tempPendingTasks.clear();
 
         currentTick.getAndIncrement();
 
         end();
+    }
+
+    protected void parse() {
+        RegisteredTask lastTask = null;
+        for (RegisteredTask task = headTask.getNextTask(); task != null; task = (lastTask = task).getNextTask()) {
+            pendingTasks.add(task);
+            runningTasks.put(task.getId(), task);
+        }
+
+        for (RegisteredTask task = headTask; task != null; task = (lastTask = task).getNextTask())
+            if (lastTask != null)
+                lastTask.setNextTask(null);
+
+        headTask = lastTask;
     }
 
     public long getCurrentTick() {

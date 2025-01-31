@@ -2,17 +2,12 @@ package com.wizardlybump17.physics.two.task;
 
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicReference;
 
 @ApiStatus.Internal
-public class RegisteredTask implements Comparable<RegisteredTask> {
+public class RegisteredTask {
 
-    public static final @NotNull Comparator<RegisteredTask> COMPARATOR = Comparator
-            .comparing(RegisteredTask::getNextRun)
-            .thenComparing(RegisteredTask::getStartedAt);
     public static final int NO_REPEATING = -1;
     public static final int CANCELED = -1;
     public static final int INTERNAL_ID = -1;
@@ -22,7 +17,7 @@ public class RegisteredTask implements Comparable<RegisteredTask> {
     private final long delay;
     private final long period;
     private final @NotNull Runnable runnable;
-    private final @NotNull AtomicReference<RegisteredTask> previousTask = new AtomicReference<>();
+    private final @NotNull AtomicReference<RegisteredTask> nextTask = new AtomicReference<>();
     private long nextRun;
 
     public RegisteredTask(int id, long startedAt, long delay, long period, @NotNull Runnable runnable) {
@@ -74,19 +69,14 @@ public class RegisteredTask implements Comparable<RegisteredTask> {
         nextRun = CANCELED;
     }
 
-    public void setPreviousTask(@Nullable RegisteredTask previousTask) {
-        RegisteredTask task = this.previousTask.get();
-        while (!this.previousTask.compareAndSet(task, previousTask))
-            task = this.previousTask.get();
+    public void setNextTask(RegisteredTask nextTask) {
+        RegisteredTask task = this.nextTask.get();
+        while (!this.nextTask.compareAndSet(task, nextTask))
+            task = this.nextTask.get();
     }
 
-    public @Nullable RegisteredTask getPreviousTask() {
-        return previousTask.get();
-    }
-
-    @Override
-    public int compareTo(@NotNull RegisteredTask other) {
-        return COMPARATOR.compare(this, other);
+    public RegisteredTask getNextTask() {
+        return nextTask.get();
     }
 
     public long getNextRun() {
