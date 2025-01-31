@@ -61,6 +61,7 @@ public class Main {
         );
         RegisteredTask killTask = scheduler.schedule(() -> System.exit(0), Constants.TICKS_PER_SECOND * 30);
         scheduler.schedule(() -> {
+            System.out.println(scheduler.isScheduled(killTask.getId()));
             scheduler.cancelTask(killTask.getId());
             System.out.println(scheduler.isScheduled(killTask.getId()));
         }, Constants.TICKS_PER_SECOND * 20);
