@@ -27,7 +27,8 @@ class TaskSchedulerTests {
         for (int i = 0; i < tasks; i++)
             scheduler.schedule(executedTasks::incrementAndGet);
 
-        for (int i = 0; i <= tasks; i++)
+        scheduler.tick();
+        for (int i = 0; i < tasks; i++)
             scheduler.tick();
 
         Assertions.assertEquals(tasks, executedTasks.get());
@@ -43,7 +44,8 @@ class TaskSchedulerTests {
         for (int i = 0; i < tasks; i++)
             scheduler.schedule(executedTasks::incrementAndGet, i * delay);
 
-        for (int i = 0; i <= tasks * delay; i++)
+        scheduler.tick();
+        for (int i = 0; i < tasks * delay; i++)
             scheduler.tick();
 
         Assertions.assertEquals(tasks, executedTasks.get());
@@ -74,7 +76,8 @@ class TaskSchedulerTests {
             );
         }
 
-        for (int i = 0; i <= delay; i++)
+        scheduler.tick();
+        for (int i = 0; i < delay; i++)
             scheduler.tick();
         for (int i = 0; i < tasks * period; i++)
             scheduler.tick();
