@@ -1,7 +1,9 @@
 package com.wizardlybump17.physics.two.task;
 
+import com.wizardlybump17.physics.util.AtomicUtil;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -69,13 +71,11 @@ public class RegisteredTask {
         nextRun = CANCELED;
     }
 
-    public void setNextTask(RegisteredTask nextTask) {
-        RegisteredTask task = this.nextTask.get();
-        while (!this.nextTask.compareAndSet(task, nextTask))
-            task = this.nextTask.get();
+    public void setNextTask(@Nullable RegisteredTask nextTask) {
+        AtomicUtil.set(this.nextTask, nextTask);
     }
 
-    public RegisteredTask getNextTask() {
+    public @Nullable RegisteredTask getNextTask() {
         return nextTask.get();
     }
 

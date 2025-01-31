@@ -4,6 +4,7 @@ import com.wizardlybump17.physics.Tickable;
 import com.wizardlybump17.physics.Timeable;
 import com.wizardlybump17.physics.two.task.RegisteredTask;
 import com.wizardlybump17.physics.two.task.factory.RegisteredTaskFactory;
+import com.wizardlybump17.physics.util.AtomicUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -32,14 +33,8 @@ public class TaskScheduler implements Tickable, Timeable {
     protected @NotNull RegisteredTask addTask(@NotNull RegisteredTask task) {
         RegisteredTask previous = tailTask.get();
         previous.setNextTask(task);
-        setTailTask(task);
+        AtomicUtil.set(tailTask, task);
         return task;
-    }
-
-    protected void setTailTask(RegisteredTask task) {
-        RegisteredTask tail = tailTask.get();
-        while (!tailTask.compareAndSet(tail, task))
-            tail = tailTask.get();
     }
 
     public @NotNull RegisteredTask schedule(@NotNull Runnable task) {
