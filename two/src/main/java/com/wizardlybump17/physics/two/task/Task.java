@@ -54,4 +54,8 @@ public abstract class Task implements Runnable {
     public void cancel() {
         cancel(Engine.getScheduler());
     }
+
+    public boolean isScheduled() {
+        return registeredTask != null && !registeredTask.isCancelled();
+    }
 }
