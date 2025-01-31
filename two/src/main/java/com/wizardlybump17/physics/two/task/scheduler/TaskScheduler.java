@@ -2,8 +2,9 @@ package com.wizardlybump17.physics.two.task.scheduler;
 
 import com.wizardlybump17.physics.Tickable;
 import com.wizardlybump17.physics.Timeable;
-import com.wizardlybump17.physics.two.task.RegisteredTask;
 import com.wizardlybump17.physics.two.task.factory.RegisteredTaskFactory;
+import com.wizardlybump17.physics.two.task.registered.RegisteredTask;
+import com.wizardlybump17.physics.two.task.registered.RegisteredTaskImpl;
 import com.wizardlybump17.physics.util.AtomicUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,18 +21,18 @@ public class TaskScheduler implements Tickable, Timeable {
     private long end;
     private final @NotNull RegisteredTaskFactory taskFactory;
     private final @NotNull AtomicInteger taskIdCounter = new AtomicInteger();
-    private @NotNull RegisteredTask headTask = new RegisteredTask();
-    private final @NotNull AtomicReference<RegisteredTask> tailTask = new AtomicReference<>(headTask);
-    private final @NotNull Map<Integer, RegisteredTask> runningTasks = new ConcurrentHashMap<>();
-    private final @NotNull Deque<RegisteredTask> pendingTasks = new ArrayDeque<>();
-    private final @NotNull List<RegisteredTask> tempPendingTasks = new ArrayList<>();
+    private @NotNull RegisteredTaskImpl headTask = new RegisteredTaskImpl();
+    private final @NotNull AtomicReference<RegisteredTaskImpl> tailTask = new AtomicReference<>(headTask);
+    private final @NotNull Map<Integer, RegisteredTaskImpl> runningTasks = new ConcurrentHashMap<>();
+    private final @NotNull Deque<RegisteredTaskImpl> pendingTasks = new ArrayDeque<>();
+    private final @NotNull List<RegisteredTaskImpl> tempPendingTasks = new ArrayList<>();
 
     public TaskScheduler(@NotNull RegisteredTaskFactory taskFactory) {
         this.taskFactory = taskFactory;
     }
 
-    protected @NotNull RegisteredTask addTask(@NotNull RegisteredTask task) {
-        RegisteredTask previous = tailTask.get();
+    protected @NotNull RegisteredTaskImpl addTask(@NotNull RegisteredTaskImpl task) {
+        RegisteredTaskImpl previous = tailTask.get();
         previous.setNextTask(task);
         AtomicUtil.set(tailTask, task);
         return task;
@@ -50,7 +51,7 @@ public class TaskScheduler implements Tickable, Timeable {
     }
 
     public void cancelTask(int id) {
-        RegisteredTask task = runningTasks.remove(id);
+        RegisteredTaskImpl task = runningTasks.remove(id);
         if (task != null) {
             task.cancel();
             return;
@@ -69,7 +70,7 @@ public class TaskScheduler implements Tickable, Timeable {
     public boolean isScheduled(int id) {
         if (runningTasks.containsKey(id))
             return true;
-        for (RegisteredTask task = headTask; task != null; task = task.getNextTask())
+        for (RegisteredTaskImpl task = headTask; task != null; task = task.getNextTask())
             if (task.getId() == id)
                 return !task.isCancelled();
         return false;
@@ -83,7 +84,7 @@ public class TaskScheduler implements Tickable, Timeable {
 
         parse();
         while (!pendingTasks.isEmpty()) {
-            RegisteredTask task = pendingTasks.pollLast();
+            RegisteredTaskImpl task = pendingTasks.pollLast();
             if (task.isCancelled()) {
                 parse();
                 continue;
@@ -117,13 +118,13 @@ public class TaskScheduler implements Tickable, Timeable {
     }
 
     protected void parse() {
-        RegisteredTask lastTask = null;
-        for (RegisteredTask task = headTask.getNextTask(); task != null; task = (lastTask = task).getNextTask()) {
+        RegisteredTaskImpl lastTask = null;
+        for (RegisteredTaskImpl task = headTask.getNextTask(); task != null; task = (lastTask = task).getNextTask()) {
             pendingTasks.add(task);
             runningTasks.put(task.getId(), task);
         }
 
-        for (RegisteredTask task = headTask; task != null; task = (lastTask = task).getNextTask())
+        for (RegisteredTaskImpl task = headTask; task != null; task = (lastTask = task).getNextTask())
             if (lastTask != null)
                 lastTask.setNextTask(null);
 
