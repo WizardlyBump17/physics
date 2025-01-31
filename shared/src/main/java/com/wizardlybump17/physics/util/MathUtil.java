@@ -1,4 +1,4 @@
-package com.wizardlybump17.physics.two.util;
+package com.wizardlybump17.physics.util;
 
 public final class MathUtil {
 

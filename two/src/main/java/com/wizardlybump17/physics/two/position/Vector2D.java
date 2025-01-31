@@ -1,7 +1,7 @@
 package com.wizardlybump17.physics.two.position;
 
 import com.wizardlybump17.physics.two.iterator.Vector2DIterator;
-import com.wizardlybump17.physics.two.util.MathUtil;
+import com.wizardlybump17.physics.util.MathUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;

@@ -4,7 +4,7 @@ import com.wizardlybump17.physics.two.intersection.Intersection;
 import com.wizardlybump17.physics.two.intersection.circle.CircleToCircleIntersection;
 import com.wizardlybump17.physics.two.intersection.rectangle.RectangleToCircleIntersection;
 import com.wizardlybump17.physics.two.position.Vector2D;
-import com.wizardlybump17.physics.two.util.MathUtil;
+import com.wizardlybump17.physics.util.MathUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
