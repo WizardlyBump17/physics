@@ -12,7 +12,7 @@ public class Physics {
     public static final double GRAVITATIONAL_CONSTANT = 9.8;
     public static final @NotNull Vector2D GRAVITY_VECTOR = new Vector2D(0, GRAVITATIONAL_CONSTANT);
 
-    private final @NotNull PhysicsObject object;
+    private @NotNull PhysicsObject object;
     private @NotNull Vector2D velocity;
     private @NotNull Vector2D acceleration;
 
@@ -22,10 +22,24 @@ public class Physics {
         this.acceleration = acceleration;
     }
 
+    public Physics(@NotNull Vector2D velocity, @NotNull Vector2D acceleration) {
+        this.velocity = velocity;
+        this.acceleration = acceleration;
+    }
+
     public Physics(@NotNull PhysicsObject object) {
         this.object = object;
         velocity = Vector2D.ZERO;
         acceleration = Vector2D.ZERO;
+    }
+
+    public Physics() {
+        velocity = Vector2D.ZERO;
+        acceleration = Vector2D.ZERO;
+    }
+
+    public void setObject(@NotNull PhysicsObject object) {
+        this.object = object;
     }
 
     public @NotNull PhysicsObject getObject() {
