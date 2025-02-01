@@ -57,7 +57,14 @@ public class BallGamePanel extends JPanel {
                     PlatformPhysics physics = platform.getPhysics();
 
                     switch (event.getKeyCode()) {
-                        case KeyEvent.VK_A, KeyEvent.VK_D -> physics.stopMovement();
+                        case KeyEvent.VK_A -> {
+                            if (physics.getDirection() == PlatformPhysics.Direction.LEFT)
+                                physics.stopMovement();
+                        }
+                        case KeyEvent.VK_D -> {
+                            if (physics.getDirection() == PlatformPhysics.Direction.RIGHT)
+                                physics.stopMovement();
+                        }
                     }
                 });
             }
