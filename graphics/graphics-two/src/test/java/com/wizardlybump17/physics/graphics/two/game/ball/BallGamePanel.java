@@ -4,6 +4,7 @@ import com.wizardlybump17.physics.two.Constants;
 import com.wizardlybump17.physics.two.object.BaseObject;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Circle;
+import com.wizardlybump17.physics.two.shape.Rectangle;
 import com.wizardlybump17.physics.two.shape.Shape;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,6 +41,13 @@ public class BallGamePanel extends JPanel {
 
                     graphics.setColor(Color.RED);
                     graphics.fillOval((int) x, (int) y, (int) diameter, (int) diameter);
+                }
+                case Rectangle rectangle -> {
+                    double width = rectangle.getWidth();
+                    double height = rectangle.getHeight();
+
+                    graphics.setColor(Color.BLUE);
+                    graphics.fillRect((int) position.x(), (int) position.y(), (int) width, (int) height);
                 }
                 default -> {
                     Class<? extends Shape> shapeClass = shape.getClass();
