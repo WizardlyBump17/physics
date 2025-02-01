@@ -149,4 +149,6 @@ public abstract class BaseObjectContainer implements Tickable, Timeable {
                 secondObject.onCollisionStop(firstObject);
         }
     }
+
+    public abstract int getObjectsCount();
 }
