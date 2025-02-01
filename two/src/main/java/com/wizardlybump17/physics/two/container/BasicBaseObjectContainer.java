@@ -48,4 +48,9 @@ public class BasicBaseObjectContainer extends BaseObjectContainer {
     public void clear() {
         objects.clear();
     }
+
+    @Override
+    public int getObjectsCount() {
+        return objects.size();
+    }
 }
