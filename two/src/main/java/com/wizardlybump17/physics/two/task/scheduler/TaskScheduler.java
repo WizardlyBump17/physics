@@ -140,7 +140,7 @@ public class TaskScheduler implements Tickable, Timeable {
 
             task.run();
 
-            if (task.isRepeatable()) {
+            if (!task.isCancelled() && task.isRepeatable()) {
                 task.setNextRun(now + task.getPeriod());
                 tempPendingTasks.add(task);
             } else {
