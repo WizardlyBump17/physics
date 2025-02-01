@@ -22,5 +22,11 @@ public class Main {
         BallGame game = new BallGame();
         game.init();
         game.getMainFrame().setVisible(true);
+
+        scheduler.schedule(
+                () -> game.getMainPanel().repaint(),
+                0,
+                1
+        );
     }
 }
