@@ -1,6 +1,9 @@
 package com.wizardlybump17.physics.graphics.two.game.ball;
 
+import com.wizardlybump17.physics.graphics.two.game.ball.platform.Platform;
+import com.wizardlybump17.physics.graphics.two.game.ball.platform.PlatformPhysics;
 import com.wizardlybump17.physics.two.Constants;
+import com.wizardlybump17.physics.two.Engine;
 import com.wizardlybump17.physics.two.object.BaseObject;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Circle;
@@ -10,6 +13,8 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +25,43 @@ public class BallGamePanel extends JPanel {
 
     public BallGamePanel(@NotNull BallContainer container) {
         this.container = container;
+        init();
+    }
+
+    protected void init() {
+        setFocusable(true);
+        requestFocus();
+
+        initListeners();
+    }
+
+    protected void initListeners() {
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(@NotNull KeyEvent event) {
+                Engine.getScheduler().schedule(() -> {
+                    Platform platform = container.getPlatform();
+                    PlatformPhysics physics = platform.getPhysics();
+
+                    switch (event.getKeyCode()) {
+                        case KeyEvent.VK_A -> physics.moveLeft();
+                        case KeyEvent.VK_D -> physics.moveRight();
+                    }
+                });
+            }
+
+            @Override
+            public void keyReleased(@NotNull KeyEvent event) {
+                Engine.getScheduler().schedule(() -> {
+                    Platform platform = container.getPlatform();
+                    PlatformPhysics physics = platform.getPhysics();
+
+                    switch (event.getKeyCode()) {
+                        case KeyEvent.VK_A, KeyEvent.VK_D -> physics.stopMovement();
+                    }
+                });
+            }
+        });
     }
 
     @Override
