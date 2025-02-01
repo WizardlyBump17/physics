@@ -79,7 +79,7 @@ public class Physics {
     }
 
     public void tick() {
-        velocity = velocity.add(acceleration.divide(Constants.TICKS_PER_SECOND));
+        setVelocity(velocity.add(acceleration.divide(Constants.TICKS_PER_SECOND)));
         object.teleport(object.getPosition().add(velocity.divide(Constants.TICKS_PER_SECOND)));
     }
 
