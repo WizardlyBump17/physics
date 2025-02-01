@@ -7,6 +7,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class PlatformPhysics extends Physics {
 
+    public static final @NotNull Vector2D LEFT_SPEED = new Vector2D(-200, 0);
+    public static final @NotNull Vector2D RIGHT_SPEED = new Vector2D(-LEFT_SPEED.x(), 0);
+
     private @NotNull Direction direction = Direction.NONE;
 
     public PlatformPhysics(@NotNull Platform object, @NotNull Vector2D velocity, @NotNull Vector2D acceleration) {
@@ -31,12 +34,12 @@ public class PlatformPhysics extends Physics {
 
     public void moveLeft() {
         direction = Direction.LEFT;
-        setVelocity(new Vector2D(-100, 0));
+        setVelocity(LEFT_SPEED);
     }
 
     public void moveRight() {
         direction = Direction.RIGHT;
-        setVelocity(new Vector2D(100, 0));
+        setVelocity(RIGHT_SPEED);
     }
 
     public void stopMovement() {
