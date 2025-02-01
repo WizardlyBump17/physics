@@ -1,6 +1,7 @@
 package com.wizardlybump17.physics.two.physics;
 
 import com.wizardlybump17.physics.annotation.NeedsSetup;
+import com.wizardlybump17.physics.annotation.SetupMethod;
 import com.wizardlybump17.physics.two.Constants;
 import com.wizardlybump17.physics.two.physics.object.PhysicsObject;
 import com.wizardlybump17.physics.two.position.Vector2D;
@@ -41,6 +42,7 @@ public class Physics {
         acceleration = Vector2D.ZERO;
     }
 
+    @SetupMethod
     public void setObject(@NotNull PhysicsObject object) {
         this.object = object;
     }
