@@ -36,14 +36,42 @@ public class TaskScheduler implements Tickable, Timeable {
         return task;
     }
 
+    /**
+     * <p>
+     * Schedules the given task to be run on the NEXT tick.
+     * </p>
+     *
+     * @param task the task to run
+     * @return the {@link RegisteredTask} related to the task
+     */
     public @NotNull RegisteredTask schedule(@NotNull Runnable task) {
         return addTask(taskFactory.create(nextTaskId(), task, currentTick.get() + 1));
     }
 
+    /**
+     * <p>
+     * Schedules the given task to be run on the NEXT tick PLUS the given delay.
+     * </p>
+     *
+     * @param task the task to run
+     * @param delay the delay to wait to run the task
+     * @return the {@link RegisteredTask} related to the task
+     */
     public @NotNull RegisteredTask schedule(@NotNull Runnable task, long delay) {
         return addTask(taskFactory.create(nextTaskId(), task, delay, currentTick.get() + 1));
     }
 
+    /**
+     * <p>
+     * Schedules the given task to be run on the NEXT tick PLUS the given delay.
+     * The task will keep running with a period given by the {@code period} param.
+     * </p>
+     *
+     * @param task the task to run
+     * @param delay the delay to wait to run the task
+     * @param period the number of ticks the task will keep running
+     * @return the {@link RegisteredTask} related to the task
+     */
     public @NotNull RegisteredTask schedule(@NotNull Runnable task, long delay, long period) {
         return addTask(taskFactory.create(nextTaskId(), task, delay, period, currentTick.get() + 1));
     }
