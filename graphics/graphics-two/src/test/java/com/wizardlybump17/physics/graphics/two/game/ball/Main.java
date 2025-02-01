@@ -23,6 +23,8 @@ public class Main {
         game.init();
         game.getMainFrame().setVisible(true);
 
+        containerRegistry.register(game.getObjectContainer());
+
         scheduler.schedule(
                 () -> game.getMainPanel().repaint(),
                 0,
