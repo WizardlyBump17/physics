@@ -7,6 +7,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public final class AtomicUtil {
 
+    private AtomicUtil() {
+    }
+
     /**
      * <p>
      * Sets the value of the {@link AtomicReference} to be the given new value.
