@@ -5,9 +5,11 @@ import com.wizardlybump17.physics.two.task.registered.RegisteredTask;
 import com.wizardlybump17.physics.two.task.scheduler.TaskScheduler;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class Task implements Runnable {
+public abstract class Task {
 
     private RegisteredTask registeredTask;
+
+    public abstract void run();
 
     public @NotNull RegisteredTask schedule() {
         return schedule(Engine.getScheduler());
@@ -23,17 +25,17 @@ public abstract class Task implements Runnable {
 
     public @NotNull RegisteredTask schedule(@NotNull TaskScheduler scheduler) {
         assertNotScheduled();
-        return registeredTask = scheduler.schedule((Runnable) this);
+        return registeredTask = scheduler.schedule(this::run);
     }
 
     public @NotNull RegisteredTask schedule(@NotNull TaskScheduler scheduler, long delay) {
         assertNotScheduled();
-        return registeredTask = scheduler.schedule((Runnable) this, delay);
+        return registeredTask = scheduler.schedule(this::run, delay);
     }
 
     public @NotNull RegisteredTask schedule(@NotNull TaskScheduler scheduler, long delay, long period) {
         assertNotScheduled();
-        return registeredTask = scheduler.schedule((Runnable) this, delay, period);
+        return registeredTask = scheduler.schedule(this::run, delay, period);
     }
 
     private void assertScheduled() {
