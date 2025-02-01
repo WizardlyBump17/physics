@@ -1,10 +1,11 @@
 package com.wizardlybump17.physics.graphics.two.game.ball;
 
 import com.wizardlybump17.physics.graphics.two.game.ball.ball.Ball;
+import com.wizardlybump17.physics.graphics.two.game.ball.platform.Platform;
 import com.wizardlybump17.physics.two.container.BasicBaseObjectContainer;
-import com.wizardlybump17.physics.two.object.BaseObject;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Circle;
+import com.wizardlybump17.physics.two.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -12,6 +13,7 @@ import java.util.UUID;
 public class BallContainer extends BasicBaseObjectContainer {
 
     private @NotNull Ball ball;
+    private @NotNull Platform platform;
 
     public BallContainer(@NotNull UUID id) {
         super(id);
@@ -19,8 +21,8 @@ public class BallContainer extends BasicBaseObjectContainer {
     }
 
     protected void init() {
-        addObject(ball = new Ball(this, 0, new Circle(new Vector2D(250, 250), 12.5)));
-        addObject(new BaseObject(this, 1, new Circle(new Vector2D(250, 0), 50)));
+        addObject(ball = new Ball(this, getObjectsCount(), new Circle(new Vector2D(250, 250), 12.5)));
+        addObject(platform = new Platform(this, getObjectsCount(), new Rectangle(new Vector2D(500, 500), 10, 5)));
     }
 
     public @NotNull Ball getBall() {
@@ -29,5 +31,13 @@ public class BallContainer extends BasicBaseObjectContainer {
 
     public void setBall(@NotNull Ball ball) {
         this.ball = ball;
+    }
+
+    public @NotNull Platform getPlatform() {
+        return platform;
+    }
+
+    public void setPlatform(@NotNull Platform platform) {
+        this.platform = platform;
     }
 }
