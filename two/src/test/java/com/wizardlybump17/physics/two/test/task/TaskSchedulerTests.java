@@ -7,6 +7,8 @@ import com.wizardlybump17.physics.two.task.scheduler.TaskScheduler;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -206,5 +208,81 @@ class TaskSchedulerTests {
         }
 
         Assertions.assertEquals(0, executedTasks.get());
+    }
+
+    @Test
+    @Order(8)
+    void testIfTheCurrentTickIsTheExpected() {
+        long delay = 500;
+        scheduler.schedule(() -> Assertions.assertEquals(delay + 1, scheduler.getCurrentTick()), delay);
+
+        scheduler.tick();
+        for (int i = 0; i < delay; i++)
+            scheduler.tick();
+    }
+
+    @Test
+    @Order(9)
+    void testSchedulerIsMarkingAsCancelled() {
+        int tasks = 10;
+
+        List<RegisteredTask> registeredTasks = new ArrayList<>(tasks);
+        for (int i = 0; i < tasks; i++)
+            registeredTasks.add(scheduler.schedule(() -> {}));
+
+        scheduler.tick();
+        scheduler.tick();
+        for (RegisteredTask task : registeredTasks)
+            Assertions.assertTrue(task.isCancelled());
+    }
+
+    @Test
+    @Order(10)
+    void testSchedulerIsMarkingAsCancelledWithDelay() {
+        int tasks = 10;
+        int delay = 100;
+
+        List<RegisteredTask> registeredTasks = new ArrayList<>(tasks);
+        for (int i = 0; i < tasks; i++)
+            registeredTasks.add(scheduler.schedule(() -> {
+            }, delay));
+
+        scheduler.tick();
+        scheduler.tick();
+        for (int i = 0; i < delay; i++)
+            scheduler.tick();
+        for (RegisteredTask task : registeredTasks)
+            Assertions.assertTrue(task.isCancelled());
+    }
+
+    @Test
+    @Order(11)
+    void testSchedulerIsMarkingAsCancelledWithDelayAndPeriod() {
+        int tasks = 10;
+        int delay = 200;
+        int period = 20;
+        int target = 10;
+
+        List<RegisteredTask> registeredTasks = new ArrayList<>(tasks);
+        for (int i = 0; i < tasks; i++) {
+            registeredTasks.add(new Task() {
+                int count;
+
+                @Override
+                public void run() {
+                    count++;
+                    if (count == target)
+                        cancel(scheduler);
+                    else if (count > target)
+                        throw new IllegalStateException("Should be cancelled");
+                }
+            }.schedule(scheduler, delay, period));
+        }
+
+        scheduler.tick();
+        for (int i = 0; i < delay + period * target; i++)
+            scheduler.tick();
+        for (RegisteredTask task : registeredTasks)
+            Assertions.assertTrue(task.isCancelled());
     }
 }
