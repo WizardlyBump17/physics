@@ -22,7 +22,7 @@ public class BallContainer extends BasicBaseObjectContainer {
 
     protected void init() {
         addObject(ball = new Ball(this, getObjectsCount(), new Circle(new Vector2D(250, 250), 12.5)));
-        addObject(platform = new Platform(this, getObjectsCount(), new Rectangle(new Vector2D(500, 500), 10, 5)));
+        addObject(platform = new Platform(this, getObjectsCount(), new Rectangle(new Vector2D(250, 450), 30, 10)));
     }
 
     public @NotNull Ball getBall() {
