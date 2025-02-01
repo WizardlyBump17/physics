@@ -1,5 +1,6 @@
 package com.wizardlybump17.physics.graphics.two.game.ball;
 
+import com.wizardlybump17.physics.two.Constants;
 import com.wizardlybump17.physics.two.object.BaseObject;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Circle;
@@ -8,10 +9,13 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BallGamePanel extends JPanel {
 
     private final @NotNull BallContainer container;
+    private final @NotNull Map<Class<?>, Integer> unknownShapeDelay = new HashMap<>();
 
     public BallGamePanel(@NotNull BallContainer container) {
         this.container = container;
@@ -37,7 +41,13 @@ public class BallGamePanel extends JPanel {
                     graphics.setColor(Color.RED);
                     graphics.fillOval((int) x, (int) y, (int) diameter, (int) diameter);
                 }
-                default -> System.err.println("Unknown shape: " + shape.getClass().getName());
+                default -> {
+                    Class<? extends Shape> shapeClass = shape.getClass();
+                    int delay = unknownShapeDelay.computeIfAbsent(shapeClass, $ -> 0);
+                    unknownShapeDelay.put(shapeClass, delay + 1);
+                    if (delay % Constants.TICKS_PER_SECOND == 0)
+                        System.err.println("We do not know how to draw a " + shapeClass.getName());
+                }
             }
         }
     }
