@@ -32,9 +32,7 @@ public class TaskScheduler implements Tickable, Timeable {
     }
 
     protected @NotNull RegisteredTaskImpl addTask(@NotNull RegisteredTaskImpl task) {
-        RegisteredTaskImpl previous = tailTask.get();
-        previous.setNextTask(task);
-        AtomicUtil.set(tailTask, task);
+        AtomicUtil.set(tailTask, task).setNextTask(task);
         return task;
     }
 
