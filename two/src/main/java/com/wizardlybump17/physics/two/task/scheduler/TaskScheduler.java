@@ -2,11 +2,14 @@ package com.wizardlybump17.physics.two.task.scheduler;
 
 import com.wizardlybump17.physics.Tickable;
 import com.wizardlybump17.physics.Timeable;
+import com.wizardlybump17.physics.two.task.Task;
 import com.wizardlybump17.physics.two.task.factory.RegisteredTaskFactory;
 import com.wizardlybump17.physics.two.task.registered.RegisteredTask;
 import com.wizardlybump17.physics.two.task.registered.RegisteredTaskImpl;
 import com.wizardlybump17.physics.util.AtomicUtil;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -74,6 +77,19 @@ public class TaskScheduler implements Tickable, Timeable {
      */
     public @NotNull RegisteredTask schedule(@NotNull Runnable task, long delay, long period) {
         return addTask(taskFactory.create(nextTaskId(), task, delay, period, currentTick.get() + 1));
+    }
+
+    @Contract("_ -> fail")
+    public @NotNull RegisteredTask schedule(@Nullable Task task) {
+        throw new UnsupportedOperationException("Use the Task#schedule() or Task#schedule(TaskScheduler) method");
+    }
+
+    public @NotNull RegisteredTask schedule(@Nullable Task task, long delay) {
+        throw new UnsupportedOperationException("Use the Task#schedule(long) or Task#schedule(TaskScheduler, long) method");
+    }
+
+    public @NotNull RegisteredTask schedule(@Nullable Task unused, long delay, long period) {
+        throw new UnsupportedOperationException("Use the Task#schedule(long, long) or Task#schedule(TaskScheduler, long, long) method");
     }
 
     public void cancelTask(int id) {
