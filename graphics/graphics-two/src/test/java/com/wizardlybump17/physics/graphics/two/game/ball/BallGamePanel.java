@@ -92,11 +92,12 @@ public class BallGamePanel extends JPanel {
                     graphics.fillOval((int) x, (int) y, (int) diameter, (int) diameter);
                 }
                 case Rectangle rectangle -> {
+                    Vector2D min = rectangle.getMin();
                     double width = rectangle.getWidth();
                     double height = rectangle.getHeight();
 
                     graphics.setColor(Color.BLUE);
-                    graphics.fillRect((int) position.x(), (int) position.y(), (int) width, (int) height);
+                    graphics.fillRect((int) min.x(), (int) min.y(), (int) width, (int) height);
                 }
                 default -> {
                     Class<? extends Shape> shapeClass = shape.getClass();
