@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 public class BallPhysics extends Physics {
 
     public static final @NotNull Vector2D INITIAL_SPEED = new Vector2D(0, 100);
-    public static final double MAX_SPEED = new Vector2D(200, 0).length();
+    public static final double MAX_SPEED = 200;
 
     public BallPhysics(@NotNull Ball object, @NotNull Vector2D velocity, @NotNull Vector2D acceleration) {
         super(object, velocity, acceleration);
