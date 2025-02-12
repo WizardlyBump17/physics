@@ -147,4 +147,20 @@ public record Vector3D(double x, double y, double z) {
     public @NotNull Vector3D facing(@NotNull Vector3D other) {
         return subtract(other);
     }
+
+    public static @NotNull Vector3D min(@NotNull Vector3D a, @NotNull Vector3D b) {
+        return new Vector3D(
+                Math.min(a.x, b.x),
+                Math.min(a.y, b.y),
+                Math.min(a.z, b.z)
+        );
+    }
+
+    public static @NotNull Vector3D max(@NotNull Vector3D a, @NotNull Vector3D b) {
+        return new Vector3D(
+                Math.max(a.x, b.x),
+                Math.max(a.y, b.y),
+                Math.max(a.z, b.z)
+        );
+    }
 }
