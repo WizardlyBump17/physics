@@ -163,4 +163,8 @@ public record Vector3D(double x, double y, double z) {
                 Math.max(a.z, b.z)
         );
     }
+
+    public @NotNull Vector3D midpoint(@NotNull Vector3D other) {
+        return add(other).divide(2);
+    }
 }
