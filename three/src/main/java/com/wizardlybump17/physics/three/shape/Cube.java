@@ -55,4 +55,12 @@ public class Cube extends Shape {
     public double getZSize() {
         return max.z() - min.z();
     }
+
+    public @NotNull Vector3D getMin() {
+        return min;
+    }
+
+    public @NotNull Vector3D getMax() {
+        return max;
+    }
 }
