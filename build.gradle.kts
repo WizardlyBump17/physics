@@ -40,7 +40,9 @@ allprojects {
             }
         }
     }
+}
 
+subprojects {
     publishing {
         repositories {
             maven {
