@@ -39,6 +39,10 @@ allprojects {
                 events(TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.STARTED, TestLogEvent.STANDARD_ERROR, TestLogEvent.STANDARD_OUT)
             }
         }
+
+        java {
+            withSourcesJar()
+        }
     }
 }
 
