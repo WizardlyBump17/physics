@@ -25,7 +25,16 @@ public class Cube extends Shape {
 
     @Override
     public boolean intersects(@NotNull Shape other) {
-        return false;
+        return switch (other) {
+            case Cube otherCube -> {
+                Vector3D otherMin = otherCube.getMin();
+                Vector3D otherMax = otherCube.getMax();
+                yield min.x() < otherMax.x() && max.x() > otherMin.x()
+                        && min.y() < otherMax.y() && max.y() > otherMin.y()
+                        && min.z() < otherMax.z() && max.z() > otherMin.z();
+            }
+            default -> false;
+        };
     }
 
     @Override
