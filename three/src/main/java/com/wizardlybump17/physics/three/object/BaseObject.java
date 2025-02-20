@@ -2,6 +2,7 @@ package com.wizardlybump17.physics.three.object;
 
 import com.wizardlybump17.physics.Tickable;
 import com.wizardlybump17.physics.three.Vector3D;
+import com.wizardlybump17.physics.three.container.BaseObjectContainer;
 import com.wizardlybump17.physics.three.shape.Shape;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,10 +12,12 @@ public abstract class BaseObject implements Tickable {
 
     private final int id;
     private @NotNull Shape shape;
+    private final @NotNull BaseObjectContainer container;
 
-    public BaseObject(int id, @NotNull Shape shape) {
+    public BaseObject(int id, @NotNull Shape shape, @NotNull BaseObjectContainer container) {
         this.id = id;
         this.shape = shape;
+        this.container = container;
     }
 
     public int getId() {
@@ -33,16 +36,20 @@ public abstract class BaseObject implements Tickable {
         shape = shape.at(position);
     }
 
+    public @NotNull BaseObjectContainer getContainer() {
+        return container;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         BaseObject that = (BaseObject) o;
-        return id == that.id && Objects.equals(shape, that.shape);
+        return id == that.id && Objects.equals(shape, that.shape) && Objects.equals(container, that.container);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, shape);
+        return Objects.hash(id, shape, container);
     }
 
     @Override
@@ -50,6 +57,7 @@ public abstract class BaseObject implements Tickable {
         return "BaseObject{" +
                 "id=" + id +
                 ", shape=" + shape +
+                ", container=" + container +
                 '}';
     }
 }
