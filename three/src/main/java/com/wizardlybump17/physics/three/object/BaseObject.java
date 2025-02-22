@@ -14,14 +14,10 @@ public abstract class BaseObject implements Tickable {
     private @NotNull Shape shape;
     private final @NotNull BaseObjectContainer container;
 
-    public BaseObject(int id, @NotNull Shape shape, @NotNull BaseObjectContainer container) {
-        this.id = id;
+    public BaseObject(@NotNull Shape shape, @NotNull BaseObjectContainer container) {
+        this.id = container.increaseObjectCounter();
         this.shape = shape;
         this.container = container;
-    }
-
-    public BaseObject(@NotNull Shape shape, @NotNull BaseObjectContainer container) {
-        this(container.getLoadedObjectsCount() + 1, shape, container);
     }
 
     public int getId() {
