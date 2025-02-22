@@ -20,6 +20,10 @@ public abstract class BaseObject implements Tickable {
         this.container = container;
     }
 
+    public BaseObject(@NotNull Shape shape, @NotNull BaseObjectContainer container) {
+        this(container.getLoadedObjectsCount() + 1, shape, container);
+    }
+
     public int getId() {
         return id;
     }
