@@ -16,6 +16,8 @@ allprojects {
     group = "com.wizardlybump17.physics"
     version = "${properties["version"]}-${gitVersion()}"
 
+    println("Running $name $version")
+
     repositories {
         mavenCentral()
     }
