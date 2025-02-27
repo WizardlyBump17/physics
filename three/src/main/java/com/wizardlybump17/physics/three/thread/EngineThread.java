@@ -5,13 +5,18 @@ import com.wizardlybump17.physics.three.Constants;
 import com.wizardlybump17.physics.three.registry.BaseObjectContainerRegistry;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class EngineThread extends Thread {
+
+    private static final @NotNull AtomicInteger THREAD_COUNTER = new AtomicInteger();
 
     private final @NotNull TaskScheduler scheduler;
     private final @NotNull BaseObjectContainerRegistry containerRegistry;
     private boolean running = true;
 
     public EngineThread(@NotNull TaskScheduler scheduler, @NotNull BaseObjectContainerRegistry containerRegistry) {
+        super("EngineThread-" + THREAD_COUNTER.getAndIncrement());
         this.scheduler = scheduler;
         this.containerRegistry = containerRegistry;
     }
