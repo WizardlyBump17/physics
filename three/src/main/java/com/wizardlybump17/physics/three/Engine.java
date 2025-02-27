@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 public final class Engine {
 
     private static BaseObjectContainerRegistry objectContainerRegistry;
+    private static Thread thread;
 
     private Engine() {
     }
@@ -23,5 +24,14 @@ public final class Engine {
     private static void assertNotSet(@Nullable Object object, @NotNull String what) {
         if (object != null)
             throw new IllegalStateException("The " + what + " is already set.");
+    }
+
+    public static Thread getThread() {
+        return thread;
+    }
+
+    public static void setThread(Thread thread) {
+        assertNotSet(Engine.thread, "thread");
+        Engine.thread = thread;
     }
 }
