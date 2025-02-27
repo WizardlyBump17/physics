@@ -47,7 +47,7 @@ public class TaskScheduler implements Tickable, Timeable {
      */
     public @NotNull RegisteredTask schedule(@NotNull Runnable task) {
         if (task instanceof Task)
-            throw new UnsupportedOperationException("Use the Task#schedule() or Task#schedule(TaskScheduler) method instead");
+            throw new UnsupportedOperationException("Use the Task#schedule(TaskScheduler) method instead");
         return addTask(taskFactory.create(nextTaskId(), task, currentTick.get() + 1));
     }
 
@@ -62,7 +62,7 @@ public class TaskScheduler implements Tickable, Timeable {
      */
     public @NotNull RegisteredTask schedule(@NotNull Runnable task, long delay) {
         if (task instanceof Task)
-            throw new UnsupportedOperationException("Use the Task#schedule() or Task#schedule(TaskScheduler) method instead");
+            throw new UnsupportedOperationException("Use the Task#schedule(TaskScheduler, long) method instead");
         return addTask(taskFactory.create(nextTaskId(), task, delay, currentTick.get() + 1));
     }
 
@@ -79,7 +79,7 @@ public class TaskScheduler implements Tickable, Timeable {
      */
     public @NotNull RegisteredTask schedule(@NotNull Runnable task, long delay, long period) {
         if (task instanceof Task)
-            throw new UnsupportedOperationException("Use the Task#schedule() or Task#schedule(TaskScheduler) method instead");
+            throw new UnsupportedOperationException("Use the Task#schedule(TaskScheduler, long, long) method instead");
         return addTask(taskFactory.create(nextTaskId(), task, delay, period, currentTick.get() + 1));
     }
 
