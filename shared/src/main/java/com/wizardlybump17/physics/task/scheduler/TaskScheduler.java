@@ -1,11 +1,11 @@
-package com.wizardlybump17.physics.two.task.scheduler;
+package com.wizardlybump17.physics.task.scheduler;
 
 import com.wizardlybump17.physics.Tickable;
 import com.wizardlybump17.physics.Timeable;
-import com.wizardlybump17.physics.two.task.Task;
-import com.wizardlybump17.physics.two.task.factory.RegisteredTaskFactory;
-import com.wizardlybump17.physics.two.task.registered.RegisteredTask;
-import com.wizardlybump17.physics.two.task.registered.RegisteredTaskImpl;
+import com.wizardlybump17.physics.task.Task;
+import com.wizardlybump17.physics.task.factory.RegisteredTaskFactory;
+import com.wizardlybump17.physics.task.registered.RegisteredTask;
+import com.wizardlybump17.physics.task.registered.RegisteredTaskImpl;
 import com.wizardlybump17.physics.util.AtomicUtil;
 import org.jetbrains.annotations.NotNull;
 

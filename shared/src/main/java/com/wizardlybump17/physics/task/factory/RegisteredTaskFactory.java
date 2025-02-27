@@ -1,6 +1,6 @@
-package com.wizardlybump17.physics.two.task.factory;
+package com.wizardlybump17.physics.task.factory;
 
-import com.wizardlybump17.physics.two.task.registered.RegisteredTaskImpl;
+import com.wizardlybump17.physics.task.registered.RegisteredTaskImpl;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 

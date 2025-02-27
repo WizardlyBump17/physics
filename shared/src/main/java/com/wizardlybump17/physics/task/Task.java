@@ -1,7 +1,7 @@
-package com.wizardlybump17.physics.two.task;
+package com.wizardlybump17.physics.task;
 
-import com.wizardlybump17.physics.two.task.registered.RegisteredTask;
-import com.wizardlybump17.physics.two.task.scheduler.TaskScheduler;
+import com.wizardlybump17.physics.task.registered.RegisteredTask;
+import com.wizardlybump17.physics.task.scheduler.TaskScheduler;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class Task {

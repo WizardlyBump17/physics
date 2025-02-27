@@ -1,8 +1,8 @@
 package com.wizardlybump17.physics.two.thread;
 
+import com.wizardlybump17.physics.task.scheduler.TaskScheduler;
 import com.wizardlybump17.physics.two.Constants;
 import com.wizardlybump17.physics.two.registry.BaseObjectContainerRegistry;
-import com.wizardlybump17.physics.two.task.scheduler.TaskScheduler;
 import org.jetbrains.annotations.NotNull;
 
 public class EngineThread extends Thread {
