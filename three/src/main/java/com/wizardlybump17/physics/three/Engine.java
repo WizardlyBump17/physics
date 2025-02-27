@@ -1,5 +1,6 @@
 package com.wizardlybump17.physics.three;
 
+import com.wizardlybump17.physics.task.scheduler.TaskScheduler;
 import com.wizardlybump17.physics.three.registry.BaseObjectContainerRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -8,6 +9,7 @@ public final class Engine {
 
     private static BaseObjectContainerRegistry objectContainerRegistry;
     private static Thread thread;
+    private static TaskScheduler scheduler;
 
     private Engine() {
     }
@@ -33,5 +35,14 @@ public final class Engine {
     public static void setThread(Thread thread) {
         assertNotSet(Engine.thread, "thread");
         Engine.thread = thread;
+    }
+
+    public static TaskScheduler getScheduler() {
+        return scheduler;
+    }
+
+    public static void setScheduler(TaskScheduler scheduler) {
+        assertNotSet(Engine.scheduler, "scheduler");
+        Engine.scheduler = scheduler;
     }
 }
