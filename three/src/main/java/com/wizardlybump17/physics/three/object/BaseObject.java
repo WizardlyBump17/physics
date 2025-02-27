@@ -36,6 +36,10 @@ public abstract class BaseObject implements Tickable {
         shape = shape.at(position);
     }
 
+    public @NotNull Vector3D getPosition() {
+        return shape.getPosition();
+    }
+
     public @NotNull BaseObjectContainer getContainer() {
         return container;
     }
