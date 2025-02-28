@@ -46,7 +46,7 @@ public class EngineThread extends Thread {
 
 
             try {
-                Thread.sleep(Duration.ofNanos((long) Constants.MILLIS_PER_TICK));
+                Thread.sleep(Duration.ofNanos((long) Constants.NANOS_PER_TICK));
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 Thread.currentThread().interrupt();
