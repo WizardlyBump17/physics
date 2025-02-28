@@ -1,5 +1,6 @@
 package com.wizardlybump17.physics.three.object;
 
+import com.wizardlybump17.physics.Constants;
 import com.wizardlybump17.physics.three.Vector3D;
 import com.wizardlybump17.physics.three.container.BaseObjectContainer;
 import com.wizardlybump17.physics.three.shape.Shape;
