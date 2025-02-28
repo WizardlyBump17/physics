@@ -5,6 +5,7 @@ import com.wizardlybump17.physics.three.Constants;
 import com.wizardlybump17.physics.three.registry.BaseObjectContainerRegistry;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.Duration;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class EngineThread extends Thread {
@@ -39,19 +40,16 @@ public class EngineThread extends Thread {
 
     @Override
     public void run() {
-        long nextRun;
         while (running) {
             tickScheduler();
             tickContainers();
 
-            nextRun = (long) (System.currentTimeMillis() + Constants.MILLIS_PER_TICK);
 
-            while (System.currentTimeMillis() < nextRun) {
-                try {
-                    Thread.sleep(1);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+            try {
+                Thread.sleep(Duration.ofNanos((long) Constants.MILLIS_PER_TICK));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
         }
     }
