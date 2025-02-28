@@ -19,7 +19,7 @@ import java.util.UUID;
 public class Main {
 
     public static void main(String[] args) {
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
         System.out.println(dateFormat.format(System.currentTimeMillis()));
 
         MainFrame frame = new MainFrame("2D test");
