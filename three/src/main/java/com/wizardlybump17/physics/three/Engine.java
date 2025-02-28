@@ -28,6 +28,11 @@ public final class Engine {
             throw new IllegalStateException("The " + what + " is already set.");
     }
 
+    private static void assertSet(@Nullable Object object, @NotNull String what) {
+        if (object == null)
+            throw new IllegalStateException("The " + what + " is not set.");
+    }
+
     public static Thread getThread() {
         return thread;
     }
