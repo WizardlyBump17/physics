@@ -2,8 +2,11 @@ package com.wizardlybump17.physics.three;
 
 import com.wizardlybump17.physics.task.scheduler.TaskScheduler;
 import com.wizardlybump17.physics.three.registry.BaseObjectContainerRegistry;
+import com.wizardlybump17.physics.three.thread.EngineThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.UUID;
 
 public final class Engine {
 
@@ -49,5 +52,25 @@ public final class Engine {
     public static void setScheduler(TaskScheduler scheduler) {
         assertNotSet(Engine.scheduler, "scheduler");
         Engine.scheduler = scheduler;
+    }
+
+    public static void start(@NotNull BaseObjectContainerRegistry objectContainerRegistry, @NotNull Thread thread, @NotNull TaskScheduler scheduler) {
+        setObjectContainerRegistry(objectContainerRegistry);
+        setThread(thread);
+        setScheduler(scheduler);
+    }
+
+    public static void shutdown() {
+        assertSet(objectContainerRegistry, "object container registry");
+        assertSet(thread, "thread");
+        assertSet(scheduler, "scheduler");
+
+        for (UUID key : objectContainerRegistry.getKeys())
+            objectContainerRegistry.unregisterKey(key);
+        objectContainerRegistry = null;
+
+        thread.interrupt();
+        if (thread instanceof EngineThread engineThread)
+            engineThread.setRunning(false);
     }
 }
