@@ -1,7 +1,7 @@
 package com.wizardlybump17.physics.two.thread;
 
+import com.wizardlybump17.physics.Constants;
 import com.wizardlybump17.physics.task.scheduler.TaskScheduler;
-import com.wizardlybump17.physics.two.Constants;
 import com.wizardlybump17.physics.two.registry.BaseObjectContainerRegistry;
 import org.jetbrains.annotations.NotNull;
 

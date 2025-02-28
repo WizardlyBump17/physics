@@ -1,11 +1,11 @@
 package com.wizardlybump17.physics.graphics.two;
 
+import com.wizardlybump17.physics.Constants;
 import com.wizardlybump17.physics.graphics.two.frame.MainFrame;
 import com.wizardlybump17.physics.graphics.two.panel.object.ObjectsPanel;
 import com.wizardlybump17.physics.task.factory.RegisteredTaskFactory;
 import com.wizardlybump17.physics.task.registered.RegisteredTask;
 import com.wizardlybump17.physics.task.scheduler.TaskScheduler;
-import com.wizardlybump17.physics.two.Constants;
 import com.wizardlybump17.physics.two.Engine;
 import com.wizardlybump17.physics.two.container.BaseObjectContainer;
 import com.wizardlybump17.physics.two.container.BasicBaseObjectContainer;
