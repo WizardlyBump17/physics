@@ -14,7 +14,7 @@ public class EngineThread extends Thread {
 
     private final @NotNull TaskScheduler scheduler;
     private final @NotNull BaseObjectContainerRegistry containerRegistry;
-    private boolean running = true;
+    private volatile boolean running = true;
 
     public EngineThread(@NotNull TaskScheduler scheduler, @NotNull BaseObjectContainerRegistry containerRegistry) {
         super("EngineThread-" + THREAD_COUNTER.getAndIncrement());
@@ -43,7 +43,6 @@ public class EngineThread extends Thread {
         while (running) {
             tickScheduler();
             tickContainers();
-
 
             try {
                 Thread.sleep(Duration.ofNanos((long) Constants.NANOS_PER_TICK));

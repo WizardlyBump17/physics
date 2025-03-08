@@ -54,10 +54,14 @@ public final class Engine {
         Engine.scheduler = scheduler;
     }
 
-    public static void start(@NotNull BaseObjectContainerRegistry objectContainerRegistry, @NotNull Thread thread, @NotNull TaskScheduler scheduler) {
+    public static void start(@NotNull BaseObjectContainerRegistry objectContainerRegistry, @NotNull TaskScheduler scheduler) {
+        EngineThread thread = new EngineThread(scheduler, objectContainerRegistry);
+
         setObjectContainerRegistry(objectContainerRegistry);
         setThread(thread);
         setScheduler(scheduler);
+
+        thread.start();
     }
 
     public static void shutdown() {
@@ -69,8 +73,10 @@ public final class Engine {
             objectContainerRegistry.unregisterKey(key);
         objectContainerRegistry = null;
 
-        thread.interrupt();
+
         if (thread instanceof EngineThread engineThread)
             engineThread.setRunning(false);
+        else
+            thread.interrupt();
     }
 }
