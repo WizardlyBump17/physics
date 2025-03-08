@@ -1,4 +1,4 @@
-package com.wizardlybump17.physics.two.task.registered;
+package com.wizardlybump17.physics.task.registered;
 
 import com.wizardlybump17.physics.util.AtomicUtil;
 import org.jetbrains.annotations.ApiStatus;

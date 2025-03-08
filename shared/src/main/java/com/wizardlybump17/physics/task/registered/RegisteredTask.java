@@ -1,4 +1,4 @@
-package com.wizardlybump17.physics.two.task.registered;
+package com.wizardlybump17.physics.task.registered;
 
 import org.jetbrains.annotations.NotNull;
 

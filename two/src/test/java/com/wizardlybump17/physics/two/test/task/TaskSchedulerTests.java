@@ -1,9 +1,9 @@
 package com.wizardlybump17.physics.two.test.task;
 
-import com.wizardlybump17.physics.two.task.Task;
-import com.wizardlybump17.physics.two.task.factory.RegisteredTaskFactory;
-import com.wizardlybump17.physics.two.task.registered.RegisteredTask;
-import com.wizardlybump17.physics.two.task.scheduler.TaskScheduler;
+import com.wizardlybump17.physics.task.Task;
+import com.wizardlybump17.physics.task.factory.RegisteredTaskFactory;
+import com.wizardlybump17.physics.task.registered.RegisteredTask;
+import com.wizardlybump17.physics.task.scheduler.TaskScheduler;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
 

@@ -1,11 +1,11 @@
-package com.wizardlybump17.physics.two.task.scheduler;
+package com.wizardlybump17.physics.task.scheduler;
 
 import com.wizardlybump17.physics.Tickable;
 import com.wizardlybump17.physics.Timeable;
-import com.wizardlybump17.physics.two.task.Task;
-import com.wizardlybump17.physics.two.task.factory.RegisteredTaskFactory;
-import com.wizardlybump17.physics.two.task.registered.RegisteredTask;
-import com.wizardlybump17.physics.two.task.registered.RegisteredTaskImpl;
+import com.wizardlybump17.physics.task.Task;
+import com.wizardlybump17.physics.task.factory.RegisteredTaskFactory;
+import com.wizardlybump17.physics.task.registered.RegisteredTask;
+import com.wizardlybump17.physics.task.registered.RegisteredTaskImpl;
 import com.wizardlybump17.physics.util.AtomicUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,7 +47,7 @@ public class TaskScheduler implements Tickable, Timeable {
      */
     public @NotNull RegisteredTask schedule(@NotNull Runnable task) {
         if (task instanceof Task)
-            throw new UnsupportedOperationException("Use the Task#schedule() or Task#schedule(TaskScheduler) method instead");
+            throw new UnsupportedOperationException("Use the Task#schedule(TaskScheduler) method instead");
         return addTask(taskFactory.create(nextTaskId(), task, currentTick.get() + 1));
     }
 
@@ -62,7 +62,7 @@ public class TaskScheduler implements Tickable, Timeable {
      */
     public @NotNull RegisteredTask schedule(@NotNull Runnable task, long delay) {
         if (task instanceof Task)
-            throw new UnsupportedOperationException("Use the Task#schedule() or Task#schedule(TaskScheduler) method instead");
+            throw new UnsupportedOperationException("Use the Task#schedule(TaskScheduler, long) method instead");
         return addTask(taskFactory.create(nextTaskId(), task, delay, currentTick.get() + 1));
     }
 
@@ -79,7 +79,7 @@ public class TaskScheduler implements Tickable, Timeable {
      */
     public @NotNull RegisteredTask schedule(@NotNull Runnable task, long delay, long period) {
         if (task instanceof Task)
-            throw new UnsupportedOperationException("Use the Task#schedule() or Task#schedule(TaskScheduler) method instead");
+            throw new UnsupportedOperationException("Use the Task#schedule(TaskScheduler, long, long) method instead");
         return addTask(taskFactory.create(nextTaskId(), task, delay, period, currentTick.get() + 1));
     }
 
