@@ -6,6 +6,8 @@ import com.wizardlybump17.physics.three.container.BaseObjectContainer;
 import com.wizardlybump17.physics.three.shape.Shape;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public abstract class BaseObject implements Tickable {
@@ -13,6 +15,7 @@ public abstract class BaseObject implements Tickable {
     private final int id;
     private @NotNull Shape shape;
     private final @NotNull BaseObjectContainer container;
+    protected final @NotNull Map<Integer, BaseObject> collidingWith = new HashMap<>();
 
     public BaseObject(@NotNull Shape shape, @NotNull BaseObjectContainer container) {
         this.id = container.increaseObjectCounter();
@@ -42,6 +45,44 @@ public abstract class BaseObject implements Tickable {
 
     public @NotNull BaseObjectContainer getContainer() {
         return container;
+    }
+
+    @Override
+    public void tick() {
+        tickCollisions();
+    }
+
+    protected void tickCollisions() {
+        for (BaseObject otherObject : getContainer().getLoadedObjects()) {
+            if (id == otherObject.id)
+                continue;
+
+            if (otherObject.getShape().intersects(getShape())) {
+                onCollide(otherObject);
+                collidingWith.put(otherObject.getId(), otherObject);
+            } else if (isCollidingWith(otherObject)) {
+                onStopColliding(otherObject);
+                collidingWith.remove(otherObject.getId());
+            }
+        }
+    }
+
+    public @NotNull Map<Integer, BaseObject> getCollidingWith() {
+        return Map.copyOf(collidingWith);
+    }
+
+    public boolean isCollidingWith(int otherObject) {
+        return collidingWith.containsKey(otherObject);
+    }
+
+    public boolean isCollidingWith(@NotNull BaseObject otherObject) {
+        return isCollidingWith(otherObject.getId());
+    }
+
+    public void onCollide(@NotNull BaseObject otherObject) {
+    }
+
+    public void onStopColliding(@NotNull BaseObject otherObject) {
     }
 
     @Override

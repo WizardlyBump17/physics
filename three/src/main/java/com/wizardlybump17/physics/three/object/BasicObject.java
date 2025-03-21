@@ -9,8 +9,4 @@ public class BasicObject extends BaseObject {
     public BasicObject(@NotNull Shape shape, @NotNull BaseObjectContainer container) {
         super(shape, container);
     }
-
-    @Override
-    public void tick() {
-    }
 }
