@@ -1,6 +1,7 @@
 package com.wizardlybump17.physics.three.shape;
 
 import com.wizardlybump17.physics.three.Vector3D;
+import com.wizardlybump17.physics.util.MathUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class Cube extends Shape {
@@ -32,6 +33,28 @@ public class Cube extends Shape {
                 yield min.x() < otherMax.x() && max.x() > otherMin.x()
                         && min.y() < otherMax.y() && max.y() > otherMin.y()
                         && min.z() < otherMax.z() && max.z() > otherMin.z();
+            }
+            case Sphere sphere -> {
+                Vector3D circlePosition = sphere.getPosition();
+                Vector3D position = getPosition();
+
+                double xDistance = Math.abs(position.x() - circlePosition.x());
+                double yDistance = Math.abs(position.y() - circlePosition.y());
+                double zDistance = Math.abs(position.z() - circlePosition.z());
+
+                double radius = sphere.getRadius();
+
+                double xSize = getXSize() / 2;
+                double ySize = getYSize() / 2;
+                double zSize = getZSize() / 2;
+
+                if (xDistance > xSize + radius || yDistance > ySize + radius || zDistance > zSize + radius)
+                    yield false;
+
+                if (xDistance <= xSize || yDistance <= ySize || zDistance <= zSize)
+                    yield true;
+
+                yield MathUtil.square(xDistance - xSize) + MathUtil.square(yDistance - ySize) + MathUtil.square(zDistance - zSize) <= MathUtil.square(radius);
             }
             default -> false;
         };

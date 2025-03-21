@@ -57,7 +57,7 @@ public abstract class BaseObject implements Tickable {
             if (id == otherObject.id)
                 continue;
 
-            if (otherObject.getShape().intersects(getShape())) {
+            if (getShape().intersects(otherObject.getShape())) {
                 onCollide(otherObject);
                 collidingWith.put(otherObject.getId(), otherObject);
             } else if (isCollidingWith(otherObject)) {
