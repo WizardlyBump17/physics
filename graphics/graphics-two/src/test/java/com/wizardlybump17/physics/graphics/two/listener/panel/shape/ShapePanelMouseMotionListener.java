@@ -1,8 +1,8 @@
 package com.wizardlybump17.physics.graphics.two.listener.panel.shape;
 
+import com.wizardlybump17.physics.Constants;
 import com.wizardlybump17.physics.graphics.two.panel.object.ObjectsPanel;
 import com.wizardlybump17.physics.graphics.two.panel.object.PanelObject;
-import com.wizardlybump17.physics.two.Constants;
 import com.wizardlybump17.physics.two.Engine;
 import com.wizardlybump17.physics.two.object.BaseObject;
 import com.wizardlybump17.physics.two.physics.Physics;

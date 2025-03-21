@@ -1,19 +1,23 @@
-package com.wizardlybump17.physics.two.thread;
+package com.wizardlybump17.physics.three.thread;
 
 import com.wizardlybump17.physics.Constants;
 import com.wizardlybump17.physics.task.scheduler.TaskScheduler;
-import com.wizardlybump17.physics.two.registry.BaseObjectContainerRegistry;
+import com.wizardlybump17.physics.three.registry.BaseObjectContainerRegistry;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class EngineThread extends Thread {
 
+    private static final @NotNull AtomicInteger THREAD_COUNTER = new AtomicInteger();
+
     private final @NotNull TaskScheduler scheduler;
     private final @NotNull BaseObjectContainerRegistry containerRegistry;
-    private boolean running = true;
+    private volatile boolean running = true;
 
     public EngineThread(@NotNull TaskScheduler scheduler, @NotNull BaseObjectContainerRegistry containerRegistry) {
+        super("EngineThread-" + THREAD_COUNTER.getAndIncrement());
         this.scheduler = scheduler;
         this.containerRegistry = containerRegistry;
     }

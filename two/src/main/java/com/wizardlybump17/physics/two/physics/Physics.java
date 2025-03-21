@@ -1,8 +1,8 @@
 package com.wizardlybump17.physics.two.physics;
 
+import com.wizardlybump17.physics.Constants;
 import com.wizardlybump17.physics.annotation.NeedsSetup;
 import com.wizardlybump17.physics.annotation.SetupMethod;
-import com.wizardlybump17.physics.two.Constants;
 import com.wizardlybump17.physics.two.physics.object.PhysicsObject;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import org.jetbrains.annotations.NotNull;

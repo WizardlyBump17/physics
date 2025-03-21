@@ -3,6 +3,7 @@ rootProject.name = "physics"
 include("shared")
 
 include("two")
+include("three")
 
 include("graphics")
 include("graphics:graphics-two")

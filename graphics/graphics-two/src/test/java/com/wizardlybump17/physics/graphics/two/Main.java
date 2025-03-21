@@ -1,15 +1,15 @@
 package com.wizardlybump17.physics.graphics.two;
 
+import com.wizardlybump17.physics.Constants;
 import com.wizardlybump17.physics.graphics.two.frame.MainFrame;
 import com.wizardlybump17.physics.graphics.two.panel.object.ObjectsPanel;
-import com.wizardlybump17.physics.two.Constants;
+import com.wizardlybump17.physics.task.factory.RegisteredTaskFactory;
+import com.wizardlybump17.physics.task.registered.RegisteredTask;
+import com.wizardlybump17.physics.task.scheduler.TaskScheduler;
 import com.wizardlybump17.physics.two.Engine;
 import com.wizardlybump17.physics.two.container.BaseObjectContainer;
 import com.wizardlybump17.physics.two.container.BasicBaseObjectContainer;
 import com.wizardlybump17.physics.two.registry.BaseObjectContainerRegistry;
-import com.wizardlybump17.physics.two.task.factory.RegisteredTaskFactory;
-import com.wizardlybump17.physics.two.task.registered.RegisteredTask;
-import com.wizardlybump17.physics.two.task.scheduler.TaskScheduler;
 import com.wizardlybump17.physics.two.thread.EngineThread;
 
 import java.text.DateFormat;
@@ -19,7 +19,7 @@ import java.util.UUID;
 public class Main {
 
     public static void main(String[] args) {
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
         System.out.println(dateFormat.format(System.currentTimeMillis()));
 
         MainFrame frame = new MainFrame("2D test");
