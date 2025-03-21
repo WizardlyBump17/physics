@@ -28,6 +28,26 @@ public class Sphere extends Shape {
     public boolean intersects(@NotNull Shape other) {
         return switch (other) {
             case Sphere otherSphere -> position.distanceSquared(otherSphere.position) <= MathUtil.square(radius + otherSphere.radius);
+            case Cube cube -> {
+                Vector3D cubePosition = cube.getPosition();
+                Vector3D position = getPosition();
+
+                double xDistance = Math.abs(position.x() - cubePosition.x());
+                double yDistance = Math.abs(position.y() - cubePosition.y());
+                double zDistance = Math.abs(position.z() - cubePosition.z());
+
+                double xSize = cube.getXSize() / 2;
+                double ySize = cube.getYSize() / 2;
+                double zSize = cube.getZSize() / 2;
+
+                if (xDistance > xSize + radius || yDistance > ySize + radius || zDistance > zSize + radius)
+                    yield false;
+
+                if (xDistance <= xSize || yDistance <= ySize || zDistance <= zSize)
+                    yield true;
+
+                yield MathUtil.square(xDistance - xSize) + MathUtil.square(yDistance - ySize) + MathUtil.square(zDistance - zSize) <= MathUtil.square(radius);
+            }
             default -> false;
         };
     }
