@@ -5,6 +5,7 @@ import com.wizardlybump17.physics.graphics.two.listener.panel.shape.ShapePanelMo
 import com.wizardlybump17.physics.graphics.two.listener.panel.shape.ShapePanelMouseMotionListener;
 import com.wizardlybump17.physics.graphics.two.renderer.shape.CircleRenderer;
 import com.wizardlybump17.physics.graphics.two.renderer.shape.RectangleRenderer;
+import com.wizardlybump17.physics.graphics.two.renderer.shape.RotatingRectangleRenderer;
 import com.wizardlybump17.physics.graphics.two.renderer.shape.ShapeRenderer;
 import com.wizardlybump17.physics.two.container.BaseObjectContainer;
 import com.wizardlybump17.physics.two.object.BaseObject;
@@ -13,6 +14,7 @@ import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Circle;
 import com.wizardlybump17.physics.two.shape.Rectangle;
 import com.wizardlybump17.physics.two.shape.Shape;
+import com.wizardlybump17.physics.two.shape.rotating.RotatingRectangle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,6 +32,7 @@ public class ObjectsPanel extends JPanel {
     private transient @Nullable PanelObject selectedShape;
     private transient PhysicsObject fallingBall;
     private transient int objectCount;
+    private transient BaseObject rotatingRectangle;
 
     public ObjectsPanel() {
         setFocusable(true);
@@ -90,6 +93,17 @@ public class ObjectsPanel extends JPanel {
                     )
             );
             fallingBall.setPhysics(new FallingBallPhysics(addObject(fallingBall, new CircleRenderer())));
+
+            rotatingRectangle = new BaseObject(
+                    objectContainer,
+                    objectCount++,
+                    new RotatingRectangle(
+                            Vector2D.randomVector(random, 0, 0, size.getWidth(), size.getHeight()),
+                            50, 30,
+                            0
+                    )
+            );
+            addObject(rotatingRectangle, new RotatingRectangleRenderer());
         }
     }
 
