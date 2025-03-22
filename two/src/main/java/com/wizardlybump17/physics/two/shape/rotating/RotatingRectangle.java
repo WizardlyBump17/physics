@@ -46,12 +46,12 @@ public class RotatingRectangle extends Shape {
 
     @Override
     public boolean hasPoint(@NotNull Vector2D point) {
-        return false;
+        return true;
     }
 
     @Override
     public boolean hasPoint(double x, double y) {
-        return false;
+        return true;
     }
 
     @Override
