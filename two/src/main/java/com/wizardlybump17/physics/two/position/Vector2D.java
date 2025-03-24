@@ -144,4 +144,13 @@ public record Vector2D(double x, double y) {
     public boolean zero() {
         return lengthSquared() <= MathUtil.EPSILON;
     }
+
+    public @NotNull Vector2D rotate(double angle) {
+        double cos = Math.cos(angle);
+        double sin = Math.sin(angle);
+        return new Vector2D(
+                (x * cos) - (y * sin),
+                (x * sin) + (y * cos)
+        );
+    }
 }

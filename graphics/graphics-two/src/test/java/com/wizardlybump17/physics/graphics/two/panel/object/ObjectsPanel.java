@@ -3,10 +3,7 @@ package com.wizardlybump17.physics.graphics.two.panel.object;
 import com.wizardlybump17.physics.graphics.two.listener.panel.shape.ShapePanelKeyboardListener;
 import com.wizardlybump17.physics.graphics.two.listener.panel.shape.ShapePanelMouseListener;
 import com.wizardlybump17.physics.graphics.two.listener.panel.shape.ShapePanelMouseMotionListener;
-import com.wizardlybump17.physics.graphics.two.renderer.shape.CircleRenderer;
-import com.wizardlybump17.physics.graphics.two.renderer.shape.RectangleRenderer;
-import com.wizardlybump17.physics.graphics.two.renderer.shape.RotatingRectangleRenderer;
-import com.wizardlybump17.physics.graphics.two.renderer.shape.ShapeRenderer;
+import com.wizardlybump17.physics.graphics.two.renderer.shape.*;
 import com.wizardlybump17.physics.two.container.BaseObjectContainer;
 import com.wizardlybump17.physics.two.object.BaseObject;
 import com.wizardlybump17.physics.two.physics.object.PhysicsObject;
@@ -14,16 +11,15 @@ import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Circle;
 import com.wizardlybump17.physics.two.shape.Rectangle;
 import com.wizardlybump17.physics.two.shape.Shape;
+import com.wizardlybump17.physics.two.shape.rotating.RotatingPolygon;
 import com.wizardlybump17.physics.two.shape.rotating.RotatingRectangle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.List;
+import java.util.*;
 
 public class ObjectsPanel extends JPanel {
 
@@ -33,6 +29,8 @@ public class ObjectsPanel extends JPanel {
     private transient PhysicsObject fallingBall;
     private transient int objectCount;
     private transient BaseObject rotatingRectangle;
+
+    private final transient List<BaseObject> rotatingPolygons = new ArrayList<>();
 
     public ObjectsPanel() {
         setFocusable(true);
@@ -100,10 +98,33 @@ public class ObjectsPanel extends JPanel {
                     new RotatingRectangle(
                             Vector2D.randomVector(random, 0, 0, size.getWidth(), size.getHeight()),
                             50, 30,
-                            0
+                            45
                     )
             );
             addObject(rotatingRectangle, new RotatingRectangleRenderer());
+
+            rotatingPolygons.clear();
+            {
+                for (int i = 0; i < 2; i++) {
+                    Vector2D center = Vector2D.randomVector(random, 0, 0, size.getWidth(), size.getHeight());
+                    BaseObject rotatingPolygon = new BaseObject(
+                            objectContainer,
+                            objectCount++,
+                            new RotatingPolygon(
+                                    center,
+                                    new ArrayList<>(List.of(
+                                            new Vector2D(-30, 30),
+                                            new Vector2D(30, 30),
+                                            new Vector2D(30, -30),
+                                            new Vector2D(-30, -30)
+                                    )),
+                                    0
+                            )
+                    );
+                    addObject(rotatingPolygon, new RotatingPolygonRenderer());
+                    rotatingPolygons.add(rotatingPolygon);
+                }
+            }
         }
     }
 
@@ -115,9 +136,35 @@ public class ObjectsPanel extends JPanel {
 
             super.paintComponent(graphics);
 
+            for (int i = 0; i < rotatingPolygons.size(); i++) {
+                for (int i1 = 0; i1 < rotatingPolygons.size(); i1++) {
+                    if (i == i1)
+                        continue;
+
+                    BaseObject object1 = rotatingPolygons.get(i);
+                    BaseObject object2 = rotatingPolygons.get(i1);
+
+                    RotatingPolygon resolved = RotatingPolygon.resolveOverlap((RotatingPolygon) object1.getShape(), (RotatingPolygon) object2.getShape());
+                    boolean collision = resolved != null;
+
+                    PanelObject panelObject1 = shapes.get(object1.getId());
+                    PanelObject panelObject2 = shapes.get(object2.getId());
+
+                    panelObject1.setHasCollisions(panelObject1.hasIntersections() | collision);
+                    panelObject2.setHasCollisions(panelObject2.hasIntersections() | collision);
+
+                    if (collision)
+                        object1.setShape(resolved);
+                }
+            }
+
             shapes.values().forEach(panelShape -> ((ShapeRenderer<Shape>) panelShape.getRenderer()).render(graphics, panelShape.getShape()));
             if (selectedShape != null)
                 ((ShapeRenderer<Shape>) selectedShape.getRenderer()).render(graphics, selectedShape.getShape());
+
+            for (BaseObject rotatingPolygon : rotatingPolygons) {
+                shapes.get(rotatingPolygon.getId()).setHasCollisions(false);
+            }
         }
     }
 
@@ -149,5 +196,13 @@ public class ObjectsPanel extends JPanel {
 
     public void setSelectedShape(@Nullable PanelObject selectedShape) {
         this.selectedShape = selectedShape;
+    }
+
+    public List<BaseObject> getRotatingPolygons() {
+        return rotatingPolygons;
+    }
+
+    public BaseObject getRotatingRectangle() {
+        return rotatingRectangle;
     }
 }
