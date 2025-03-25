@@ -3,6 +3,7 @@ package com.wizardlybump17.physics.two.shape.rotating;
 import com.wizardlybump17.physics.two.intersection.Intersection;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Shape;
+import com.wizardlybump17.physics.util.MathUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,7 +19,7 @@ public class RotatingPolygon extends Shape {
     public RotatingPolygon(@NotNull Vector2D center, @NotNull List<Vector2D> points, double rotation) {
         this.center = center;
         this.points = points;
-        this.rotation = rotation;
+        this.rotation = MathUtil.normalizeRotation(rotation);
         this.rotatedPoints = points.stream()
                 .map(point -> point.rotate(rotation).add(center))
                 .toList();
@@ -109,12 +110,13 @@ public class RotatingPolygon extends Shape {
     }
 
     public @NotNull RotatingPolygon addRotation(double toAdd) {
-        System.out.println(rotation + toAdd);
-        return new RotatingPolygon(
+        RotatingPolygon rotatingPolygon = new RotatingPolygon(
                 center,
                 points,
                 rotation + toAdd
         );
+        System.out.println(rotatingPolygon.rotation);
+        return rotatingPolygon;
     }
 
     public static boolean overlaps(@NotNull RotatingPolygon poly1, @NotNull RotatingPolygon poly2) {
@@ -150,5 +152,9 @@ public class RotatingPolygon extends Shape {
         }
 
         return true;
+    }
+
+    public double getRotation() {
+        return rotation;
     }
 }

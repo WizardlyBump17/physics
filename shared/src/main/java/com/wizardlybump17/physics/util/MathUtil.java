@@ -10,4 +10,11 @@ public final class MathUtil {
     public static double square(double x) {
         return x * x;
     }
+
+    public static double normalizeRotation(double yaw) {
+        yaw %= 360;
+        if (yaw < 0)
+            yaw += 360;
+        return yaw;
+    }
 }
