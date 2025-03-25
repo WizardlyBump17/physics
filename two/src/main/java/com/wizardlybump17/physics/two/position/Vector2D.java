@@ -146,6 +146,7 @@ public record Vector2D(double x, double y) {
     }
 
     public @NotNull Vector2D rotate(double angle) {
+        angle = Math.toRadians(angle);
         double cos = Math.cos(angle);
         double sin = Math.sin(angle);
         return new Vector2D(
