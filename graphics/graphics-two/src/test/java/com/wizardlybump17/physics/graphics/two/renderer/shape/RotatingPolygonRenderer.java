@@ -35,6 +35,11 @@ public class RotatingPolygonRenderer implements ShapeRenderer<RotatingPolygon> {
 
         graphics.setColor(panelObject.hasIntersections() ? INTERSECTING_COLOR : COLOR);
         graphics.fillPolygon(xPoints, yPoints, points.size());
+
+        Vector2D position = value.getPosition();
+        Vector2D target = value.getRotatedPoints().getFirst();
+        graphics.setColor(Color.BLACK);
+        graphics.drawLine((int) position.x(), (int) position.y(), (int) target.x(), (int) target.y());
     }
 
     @Override
