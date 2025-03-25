@@ -41,7 +41,13 @@ public class RotatingPolygon extends Shape {
 
     @Override
     public boolean intersects(@NotNull Shape other) {
-        return false;
+        return switch (other) {
+            case RotatingPolygon otherPolygon -> overlaps(this, otherPolygon);
+//            case Circle circle -> {
+//
+//            }
+            default -> false;
+        };
     }
 
     @Override
@@ -57,12 +63,9 @@ public class RotatingPolygon extends Shape {
 
     @Override
     public @NotNull Shape at(@NotNull Vector2D position) {
-        Vector2D subtract = center.subtract(position);
         return new RotatingPolygon(
                 position,
-                points.stream()
-//                        .map(point -> point.subtract(subtract))
-                        .toList(),
+                points,
                 rotation
         );
     }
@@ -115,98 +118,37 @@ public class RotatingPolygon extends Shape {
     }
 
     public static boolean overlaps(@NotNull RotatingPolygon poly1, @NotNull RotatingPolygon poly2) {
-        RotatingPolygon temp1 = poly1;
-        RotatingPolygon temp2 = poly2;
+        return overlaps0(poly1, poly2) && overlaps0(poly2, poly1);
+    }
 
-        for (int i = 0; i < 2; i++) {
-            if (i == 1) {
-                temp1 = poly2;
-                temp2 = poly1;
+    protected static boolean overlaps0(@NotNull RotatingPolygon polygon1, @NotNull RotatingPolygon polygon2) {
+        for (int pointIndex = 0; pointIndex < polygon1.rotatedPoints.size(); pointIndex++) {
+            int nextPoint = (pointIndex + 1) % polygon1.rotatedPoints.size();
+            Vector2D projection = new Vector2D(
+                    -(polygon1.rotatedPoints.get(nextPoint).y() - polygon1.rotatedPoints.get(pointIndex).y()),
+                    polygon1.rotatedPoints.get(nextPoint).x() - polygon1.rotatedPoints.get(pointIndex).x()
+            );
+
+            double minR1 = Double.POSITIVE_INFINITY;
+            double maxR1 = Double.NEGATIVE_INFINITY;
+            for (Vector2D point : polygon1.rotatedPoints) {
+                double dot = point.dot(projection);
+                minR1 = Math.min(minR1, dot);
+                maxR1 = Math.max(maxR1, dot);
             }
 
-            for (int a = 0; a < temp1.rotatedPoints.size(); a++) {
-                int b = (a + 1) % temp1.rotatedPoints.size();
-                Vector2D projection = new Vector2D(
-                        -(temp1.rotatedPoints.get(b).y() - temp1.rotatedPoints.get(a).y()),
-                        temp1.rotatedPoints.get(b).x() - temp1.rotatedPoints.get(a).x()
-                );
-
-                double minR1 = Double.POSITIVE_INFINITY;
-                double maxR1 = Double.NEGATIVE_INFINITY;
-                for (int p = 0; p < temp1.rotatedPoints.size(); p++) {
-                    double q = temp1.rotatedPoints.get(p).dot(projection);
-                    minR1 = Math.min(minR1, q);
-                    maxR1 = Math.max(maxR1, q);
-                }
-
-                double minR2 = Double.POSITIVE_INFINITY;
-                double maxR2 = Double.NEGATIVE_INFINITY;
-                for (int p = 0; p < temp2.rotatedPoints.size(); p++) {
-                    double q = temp2.rotatedPoints.get(p).dot(projection);
-
-                    minR2 = Math.min(minR2, q);
-                    maxR2 = Math.max(maxR2, q);
-                }
-
-                boolean b1 = maxR2 >= minR1;
-                boolean b2 = maxR1 >= minR2;
-                if (!(b1 && b2))
-                    return false;
+            double minR2 = Double.POSITIVE_INFINITY;
+            double maxR2 = Double.NEGATIVE_INFINITY;
+            for (Vector2D point : polygon2.rotatedPoints) {
+                double dot = point.dot(projection);
+                minR2 = Math.min(minR2, dot);
+                maxR2 = Math.max(maxR2, dot);
             }
+
+            if (!(maxR2 >= minR1 && maxR1 >= minR2))
+                return false;
         }
 
         return true;
-    }
-
-    public static RotatingPolygon resolveOverlap(@NotNull RotatingPolygon poly1, @NotNull RotatingPolygon poly2) {
-        RotatingPolygon temp1 = poly1;
-        RotatingPolygon temp2 = poly2;
-
-        double overlap = Double.POSITIVE_INFINITY;
-
-        for (int i = 0; i < 2; i++) {
-            if (i == 1) {
-                temp1 = poly2;
-                temp2 = poly1;
-            }
-
-            for (int a = 0; a < temp1.rotatedPoints.size(); a++) {
-                int b = (a + 1) % temp1.rotatedPoints.size();
-                Vector2D projection = new Vector2D(
-                        -(temp1.rotatedPoints.get(b).y() - temp1.rotatedPoints.get(a).y()),
-                        temp1.rotatedPoints.get(b).x() - temp1.rotatedPoints.get(a).x()
-                );
-
-                double minR1 = Double.POSITIVE_INFINITY;
-                double maxR1 = Double.NEGATIVE_INFINITY;
-                for (int p = 0; p < temp1.rotatedPoints.size(); p++) {
-                    double q = temp1.rotatedPoints.get(p).dot(projection);
-                    minR1 = Math.min(minR1, q);
-                    maxR1 = Math.max(maxR1, q);
-                }
-
-                double minR2 = Double.POSITIVE_INFINITY;
-                double maxR2 = Double.NEGATIVE_INFINITY;
-                for (int p = 0; p < temp2.rotatedPoints.size(); p++) {
-                    double q = temp2.rotatedPoints.get(p).dot(projection);
-
-                    minR2 = Math.min(minR2, q);
-                    maxR2 = Math.max(maxR2, q);
-                }
-
-                overlap = Math.min(Math.min(maxR1, maxR2) - Math.max(minR1, minR2), overlap);
-
-                if (!(maxR2 >= minR1 && maxR1 >= minR2))
-                    return null;
-            }
-        }
-
-        Vector2D d = new Vector2D(poly2.center.x() - poly1.center.x(), poly2.center.y() - poly1.center.y());
-        double s = d.length();
-        return new RotatingPolygon(
-                poly1.center.subtract(overlap * d.x() / s, overlap * d.y() / s),
-                poly1.points,
-                poly1.rotation
-        );
     }
 }
