@@ -119,21 +119,23 @@ public class RotatingPolygon extends Shape {
         return rotatingPolygon;
     }
 
-    public static boolean overlaps(@NotNull RotatingPolygon poly1, @NotNull RotatingPolygon poly2) {
-        return overlaps0(poly1, poly2) && overlaps0(poly2, poly1);
+    public static boolean overlaps(@NotNull RotatingPolygon polygon1, @NotNull RotatingPolygon polygon2) {
+        return overlapsPolygonToPolygon(polygon1.rotatedPoints, polygon2.rotatedPoints)
+                && overlapsPolygonToPolygon(polygon2.rotatedPoints, polygon1.rotatedPoints);
     }
 
-    protected static boolean overlaps0(@NotNull RotatingPolygon polygon1, @NotNull RotatingPolygon polygon2) {
-        for (int pointIndex = 0; pointIndex < polygon1.rotatedPoints.size(); pointIndex++) {
-            int nextPoint = (pointIndex + 1) % polygon1.rotatedPoints.size();
+    //Taken from https://github.com/OneLoneCoder/Javidx9/blob/c9ca5d2e5821f2d2e07f07f388803c185a68d13a/PixelGameEngine/SmallerProjects/OneLoneCoder_PGE_PolygonCollisions1.cpp#L140
+    public static boolean overlapsPolygonToPolygon(@NotNull List<Vector2D> points1, @NotNull List<Vector2D> points2) {
+        for (int pointIndex = 0; pointIndex < points1.size(); pointIndex++) {
+            int nextPoint = (pointIndex + 1) % points1.size();
             Vector2D projection = new Vector2D(
-                    -(polygon1.rotatedPoints.get(nextPoint).y() - polygon1.rotatedPoints.get(pointIndex).y()),
-                    polygon1.rotatedPoints.get(nextPoint).x() - polygon1.rotatedPoints.get(pointIndex).x()
+                    -(points1.get(nextPoint).y() - points1.get(pointIndex).y()),
+                    points1.get(nextPoint).x() - points1.get(pointIndex).x()
             );
 
             double minR1 = Double.POSITIVE_INFINITY;
             double maxR1 = Double.NEGATIVE_INFINITY;
-            for (Vector2D point : polygon1.rotatedPoints) {
+            for (Vector2D point : points1) {
                 double dot = point.dot(projection);
                 minR1 = Math.min(minR1, dot);
                 maxR1 = Math.max(maxR1, dot);
@@ -141,7 +143,7 @@ public class RotatingPolygon extends Shape {
 
             double minR2 = Double.POSITIVE_INFINITY;
             double maxR2 = Double.NEGATIVE_INFINITY;
-            for (Vector2D point : polygon2.rotatedPoints) {
+            for (Vector2D point : points2) {
                 double dot = point.dot(projection);
                 minR2 = Math.min(minR2, dot);
                 maxR2 = Math.max(maxR2, dot);
