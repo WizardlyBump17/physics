@@ -138,6 +138,10 @@ public record Vector2D(double x, double y) {
         return (x * other.x) + (y * other.y);
     }
 
+    public static double dot(double x1, double y1, double x2, double y2) {
+        return (x1 * x2) + (y1 * y2);
+    }
+
     /**
      * @return if this vector {@link #lengthSquared()} is less or equals to {@link MathUtil#EPSILON}
      */
