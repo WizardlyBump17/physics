@@ -6,6 +6,7 @@ import com.wizardlybump17.physics.two.intersection.circle.CircleToRectangleInter
 import com.wizardlybump17.physics.two.intersection.rectangle.RectangleToRectangleIntersection;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.rotating.RotatingPolygon;
+import com.wizardlybump17.physics.two.util.CollisionsUtil;
 import com.wizardlybump17.physics.util.MathUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -80,7 +81,7 @@ public class Rectangle extends Shape {
 
                 yield MathUtil.square(xDistance - width) + MathUtil.square(yDistance - height) <= MathUtil.square(radius);
             }
-            case RotatingPolygon polygon -> RotatingPolygon.overlaps(polygon, this);
+            case RotatingPolygon polygon -> CollisionsUtil.overlaps(polygon, this);
             default -> false;
         };
     }
