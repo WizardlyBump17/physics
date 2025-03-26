@@ -110,4 +110,51 @@ public final class CollisionsUtil {
         return overlapsPolygonToPolygon(polygon1.getRotatedPoints(), polygon2.getRotatedPoints())
                 && overlapsPolygonToPolygon(polygon2.getRotatedPoints(), polygon1.getRotatedPoints());
     }
+
+    public static boolean overlapsRectangleToCircle(@NotNull Vector2D rectangleCenter, double rectangleWidth, double rectangleHeight, @NotNull Vector2D circleCenter, double radius) {
+        double xDistance = Math.abs(circleCenter.x() - rectangleCenter.x());
+        double yDistance = Math.abs(circleCenter.y() - rectangleCenter.y());
+
+        double halfWidth = rectangleWidth / 2;
+        double halfHeight = rectangleHeight/ 2;
+
+        if (xDistance > halfWidth + radius || yDistance > halfHeight + radius)
+            return false;
+
+        if (xDistance <= halfWidth || yDistance <= halfHeight)
+            return true;
+
+        return MathUtil.square(xDistance - halfWidth) + MathUtil.square(yDistance - halfHeight) <= MathUtil.square(radius);
+    }
+
+    public static boolean overlapsRectangleToCircle(@NotNull Rectangle rectangle, @NotNull Circle circle) {
+        return overlapsRectangleToCircle(
+                rectangle.getPosition(),
+                rectangle.getWidth(), rectangle.getHeight(),
+                circle.getPosition(), circle.getRadius()
+        );
+    }
+
+    public static boolean overlapsRectangleToRectangle(@NotNull Vector2D min1, @NotNull Vector2D max1, @NotNull Vector2D min2, @NotNull Vector2D max2) {
+        return min1.x() <= max2.x() && max1.x() >= min2.x()
+                && min1.y() <= max2.y() && max1.y() >= min2.y();
+    }
+
+    public static boolean overlapsRectangleToRectangle(@NotNull Rectangle rectangle1, @NotNull Rectangle rectangle2) {
+        return overlapsRectangleToRectangle(
+                rectangle1.getMin(), rectangle1.getMax(),
+                rectangle2.getMin(), rectangle2.getMax()
+        );
+    }
+
+    public static boolean overlapsCircleToCircle(@NotNull Vector2D center1, double radius1, @NotNull Vector2D center2, double radius2) {
+        return center1.distanceSquared(center2) < MathUtil.square(radius1 + radius2);
+    }
+
+    public static boolean overlapsCircleToCircle(@NotNull Circle circle1, @NotNull Circle circle2) {
+        return overlapsCircleToCircle(
+                circle1.getPosition(), circle1.getRadius(),
+                circle2.getPosition(), circle2.getRadius()
+        );
+    }
 }
