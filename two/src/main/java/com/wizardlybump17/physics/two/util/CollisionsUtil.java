@@ -14,28 +14,27 @@ public final class CollisionsUtil {
     private CollisionsUtil() {
     }
 
-    public static boolean overlapsPolygonToCircle(@NotNull List<Vector2D> points, @NotNull Circle circle) {
-        Vector2D circlePosition = circle.getPosition();
-        double radiusSquared = MathUtil.square(circle.getRadius());
+    public static boolean overlapsPolygonToCircle(@NotNull List<Vector2D> points, @NotNull Vector2D circleCenter, double circleRadius) {
+        double radiusSquared = MathUtil.square(circleRadius);
 
         for (Vector2D point : points)
-            if (point.distanceSquared(circlePosition) <= radiusSquared)
+            if (point.distanceSquared(circleCenter) <= radiusSquared)
                 return true;
 
         for (int i = 0; i < points.size(); i++) {
             Vector2D currentPoint = points.get(i);
             Vector2D nextPoint = points.get((i + 1) % points.size());
 
-            Vector2D closest = Vector2D.getClosestPointOnLine(currentPoint, nextPoint, circlePosition);
-            if (closest.distanceSquared(circlePosition) <= radiusSquared)
+            Vector2D closest = Vector2D.getClosestPointOnLine(currentPoint, nextPoint, circleCenter);
+            if (closest.distanceSquared(circleCenter) <= radiusSquared)
                 return true;
         }
 
-        return isPointInsidePolygon(points, circlePosition.x(), circlePosition.y());
+        return isPointInsidePolygon(points, circleCenter.x(), circleCenter.y());
     }
 
     public static boolean overlapsPolygonToCircle(@NotNull RotatingPolygon polygon, @NotNull Circle circle) {
-        return overlapsPolygonToCircle(polygon.getRotatedPoints(), circle);
+        return overlapsPolygonToCircle(polygon.getRotatedPoints(), circle.getPosition(), circle.getRadius());
     }
 
     public static boolean isPointInsidePolygon(@NotNull List<Vector2D> points, double x, double y) {
