@@ -136,8 +136,8 @@ public final class CollisionsUtil {
     }
 
     public static boolean overlapsRectangleToRectangle(@NotNull Vector2D min1, @NotNull Vector2D max1, @NotNull Vector2D min2, @NotNull Vector2D max2) {
-        return min1.x() <= max2.x() && max1.x() >= min2.x()
-                && min1.y() <= max2.y() && max1.y() >= min2.y();
+        return min1.x() < max2.x() && max1.x() > min2.x()
+                && min1.y() < max2.y() && max1.y() > min2.y();
     }
 
     public static boolean overlapsRectangleToRectangle(@NotNull Rectangle rectangle1, @NotNull Rectangle rectangle2) {
