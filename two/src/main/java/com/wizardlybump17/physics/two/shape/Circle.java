@@ -4,6 +4,7 @@ import com.wizardlybump17.physics.two.intersection.Intersection;
 import com.wizardlybump17.physics.two.intersection.circle.CircleToCircleIntersection;
 import com.wizardlybump17.physics.two.intersection.rectangle.RectangleToCircleIntersection;
 import com.wizardlybump17.physics.two.position.Vector2D;
+import com.wizardlybump17.physics.two.shape.rotating.RotatingPolygon;
 import com.wizardlybump17.physics.util.MathUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -59,6 +60,7 @@ public class Circle extends Shape {
 
                 yield MathUtil.square(xDistance - width) + MathUtil.square(yDistance - height) <= MathUtil.square(radius);
             }
+            case RotatingPolygon polygon -> RotatingPolygon.collidesWith(polygon.getRotatedPoints(), this);
             default -> false;
         };
     }

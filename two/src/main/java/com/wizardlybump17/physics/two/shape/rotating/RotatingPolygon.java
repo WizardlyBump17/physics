@@ -2,6 +2,7 @@ package com.wizardlybump17.physics.two.shape.rotating;
 
 import com.wizardlybump17.physics.two.intersection.Intersection;
 import com.wizardlybump17.physics.two.position.Vector2D;
+import com.wizardlybump17.physics.two.shape.Circle;
 import com.wizardlybump17.physics.two.shape.Rectangle;
 import com.wizardlybump17.physics.two.shape.Shape;
 import com.wizardlybump17.physics.util.MathUtil;
@@ -45,9 +46,7 @@ public class RotatingPolygon extends Shape {
     public boolean intersects(@NotNull Shape other) {
         return switch (other) {
             case RotatingPolygon otherPolygon -> overlaps(this, otherPolygon);
-//            case Circle circle -> {
-//
-//            }
+            case Circle circle -> collidesWith(rotatedPoints, circle);
             case Rectangle rectangle -> overlaps(this, rectangle);
             default -> false;
         };
@@ -200,5 +199,47 @@ public class RotatingPolygon extends Shape {
 
     public double getRotation() {
         return rotation;
+    }
+
+    public static boolean collidesWith(@NotNull List<Vector2D> points, @NotNull Circle circle) {
+        Vector2D circlePosition = circle.getPosition();
+        double radiusSquared = MathUtil.square(circle.getRadius());
+
+        for (Vector2D point : points)
+            if (point.distanceSquared(circlePosition) <= radiusSquared)
+                return true;
+
+        for (int i = 0; i < points.size(); i++) {
+            Vector2D currentPoint = points.get(i);
+            Vector2D nextPoint = points.get((i + 1) % points.size());
+
+            Vector2D closest = Vector2D.getClosestPointOnLine(currentPoint, nextPoint, circlePosition);
+            if (closest.distanceSquared(circlePosition) <= radiusSquared)
+                return true;
+        }
+
+        return isPointInsidePolygon(points, circlePosition);
+    }
+
+    static boolean isPointInsidePolygon(@NotNull List<Vector2D> points, @NotNull Vector2D point) {
+        boolean inside = false;
+        int pointsSize = points.size();
+
+        for (int i = 0; i < pointsSize; i++) {
+            Vector2D currentPoint = points.get(i);
+            Vector2D nextPoint = points.get((i + 1) % pointsSize);
+
+            if (currentPoint.y() > point.y() == nextPoint.y() > point.y())
+                continue;
+
+            double xDifference = nextPoint.x() - currentPoint.x();
+            double yDifference = nextPoint.y() - currentPoint.y();
+            double pointYDifference = point.y() - currentPoint.y();
+
+            if (point.x() < xDifference * pointYDifference / yDifference + currentPoint.x())
+                inside = !inside;
+        }
+
+        return inside;
     }
 }

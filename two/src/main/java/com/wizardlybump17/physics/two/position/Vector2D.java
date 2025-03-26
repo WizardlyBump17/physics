@@ -69,7 +69,11 @@ public record Vector2D(double x, double y) {
     }
 
     public double distance(@NotNull Vector2D other) {
-        return Math.sqrt(MathUtil.square(x - other.x) + MathUtil.square(y - other.y));
+        return distance(x, y, other.x, other.y);
+    }
+
+    public static double distance(double x1, double y1, double x2, double y2) {
+        return Math.sqrt(MathUtil.square(x1 - x2) + MathUtil.square(y1 - y2));
     }
 
     public double distanceSquared(@NotNull Vector2D other) {
@@ -156,6 +160,21 @@ public record Vector2D(double x, double y) {
         return new Vector2D(
                 (x * cos) - (y * sin),
                 (x * sin) + (y * cos)
+        );
+    }
+
+    public static @NotNull Vector2D getClosestPointOnLine(@NotNull Vector2D a, @NotNull Vector2D b, @NotNull Vector2D point) {
+        double ax = point.x() - a.x();
+        double ay = point.y() - a.y();
+
+        double bx = b.x() - a.x();
+        double by = b.y() - a.y();
+
+        double projection = Math.clamp((ax * bx + ay * by) / (bx * bx + by * by), 0, 1);
+
+        return new Vector2D(
+                a.x() + projection * bx,
+                a.y() + projection * by
         );
     }
 }
