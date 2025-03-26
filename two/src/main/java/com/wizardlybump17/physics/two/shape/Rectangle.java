@@ -81,7 +81,7 @@ public class Rectangle extends Shape {
 
                 yield MathUtil.square(xDistance - width) + MathUtil.square(yDistance - height) <= MathUtil.square(radius);
             }
-            case RotatingPolygon polygon -> CollisionsUtil.overlaps(polygon, this);
+            case RotatingPolygon polygon -> CollisionsUtil.overlapsPolygonToRectangle(polygon, this);
             default -> false;
         };
     }

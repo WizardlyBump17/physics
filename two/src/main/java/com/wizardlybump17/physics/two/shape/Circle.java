@@ -61,7 +61,7 @@ public class Circle extends Shape {
 
                 yield MathUtil.square(xDistance - width) + MathUtil.square(yDistance - height) <= MathUtil.square(radius);
             }
-            case RotatingPolygon polygon -> CollisionsUtil.collidesWith(polygon.getRotatedPoints(), this);
+            case RotatingPolygon polygon -> CollisionsUtil.overlapsPolygonToCircle(polygon, this);
             default -> false;
         };
     }

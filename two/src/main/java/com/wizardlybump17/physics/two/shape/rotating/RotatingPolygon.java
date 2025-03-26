@@ -46,9 +46,9 @@ public class RotatingPolygon extends Shape {
     @Override
     public boolean intersects(@NotNull Shape other) {
         return switch (other) {
-            case RotatingPolygon otherPolygon -> CollisionsUtil.overlaps(this, otherPolygon);
-            case Circle circle -> CollisionsUtil.collidesWith(rotatedPoints, circle);
-            case Rectangle rectangle -> CollisionsUtil.overlaps(this, rectangle);
+            case RotatingPolygon otherPolygon -> CollisionsUtil.overlapsPolygonToPolygon(this, otherPolygon);
+            case Rectangle rectangle -> CollisionsUtil.overlapsPolygonToRectangle(this, rectangle);
+            case Circle circle -> CollisionsUtil.overlapsPolygonToCircle(this, circle);
             default -> false;
         };
     }
@@ -60,7 +60,7 @@ public class RotatingPolygon extends Shape {
 
     @Override
     public boolean hasPoint(double x, double y) {
-        return CollisionsUtil.hasPoint(rotatedPoints, x, y);
+        return CollisionsUtil.isPointInsidePolygon(rotatedPoints, x, y);
     }
 
     @Override
