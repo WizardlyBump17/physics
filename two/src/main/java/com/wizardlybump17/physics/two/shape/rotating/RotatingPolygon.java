@@ -10,6 +10,7 @@ import com.wizardlybump17.physics.util.MathUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
 
 public class RotatingPolygon extends Shape {
@@ -17,13 +18,13 @@ public class RotatingPolygon extends Shape {
     private final @NotNull Vector2D center;
     private final @NotNull List<Vector2D> points;
     private final double rotation;
-    private final @NotNull List<Vector2D> rotatedPoints;
+    private final @NotNull List<Vector2D> transformedPoints;
 
     public RotatingPolygon(@NotNull Vector2D center, @NotNull List<Vector2D> points, double rotation) {
         this.center = center;
-        this.points = points;
+        this.points = Collections.unmodifiableList(points);
         this.rotation = MathUtil.normalizeRotation(rotation);
-        this.rotatedPoints = points.stream()
+        this.transformedPoints = points.stream()
                 .map(point -> point.rotate(rotation).add(center))
                 .toList();
     }
@@ -60,7 +61,7 @@ public class RotatingPolygon extends Shape {
 
     @Override
     public boolean hasPoint(double x, double y) {
-        return CollisionsUtil.isPointInsidePolygon(rotatedPoints, x, y);
+        return CollisionsUtil.isPointInsidePolygon(transformedPoints, x, y);
     }
 
     @Override
@@ -106,8 +107,8 @@ public class RotatingPolygon extends Shape {
         return points;
     }
 
-    public @NotNull List<Vector2D> getRotatedPoints() {
-        return rotatedPoints;
+    public @NotNull List<Vector2D> getTransformedPoints() {
+        return transformedPoints;
     }
 
     public @NotNull RotatingPolygon addRotation(double toAdd) {

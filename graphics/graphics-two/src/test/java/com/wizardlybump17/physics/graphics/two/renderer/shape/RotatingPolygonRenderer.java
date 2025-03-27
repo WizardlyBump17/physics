@@ -19,7 +19,7 @@ public class RotatingPolygonRenderer implements ShapeRenderer<RotatingPolygon> {
 
     @Override
     public void render(@NotNull Graphics graphics, @NotNull RotatingPolygon value) {
-        List<Vector2D> points = value.getRotatedPoints();
+        List<Vector2D> points = value.getTransformedPoints();
         int[] xPoints = new int[points.size()];
         int[] yPoints = new int[points.size()];
         for (int i = 0; i < points.size(); i++) {
@@ -37,7 +37,7 @@ public class RotatingPolygonRenderer implements ShapeRenderer<RotatingPolygon> {
         graphics.fillPolygon(xPoints, yPoints, points.size());
 
         Vector2D position = value.getPosition();
-        Vector2D target = value.getRotatedPoints().getFirst();
+        Vector2D target = value.getTransformedPoints().getFirst();
         graphics.setColor(Color.BLACK);
         graphics.drawLine((int) position.x(), (int) position.y(), (int) target.x(), (int) target.y());
     }

@@ -34,7 +34,7 @@ public final class CollisionsUtil {
     }
 
     public static boolean overlapsPolygonToCircle(@NotNull RotatingPolygon polygon, @NotNull Circle circle) {
-        return overlapsPolygonToCircle(polygon.getRotatedPoints(), circle.getPosition(), circle.getRadius());
+        return overlapsPolygonToCircle(polygon.getTransformedPoints(), circle.getPosition(), circle.getRadius());
     }
 
     public static boolean isPointInsidePolygon(@NotNull List<Vector2D> points, double x, double y) {
@@ -102,12 +102,12 @@ public final class CollisionsUtil {
                 rectangleMax,
                 rectangleMax.subtract(0, rectangleHeight)
         );
-        return overlapsPolygonToPolygon(rectanglePoints, polygon.getRotatedPoints()) && overlapsPolygonToPolygon(polygon.getRotatedPoints(), rectanglePoints);
+        return overlapsPolygonToPolygon(rectanglePoints, polygon.getTransformedPoints()) && overlapsPolygonToPolygon(polygon.getTransformedPoints(), rectanglePoints);
     }
 
     public static boolean overlapsPolygonToPolygon(@NotNull RotatingPolygon polygon1, @NotNull RotatingPolygon polygon2) {
-        return overlapsPolygonToPolygon(polygon1.getRotatedPoints(), polygon2.getRotatedPoints())
-                && overlapsPolygonToPolygon(polygon2.getRotatedPoints(), polygon1.getRotatedPoints());
+        return overlapsPolygonToPolygon(polygon1.getTransformedPoints(), polygon2.getTransformedPoints())
+                && overlapsPolygonToPolygon(polygon2.getTransformedPoints(), polygon1.getTransformedPoints());
     }
 
     public static boolean overlapsRectangleToCircle(@NotNull Vector2D rectangleCenter, double rectangleWidth, double rectangleHeight, @NotNull Vector2D circleCenter, double radius) {
