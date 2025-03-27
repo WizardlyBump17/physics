@@ -8,10 +8,10 @@ import com.wizardlybump17.physics.two.shape.Shape;
 import com.wizardlybump17.physics.two.util.CollisionsUtil;
 import com.wizardlybump17.physics.util.MathUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class RotatingPolygon extends Shape {
 
@@ -21,6 +21,9 @@ public class RotatingPolygon extends Shape {
     private final @NotNull List<Vector2D> transformedPoints;
 
     public RotatingPolygon(@NotNull Vector2D center, @NotNull List<Vector2D> points, double rotation) {
+        if (points.size() < 3)
+            throw new IllegalArgumentException("A polygon needs at least three points");
+
         this.center = center;
         this.points = Collections.unmodifiableList(points);
         this.rotation = MathUtil.normalizeRotation(rotation);
@@ -36,12 +39,23 @@ public class RotatingPolygon extends Shape {
 
     @Override
     public double getArea() {
-        return 0;
+        double area = 0;
+        int pointsSize = points.size();
+        for (int i = 0; i < pointsSize; i++) {
+            Vector2D current = points.get(i);
+            Vector2D next = points.get((i + 1) % pointsSize);
+            area += ((current.x() * next.y()) - (next.x() * current.y()));
+        }
+        return Math.abs(area) / 2;
     }
 
     @Override
     public double getPerimeter() {
-        return 0;
+        double perimeter = 0;
+        int pointsSize = points.size();
+        for (int i = 0; i < pointsSize; i++)
+            perimeter += points.get(i).distance(points.get((i + 1) % pointsSize));
+        return perimeter;
     }
 
     @Override
@@ -89,18 +103,29 @@ public class RotatingPolygon extends Shape {
     }
 
     @Override
-    public boolean equals(@Nullable Object other) {
-        return false;
+    public boolean equals(Object other) {
+        if (other == null || getClass() != other.getClass())
+            return false;
+        RotatingPolygon that = (RotatingPolygon) other;
+        return Double.compare(rotation, that.rotation) == 0
+                && Objects.equals(center, that.center)
+                && Objects.equals(points, that.points)
+                && Objects.equals(transformedPoints, that.transformedPoints);
     }
 
     @Override
     public int hashCode() {
-        return 0;
+        return Objects.hash(center, points, rotation, transformedPoints);
     }
 
     @Override
     public String toString() {
-        return "";
+        return "RotatingPolygon{" +
+                "center=" + center +
+                ", points=" + points +
+                ", rotation=" + rotation +
+                ", transformedPoints=" + transformedPoints +
+                '}';
     }
 
     public @NotNull List<Vector2D> getPoints() {

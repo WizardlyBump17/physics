@@ -8,6 +8,7 @@ import com.wizardlybump17.physics.two.object.BaseObject;
 import com.wizardlybump17.physics.two.physics.Physics;
 import com.wizardlybump17.physics.two.physics.object.PhysicsObject;
 import com.wizardlybump17.physics.two.position.Vector2D;
+import com.wizardlybump17.physics.two.shape.rotating.RotatingPolygon;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.MouseAdapter;
@@ -41,6 +42,9 @@ public class ShapePanelMouseMotionListener extends MouseAdapter {
                 });
             } else
                 object.teleport(target);
+
+            if (object.getShape() instanceof RotatingPolygon polygon)
+                System.out.println(polygon.getPerimeter() + " " + polygon.getArea() + " " + polygon);
         });
     }
 
