@@ -94,7 +94,22 @@ public class RotatingPolygon extends Shape {
 
     @Override
     public @NotNull Vector2D getClosestPoint(@NotNull Vector2D origin) {
-        return origin;
+        Vector2D closest = null;
+        double closestDistance = Double.MAX_VALUE;
+        int pointsSize = transformedPoints.size();
+        for (int i = 0; i < pointsSize; i++) {
+            Vector2D current = transformedPoints.get(i);
+            Vector2D next = transformedPoints.get((i + 1) % pointsSize);
+
+            Vector2D attempt = Vector2D.getClosestPointOnLine(current, next, origin);
+            double attemptDistance = attempt.distanceSquared(origin);
+
+            if (closestDistance > attemptDistance) {
+                closest = attempt;
+                closestDistance = attemptDistance;
+            }
+        }
+        return closest == null ? transformedPoints.getFirst() : closest;
     }
 
     @Override
