@@ -8,7 +8,7 @@ import com.wizardlybump17.physics.two.object.BaseObject;
 import com.wizardlybump17.physics.two.physics.Physics;
 import com.wizardlybump17.physics.two.physics.object.PhysicsObject;
 import com.wizardlybump17.physics.two.position.Vector2D;
-import com.wizardlybump17.physics.two.shape.rotating.RotatingPolygon;
+import com.wizardlybump17.physics.two.shape.Shape;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.MouseAdapter;
@@ -42,10 +42,42 @@ public class ShapePanelMouseMotionListener extends MouseAdapter {
                 });
             } else
                 object.teleport(target);
-
-            if (object.getShape() instanceof RotatingPolygon polygon)
-                System.out.println(polygon.getPerimeter() + " " + polygon.getArea() + " " + polygon);
         });
+    }
+
+    @Override
+    public void mouseMoved(@NotNull MouseEvent event) {
+        Engine.getScheduler().schedule(() -> {
+            Vector2D point = new Vector2D(event.getX(), event.getY());
+            closestObject(point);
+        });
+    }
+
+    public void closestObject(@NotNull Vector2D point) {
+        panel.setMouseLocation(point);
+
+        PanelObject closest = null;
+        double closestDistance = Double.MAX_VALUE;
+        Vector2D closestPoint = null;
+
+        for (PanelObject object : panel.getShapes().values()) {
+            Shape shape = object.getShape();
+
+            Vector2D attempt = shape.getClosestPoint(point);
+            double attemptDistance = attempt.distanceSquared(point);
+
+            if (closest == null)
+                closest = object;
+
+            if (attemptDistance <= closestDistance) {
+                closest = object;
+                closestDistance = attemptDistance;
+                closestPoint = attempt;
+            }
+        }
+
+        panel.setClosestObjectToMouse(closest);
+        panel.setClosestPointToMouse(closestPoint);
     }
 
     public @NotNull ObjectsPanel getPanel() {

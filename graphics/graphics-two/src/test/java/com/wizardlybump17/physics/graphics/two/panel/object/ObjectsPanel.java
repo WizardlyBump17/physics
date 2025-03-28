@@ -30,16 +30,22 @@ public class ObjectsPanel extends JPanel {
     private transient @Nullable PanelObject selectedShape;
     private transient PhysicsObject fallingBall;
     private transient int objectCount;
-
     private final transient List<BaseObject> rotatingPolygons = new ArrayList<>();
+    private transient PanelObject closestObjectToMouse;
+    private transient Vector2D closestPointToMouse;
+    private transient Vector2D mouseLocation;
+
+    private transient final ShapePanelMouseListener mouseListener = new ShapePanelMouseListener(this);
+    private transient final ShapePanelMouseMotionListener mouseMotionListener = new ShapePanelMouseMotionListener(this);
+    private transient final ShapePanelKeyboardListener keyboardListener = new ShapePanelKeyboardListener(this);
 
     public ObjectsPanel() {
         setFocusable(true);
         requestFocus();
 
-        addMouseListener(new ShapePanelMouseListener(this));
-        addMouseMotionListener(new ShapePanelMouseMotionListener(this));
-        addKeyListener(new ShapePanelKeyboardListener(this));
+        addMouseListener(mouseListener);
+        addMouseMotionListener(mouseMotionListener);
+        addKeyListener(keyboardListener);
     }
 
     public PhysicsObject getFallingBall() {
@@ -151,10 +157,22 @@ public class ObjectsPanel extends JPanel {
             if (selectedShape != null)
                 ((ShapeRenderer<Shape>) selectedShape.getRenderer()).render(graphics, selectedShape.getShape());
 
-            for (BaseObject rotatingPolygon : rotatingPolygons) {
+            for (BaseObject rotatingPolygon : rotatingPolygons)
                 shapes.get(rotatingPolygon.getId()).setHasCollisions(false);
-            }
+
+            drawClosest(graphics);
         }
+    }
+
+    protected void drawClosest(@NotNull Graphics graphics) {
+        if (closestObjectToMouse == null || closestPointToMouse == null || mouseLocation == null)
+            return;
+
+        graphics.setColor(Color.BLACK);
+        graphics.drawLine(
+                (int) mouseLocation.x(), (int) mouseLocation.y(),
+                (int) closestPointToMouse.x(), (int) closestPointToMouse.y()
+        );
     }
 
     public <R extends ShapeRenderer<?>> @NotNull PanelObject addObject(@NotNull BaseObject object, @NotNull R renderer) {
@@ -189,5 +207,41 @@ public class ObjectsPanel extends JPanel {
 
     public List<BaseObject> getRotatingPolygons() {
         return rotatingPolygons;
+    }
+
+    public PanelObject getClosestObjectToMouse() {
+        return closestObjectToMouse;
+    }
+
+    public void setClosestObjectToMouse(PanelObject closestObjectToMouse) {
+        this.closestObjectToMouse = closestObjectToMouse;
+    }
+
+    public Vector2D getClosestPointToMouse() {
+        return closestPointToMouse;
+    }
+
+    public void setClosestPointToMouse(Vector2D closestPointToMouse) {
+        this.closestPointToMouse = closestPointToMouse;
+    }
+
+    public Vector2D getMouseLocation() {
+        return mouseLocation;
+    }
+
+    public void setMouseLocation(Vector2D mouseLocation) {
+        this.mouseLocation = mouseLocation;
+    }
+
+    public ShapePanelMouseListener getMouseListener() {
+        return mouseListener;
+    }
+
+    public ShapePanelMouseMotionListener getMouseMotionListener() {
+        return mouseMotionListener;
+    }
+
+    public ShapePanelKeyboardListener getKeyboardListener() {
+        return keyboardListener;
     }
 }

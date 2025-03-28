@@ -6,12 +6,15 @@ import com.wizardlybump17.physics.two.Constants;
 import com.wizardlybump17.physics.two.Engine;
 import com.wizardlybump17.physics.two.container.BaseObjectContainer;
 import com.wizardlybump17.physics.two.container.BasicBaseObjectContainer;
+import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.registry.BaseObjectContainerRegistry;
 import com.wizardlybump17.physics.two.task.factory.RegisteredTaskFactory;
 import com.wizardlybump17.physics.two.task.registered.RegisteredTask;
 import com.wizardlybump17.physics.two.task.scheduler.TaskScheduler;
 import com.wizardlybump17.physics.two.thread.EngineThread;
 
+import javax.swing.*;
+import java.awt.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.UUID;
@@ -54,6 +57,7 @@ public class Main {
                 0,
                 1
         );
+
         scheduler.schedule(
                 () -> System.out.println(scheduler.getCurrentTick()),
                 0,
@@ -65,6 +69,16 @@ public class Main {
             scheduler.cancelTask(killTask.getId());
             System.out.println(scheduler.isScheduled(killTask.getId()));
         }, Constants.TICKS_PER_SECOND * 20);
+
+        scheduler.schedule(
+                () -> {
+                    Point location = MouseInfo.getPointerInfo().getLocation();
+                    SwingUtilities.convertPointFromScreen(location, objectsPanel);
+                    objectsPanel.getMouseMotionListener().closestObject(new Vector2D(location.getX(), location.getY()));
+                },
+                0,
+                1
+        );
 
         EngineThread thread = new EngineThread(scheduler, containerRegistry);
         Engine.setThread(thread);
