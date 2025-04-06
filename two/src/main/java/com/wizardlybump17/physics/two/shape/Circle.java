@@ -4,6 +4,8 @@ import com.wizardlybump17.physics.two.intersection.Intersection;
 import com.wizardlybump17.physics.two.intersection.circle.CircleToCircleIntersection;
 import com.wizardlybump17.physics.two.intersection.rectangle.RectangleToCircleIntersection;
 import com.wizardlybump17.physics.two.position.Vector2D;
+import com.wizardlybump17.physics.two.shape.rotating.RotatingPolygon;
+import com.wizardlybump17.physics.two.util.CollisionsUtil;
 import com.wizardlybump17.physics.util.MathUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,24 +43,9 @@ public class Circle extends Shape {
     @Override
     public boolean intersects(@NotNull Shape other) {
         return switch (other) {
-            case Circle otherCircle -> position.distanceSquared(otherCircle.position) < MathUtil.square(radius + otherCircle.radius);
-            case Rectangle rectangle -> {
-                Vector2D rectanglePosition = rectangle.getPosition();
-
-                double xDistance = Math.abs(position.x() - rectanglePosition.x());
-                double yDistance = Math.abs(position.y() - rectanglePosition.y());
-
-                double width = rectangle.getWidth() / 2;
-                double height = rectangle.getHeight() / 2;
-
-                if (xDistance > width + radius || yDistance > height + radius)
-                    yield false;
-
-                if (xDistance <= width || yDistance <= height)
-                    yield true;
-
-                yield MathUtil.square(xDistance - width) + MathUtil.square(yDistance - height) <= MathUtil.square(radius);
-            }
+            case Circle otherCircle -> CollisionsUtil.overlapsCircleToCircle(this, otherCircle);
+            case Rectangle rectangle -> CollisionsUtil.overlapsRectangleToCircle(rectangle, this);
+            case RotatingPolygon polygon -> CollisionsUtil.overlapsPolygonToCircle(polygon, this);
             default -> false;
         };
     }

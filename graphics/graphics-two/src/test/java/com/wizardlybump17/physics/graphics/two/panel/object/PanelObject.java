@@ -11,6 +11,7 @@ public class PanelObject {
     private @NotNull BaseObject object;
     private @NotNull ShapeRenderer<?> renderer;
     private boolean selected;
+    private boolean hasCollisions;
 
     public PanelObject(@NotNull BaseObject object, @NotNull ShapeRenderer<?> renderer) {
         this.object = object;
@@ -54,6 +55,10 @@ public class PanelObject {
     }
 
     public boolean hasIntersections() {
-        return object instanceof PhysicsObject physicsObject && physicsObject.hasCollisions();
+        return hasCollisions || object instanceof PhysicsObject physicsObject && physicsObject.hasCollisions();
+    }
+
+    public void setHasCollisions(boolean hasCollisions) {
+        this.hasCollisions = hasCollisions;
     }
 }

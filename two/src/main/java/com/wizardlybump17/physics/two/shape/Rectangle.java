@@ -5,7 +5,8 @@ import com.wizardlybump17.physics.two.intersection.Intersection;
 import com.wizardlybump17.physics.two.intersection.circle.CircleToRectangleIntersection;
 import com.wizardlybump17.physics.two.intersection.rectangle.RectangleToRectangleIntersection;
 import com.wizardlybump17.physics.two.position.Vector2D;
-import com.wizardlybump17.physics.util.MathUtil;
+import com.wizardlybump17.physics.two.shape.rotating.RotatingPolygon;
+import com.wizardlybump17.physics.two.util.CollisionsUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -54,31 +55,9 @@ public class Rectangle extends Shape {
     @Override
     public boolean intersects(@NotNull Shape other) {
         return switch (other) {
-            case Rectangle rectangle -> {
-                Vector2D otherMin = rectangle.getMin();
-                Vector2D otherMax = rectangle.getMax();
-                yield min.x() < otherMax.x() && max.x() > otherMin.x()
-                        && min.y() < otherMax.y() && max.y() > otherMin.y();
-            }
-            case Circle circle -> {
-                Vector2D circlePosition = circle.getPosition();
-
-                double xDistance = Math.abs(position.x() - circlePosition.x());
-                double yDistance = Math.abs(position.y() - circlePosition.y());
-
-                double radius = circle.getRadius();
-
-                double width = getWidth() / 2;
-                double height = getHeight() / 2;
-
-                if (xDistance > width + radius || yDistance > height + radius)
-                    yield false;
-
-                if (xDistance <= width || yDistance <= height)
-                    yield true;
-
-                yield MathUtil.square(xDistance - width) + MathUtil.square(yDistance - height) <= MathUtil.square(radius);
-            }
+            case Rectangle rectangle -> CollisionsUtil.overlapsRectangleToRectangle(this, rectangle);
+            case Circle circle -> CollisionsUtil.overlapsRectangleToCircle(this, circle);
+            case RotatingPolygon polygon -> CollisionsUtil.overlapsPolygonToRectangle(polygon, this);
             default -> false;
         };
     }

@@ -13,8 +13,7 @@ public record Line(@NotNull Vector2D start, @NotNull Vector2D end) {
     }
 
     public @NotNull Vector2D closestPoint(@NotNull Vector2D origin) {
-        Vector2D vector = toVector();
-        return start.add(vector.multiply(Math.clamp(origin.subtract(start).dot(vector) / vector.dot(vector), 0, 1)));
+        return Vector2D.getClosestPointOnLine(start, end, origin);
     }
 
     public @NotNull Vector2D toVector() {
