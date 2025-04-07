@@ -44,7 +44,7 @@ public class RotatingCube extends Shape {
     }
 
     @Override
-    public @NotNull Shape at(@NotNull Vector3D newPosition) {
+    public @NotNull RotatingCube at(@NotNull Vector3D newPosition) {
         return new RotatingCube(position, points, rotation);
     }
 
