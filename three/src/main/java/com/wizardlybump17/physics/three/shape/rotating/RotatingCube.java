@@ -59,4 +59,16 @@ public class RotatingCube extends Shape {
     public @NotNull Vector3D getRotation() {
         return rotation;
     }
+
+    public @NotNull RotatingCube withRotation(@NotNull Vector3D rotation) {
+        return new RotatingCube(position, points, rotation);
+    }
+
+    public @NotNull RotatingCube addRotation(@NotNull Vector3D rotation) {
+        return new RotatingCube(position, points, this.rotation.add(rotation));
+    }
+
+    public @NotNull RotatingCube subtractRotation(@NotNull Vector3D rotation) {
+        return new RotatingCube(position, points, this.rotation.subtract(rotation));
+    }
 }
