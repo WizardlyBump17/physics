@@ -167,4 +167,41 @@ public record Vector3D(double x, double y, double z) {
     public @NotNull Vector3D midpoint(@NotNull Vector3D other) {
         return add(other).divide(2);
     }
+
+    public @NotNull Vector3D rotateAroundX(double radians) {
+        double cos = Math.cos(radians);
+        double sin = Math.sin(radians);
+
+        return new Vector3D(
+                x,
+                cos * y - sin * y,
+                sin * z + cos * z
+        );
+    }
+
+    public @NotNull Vector3D rotateAroundY(double radians) {
+        double cos = Math.cos(radians);
+        double sin = Math.sin(radians);
+
+        return new Vector3D(
+                cos * x + sin * x,
+                y,
+                -sin * z + cos * z
+        );
+    }
+
+    public @NotNull Vector3D rotateAroundZ(double radians) {
+        double cos = Math.cos(radians);
+        double sin = Math.sin(radians);
+
+        return new Vector3D(
+                cos * x - sin * x,
+                sin * y + cos * y,
+                z
+        );
+    }
+
+    public @NotNull Vector3D rotateAround(@NotNull Vector3D angles) {
+        return rotateAroundX(angles.x).rotateAroundY(angles.y).rotateAroundZ(angles.z);
+    }
 }
