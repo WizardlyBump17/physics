@@ -19,7 +19,7 @@ public class RotatingCube extends Shape {
         this.points = Collections.unmodifiableList(points);
         this.rotation = rotation;
         transformedPoints = points.stream()
-                .map(position::add)
+                .map(point -> position.add(point.rotateAround(rotation)))
                 .toList();
     }
 
