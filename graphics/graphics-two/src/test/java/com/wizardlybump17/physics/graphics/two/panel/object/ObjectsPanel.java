@@ -106,7 +106,7 @@ public class ObjectsPanel extends JPanel {
 
                     List<Vector2D> points = new ArrayList<>();
                     for (int j = 0; j < 10; j++) {
-                        points.add(new Vector2D(random.nextDouble(-200, 200), random.nextDouble(-200, 200)));
+                        points.add(new Vector2D(random.nextDouble(-100, 100), random.nextDouble(-100, 100)));
                     }
 
                     BaseObject rotatingPolygon = new PhysicsObject(
@@ -143,7 +143,40 @@ public class ObjectsPanel extends JPanel {
                     rotatingPolygons.add(rotatingPolygon);
                 }
             }
+
+            {
+                for (int i = 0; i < 2; i++) {
+                    addObject(
+                            new PhysicsObject(
+                                    objectContainer,
+                                    objectCount++,
+                                    new RotatingPolygon(
+                                            Vector2D.randomVector(random, 0, 0, size.getWidth(), size.getHeight()),
+                                            createStar(100, 45, 5),
+                                            0
+                                    )
+                            ),
+                            new RotatingPolygonRenderer()
+                    );
+                }
+            }
         }
+    }
+
+    public static List<Vector2D> createStar(double outerRadius, double innerRadius, int points) {
+        List<Vector2D> result = new ArrayList<>();
+        double angleStep = Math.PI / points;
+        for (int i = 0; i < points * 2; i++) {
+            double angle = i * angleStep;
+            double radius = (i % 2 == 0) ? outerRadius : innerRadius;
+
+            double x = Math.cos(angle) * radius;
+            double y = Math.sin(angle) * radius;
+
+            result.add(new Vector2D(x, y));
+        }
+
+        return result;
     }
 
     @SuppressWarnings("unchecked")
