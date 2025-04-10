@@ -177,4 +177,12 @@ public record Vector2D(double x, double y) {
                 a.y() + projection * by
         );
     }
+
+    public double cross(@NotNull Vector2D other) {
+        return x * other.y - y * other.x;
+    }
+
+    public double direction(@NotNull Vector2D a, @NotNull Vector2D b) {
+        return b.subtract(a).cross(subtract(a));
+    }
 }
