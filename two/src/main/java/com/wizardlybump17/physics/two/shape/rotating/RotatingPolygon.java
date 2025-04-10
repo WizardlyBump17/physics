@@ -9,9 +9,7 @@ import com.wizardlybump17.physics.two.util.CollisionsUtil;
 import com.wizardlybump17.physics.util.MathUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class RotatingPolygon extends Shape {
 
@@ -21,13 +19,17 @@ public class RotatingPolygon extends Shape {
     private final @NotNull List<Vector2D> transformedPoints;
 
     public RotatingPolygon(@NotNull Vector2D center, @NotNull List<Vector2D> points, double rotation) {
+        this(center, points, rotation, false);
+    }
+
+    private RotatingPolygon(@NotNull Vector2D center, @NotNull List<Vector2D> points, double rotation, boolean sorted) {
         if (points.size() < 3)
             throw new IllegalArgumentException("A polygon needs at least three points");
 
         this.center = center;
-        this.points = Collections.unmodifiableList(points);
+        this.points = Collections.unmodifiableList(sorted ? points : sortPoints(points));
         this.rotation = MathUtil.normalizeRotation(rotation);
-        this.transformedPoints = points.stream()
+        this.transformedPoints = this.points.stream()
                 .map(point -> point.rotate(rotation).add(center))
                 .toList();
     }
@@ -83,7 +85,8 @@ public class RotatingPolygon extends Shape {
         return new RotatingPolygon(
                 position,
                 points,
-                rotation
+                rotation,
+                true
         );
     }
 
@@ -155,11 +158,27 @@ public class RotatingPolygon extends Shape {
         return new RotatingPolygon(
                 center,
                 points,
-                rotation + toAdd
+                rotation + toAdd,
+                true
         );
     }
 
     public double getRotation() {
         return rotation;
+    }
+
+    public static @NotNull List<Vector2D> sortPoints(@NotNull List<Vector2D> points) {
+        List<Vector2D> result = new ArrayList<>(points.size());
+
+        Vector2D sum = Vector2D.ZERO;
+        for (Vector2D point : points)
+            sum = sum.add(point);
+
+        Vector2D center = sum.divide(points.size());
+
+        result.addAll(points);
+        result.sort(Comparator.comparingDouble(point -> point.angleTo(center)));
+
+        return result;
     }
 }
