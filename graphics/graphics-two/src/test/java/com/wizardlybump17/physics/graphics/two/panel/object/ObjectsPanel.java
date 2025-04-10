@@ -103,17 +103,18 @@ public class ObjectsPanel extends JPanel {
             {
                 for (int i = 0; i < 2; i++) {
                     Vector2D center = Vector2D.randomVector(random, 0, 0, size.getWidth(), size.getHeight());
+
+                    List<Vector2D> points = new ArrayList<>();
+                    for (int j = 0; j < 10; j++) {
+                        points.add(new Vector2D(random.nextDouble(-200, 200), random.nextDouble(-200, 200)));
+                    }
+
                     BaseObject rotatingPolygon = new PhysicsObject(
                             objectContainer,
                             objectCount++,
                             new RotatingPolygon(
                                     center,
-                                    new ArrayList<>(List.of(
-                                            new Vector2D(-30, 30),
-                                            new Vector2D(30, 30),
-                                            new Vector2D(30, -30),
-                                            new Vector2D(-30, -30)
-                                    )),
+                                    points,
                                     0
                             )
                     );
