@@ -35,7 +35,7 @@ public class ShapePanelKeyboardListener extends KeyAdapter {
     public void handleKey(int key) {
         List<BaseObject> rotatingPolygons = panel.getRotatingPolygons();
         BaseObject rotatingPolygon1 = rotatingPolygons.get(0);
-        BaseObject rotatingPolygon2 = rotatingPolygons.get(1);
+        BaseObject rotatingPolygon2 = rotatingPolygons.get(1 % rotatingPolygons.size());
 
         switch (key) {
             case KeyEvent.VK_SPACE -> Engine.getScheduler().schedule(panel::regenerate);

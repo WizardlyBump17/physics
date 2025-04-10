@@ -1,5 +1,6 @@
 package com.wizardlybump17.physics.two.util;
 
+import com.wizardlybump17.physics.two.Line;
 import com.wizardlybump17.physics.two.position.Vector2D;
 import com.wizardlybump17.physics.two.shape.Circle;
 import com.wizardlybump17.physics.two.shape.Rectangle;
@@ -37,6 +38,10 @@ public final class CollisionsUtil {
         return overlapsPolygonToCircle(polygon.getTransformedPoints(), circle.getPosition(), circle.getRadius());
     }
 
+    public static boolean isPointInsidePolygon(@NotNull List<Vector2D> points, @NotNull Vector2D point) {
+        return isPointInsidePolygon(points, point.x(), point.y());
+    }
+
     public static boolean isPointInsidePolygon(@NotNull List<Vector2D> points, double x, double y) {
         boolean inside = false;
         int pointsSize = points.size();
@@ -59,36 +64,38 @@ public final class CollisionsUtil {
         return inside;
     }
 
-    //Taken from https://github.com/OneLoneCoder/Javidx9/blob/c9ca5d2e5821f2d2e07f07f388803c185a68d13a/PixelGameEngine/SmallerProjects/OneLoneCoder_PGE_PolygonCollisions1.cpp#L140
     public static boolean overlapsPolygonToPolygon(@NotNull List<Vector2D> points1, @NotNull List<Vector2D> points2) {
-        for (int pointIndex = 0; pointIndex < points1.size(); pointIndex++) {
-            int nextPoint = (pointIndex + 1) % points1.size();
-            Vector2D projection = new Vector2D(
-                    -(points1.get(nextPoint).y() - points1.get(pointIndex).y()),
-                    points1.get(nextPoint).x() - points1.get(pointIndex).x()
-            );
+        return overlapsPolygonToPolygon0(points1, points2) && overlapsPolygonToPolygon0(points2, points1);
+    }
 
-            double minR1 = Double.POSITIVE_INFINITY;
-            double maxR1 = Double.NEGATIVE_INFINITY;
-            for (Vector2D point : points1) {
-                double dot = point.dot(projection);
-                minR1 = Math.min(minR1, dot);
-                maxR1 = Math.max(maxR1, dot);
+    private static boolean overlapsPolygonToPolygon0(@NotNull List<Vector2D> points1, @NotNull List<Vector2D> points2) {
+        for (int i = 0; i < points1.size(); i++) {
+            Vector2D current1 = points1.get(i);
+            Vector2D next1 = points1.get((i + 1) % points1.size());
+
+            for (int j = 0; j < points2.size(); j++) {
+                Vector2D current2 = points2.get(j);
+                Vector2D next2 = points2.get((j + 1) % points2.size());
+
+                if (overlapsLineToLine(current1, next1, current2, next2))
+                    return true;
             }
-
-            double minR2 = Double.POSITIVE_INFINITY;
-            double maxR2 = Double.NEGATIVE_INFINITY;
-            for (Vector2D point : points2) {
-                double dot = point.dot(projection);
-                minR2 = Math.min(minR2, dot);
-                maxR2 = Math.max(maxR2, dot);
-            }
-
-            if (!(maxR2 >= minR1 && maxR1 >= minR2))
-                return false;
         }
 
-        return true;
+        return isPointInsidePolygon(points1, points2.getFirst()) || isPointInsidePolygon(points2, points1.getFirst());
+    }
+
+    public static boolean overlapsLineToLine(@NotNull Vector2D start1, @NotNull Vector2D end1, @NotNull Vector2D start2, @NotNull Vector2D end2) {
+        double d1 = start1.direction(start2, end2);
+        double d2 = end1.direction(start2, end2);
+        double d3 = start2.direction(start1, end1);
+        double d4 = end2.direction(start1, end1);
+
+        return ((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) && ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0));
+    }
+
+    public static boolean overlapsLineToLine(@NotNull Line line1, @NotNull Line line2) {
+        return overlapsLineToLine(line1.start(), line1.end(), line2.start(), line2.end());
     }
 
     public static boolean overlapsPolygonToRectangle(@NotNull RotatingPolygon polygon, @NotNull Rectangle rectangle) {
@@ -96,18 +103,17 @@ public final class CollisionsUtil {
         Vector2D rectangleMin = rectangle.getMin();
         Vector2D rectangleMax = rectangle.getMax();
 
-        List<Vector2D> rectanglePoints = List.of(
+        List<Vector2D> rectanglePoints = RotatingPolygon.sortPoints(List.of(
                 rectangleMin,
                 rectangleMin.add(0, rectangleHeight),
                 rectangleMax,
                 rectangleMax.subtract(0, rectangleHeight)
-        );
-        return overlapsPolygonToPolygon(rectanglePoints, polygon.getTransformedPoints()) && overlapsPolygonToPolygon(polygon.getTransformedPoints(), rectanglePoints);
+        ));
+        return overlapsPolygonToPolygon(rectanglePoints, polygon.getTransformedPoints());
     }
 
     public static boolean overlapsPolygonToPolygon(@NotNull RotatingPolygon polygon1, @NotNull RotatingPolygon polygon2) {
-        return overlapsPolygonToPolygon(polygon1.getTransformedPoints(), polygon2.getTransformedPoints())
-                && overlapsPolygonToPolygon(polygon2.getTransformedPoints(), polygon1.getTransformedPoints());
+        return overlapsPolygonToPolygon(polygon1.getTransformedPoints(), polygon2.getTransformedPoints());
     }
 
     public static boolean overlapsRectangleToCircle(@NotNull Vector2D rectangleCenter, double rectangleWidth, double rectangleHeight, @NotNull Vector2D circleCenter, double radius) {
