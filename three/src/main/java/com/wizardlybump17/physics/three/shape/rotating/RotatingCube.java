@@ -51,7 +51,7 @@ public class RotatingCube extends Shape {
 
     @Override
     public @NotNull RotatingCube at(@NotNull Vector3D newPosition) {
-        return new RotatingCube(position, points, rotation);
+        return new RotatingCube(position, points, rotation, true);
     }
 
     public @NotNull List<Vector3D> getPoints() {
@@ -67,15 +67,15 @@ public class RotatingCube extends Shape {
     }
 
     public @NotNull RotatingCube withRotation(@NotNull Vector3D rotation) {
-        return new RotatingCube(position, points, rotation);
+        return new RotatingCube(position, points, rotation, true);
     }
 
     public @NotNull RotatingCube addRotation(@NotNull Vector3D rotation) {
-        return new RotatingCube(position, points, this.rotation.add(rotation));
+        return new RotatingCube(position, points, this.rotation.add(rotation), true);
     }
 
     public @NotNull RotatingCube subtractRotation(@NotNull Vector3D rotation) {
-        return new RotatingCube(position, points, this.rotation.subtract(rotation));
+        return new RotatingCube(position, points, this.rotation.subtract(rotation), true);
     }
 
     public @NotNull RotatingCube withPoints(@NotNull List<Vector3D> points) {
