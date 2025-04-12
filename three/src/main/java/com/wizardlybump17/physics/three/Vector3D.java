@@ -174,8 +174,8 @@ public record Vector3D(double x, double y, double z) {
 
         return new Vector3D(
                 x,
-                cos * y - sin * y,
-                sin * z + cos * z
+                cos * y - sin * z,
+                sin * y + cos * z
         );
     }
 
@@ -184,9 +184,9 @@ public record Vector3D(double x, double y, double z) {
         double sin = Math.sin(radians);
 
         return new Vector3D(
-                cos * x + sin * x,
+                cos * x + sin * z,
                 y,
-                -sin * z + cos * z
+                -sin * x + cos * z
         );
     }
 
@@ -195,13 +195,15 @@ public record Vector3D(double x, double y, double z) {
         double sin = Math.sin(radians);
 
         return new Vector3D(
-                cos * x - sin * x,
-                sin * y + cos * y,
+                cos * x - sin * y,
+                sin * x + cos * y,
                 z
         );
     }
 
     public @NotNull Vector3D rotateAround(@NotNull Vector3D angles) {
-        return rotateAroundX(angles.x).rotateAroundY(angles.y).rotateAroundZ(angles.z);
+        return rotateAroundX(Math.toRadians(angles.x))
+                .rotateAroundY(Math.toRadians(angles.y))
+                .rotateAroundZ(Math.toRadians(angles.z));
     }
 }
