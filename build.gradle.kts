@@ -59,6 +59,5 @@ subprojects {
                 from(components["java"])
             }
         }
-
     }
 }
