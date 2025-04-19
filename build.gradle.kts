@@ -48,8 +48,8 @@ subprojects {
             maven {
                 url = uri("https://maven.pkg.github.com/WizardlyBump17/physics")
                 credentials {
-                    username = (project.findProperty("gpr.user") ?: System.getenv("USERNAME")) as String
-                    password = (project.findProperty("gpr.key") ?: System.getenv("TOKEN")) as String
+                    username = (project.findProperty("gpr.user") ?: System.getenv("USERNAME")) as String?
+                    password = (project.findProperty("gpr.key") ?: System.getenv("TOKEN")) as String?
                 }
             }
         }
