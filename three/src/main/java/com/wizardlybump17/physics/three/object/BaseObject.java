@@ -9,8 +9,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class BaseObject implements Tickable {
+
+    private static final @NotNull AtomicInteger OBJECT_COUNTER = new AtomicInteger(0);
 
     private final int id;
     private @NotNull Shape shape;
@@ -18,7 +21,7 @@ public abstract class BaseObject implements Tickable {
     protected final @NotNull Map<Integer, BaseObject> collidingWith = new HashMap<>();
 
     public BaseObject(@NotNull Shape shape, @NotNull BaseObjectContainer container) {
-        this.id = container.increaseObjectCounter();
+        this.id = OBJECT_COUNTER.getAndIncrement();
         this.shape = shape;
         this.container = container;
     }
