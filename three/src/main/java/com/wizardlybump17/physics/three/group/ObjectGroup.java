@@ -1,12 +1,13 @@
 package com.wizardlybump17.physics.three.group;
 
+import com.wizardlybump17.physics.Tickable;
 import com.wizardlybump17.physics.three.container.BaseObjectContainer;
 import com.wizardlybump17.physics.three.object.BaseObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public interface ObjectGroup {
+public interface ObjectGroup extends Tickable {
 
     int getId();
 

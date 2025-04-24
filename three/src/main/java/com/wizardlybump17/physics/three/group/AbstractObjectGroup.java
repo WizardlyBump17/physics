@@ -46,4 +46,27 @@ public abstract class AbstractObjectGroup implements ObjectGroup {
 
     @Override
     public abstract boolean isCollidingWith(@NotNull BaseObject other);
+
+    protected void onCollide(@NotNull ObjectGroup otherGroup) {
+    }
+
+    protected void onStopColliding(@NotNull ObjectGroup otherGroup) {
+    }
+
+    @Override
+    public void tick() {
+        tickCollisions();
+    }
+
+    protected void tickCollisions() {
+        for (ObjectGroup otherGroup : getContainer().getLoadedGroups()) {
+            if (id == otherGroup.getId())
+                continue;
+
+            if (isCollidingWith(otherGroup))
+                onCollide(otherGroup);
+            else
+                onStopColliding(otherGroup);
+        }
+    }
 }
