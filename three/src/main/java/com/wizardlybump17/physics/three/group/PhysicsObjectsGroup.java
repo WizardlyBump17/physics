@@ -43,6 +43,9 @@ public abstract class PhysicsObjectsGroup extends AbstractObjectsGroup {
     @Override
     public void onCollide(@NotNull ObjectsGroup otherGroup) {
         collidingWith.add(otherGroup.getId());
+
+        setAcceleration(Vector3D.ZERO);
+        setVelocity(Vector3D.ZERO);
     }
 
     @Override
