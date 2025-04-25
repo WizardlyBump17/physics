@@ -58,6 +58,11 @@ public class MapObjectContainer extends BaseObjectContainer {
     }
 
     @Override
+    public @Nullable ObjectsGroup getGroup(int groupId) {
+        return groups.get(groupId);
+    }
+
+    @Override
     public void tick() {
         for (ObjectsGroup group : groups.values())
             group.tick();

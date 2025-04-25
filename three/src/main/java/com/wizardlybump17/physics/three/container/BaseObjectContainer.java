@@ -42,4 +42,6 @@ public abstract class BaseObjectContainer implements Tickable {
     public void removeGroup(@NotNull ObjectsGroup group) {
         removeGroup(group.getId());
     }
+
+    public abstract @Nullable ObjectsGroup getGroup(int groupId);
 }
