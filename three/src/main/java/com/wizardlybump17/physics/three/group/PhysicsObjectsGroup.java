@@ -2,6 +2,7 @@ package com.wizardlybump17.physics.three.group;
 
 import com.wizardlybump17.physics.three.container.BaseObjectContainer;
 import com.wizardlybump17.physics.three.object.BaseObject;
+import com.wizardlybump17.physics.three.shape.Shape;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
@@ -21,7 +22,15 @@ public abstract class PhysicsObjectsGroup extends AbstractObjectsGroup {
 
     @Override
     public boolean isCollidingWith(@NotNull BaseObject other) {
-        return collidingWith.contains(other.getId());
+        if (collidingWith.contains(other.getId()))
+            return true;
+
+        Shape otherShape = other.getShape();
+        for (BaseObject object : getObjects().values())
+            if (object.getShape().intersects(otherShape))
+                return true;
+
+        return false;
     }
 
     @Override
