@@ -47,12 +47,6 @@ public abstract class AbstractObjectsGroup implements ObjectsGroup {
     @Override
     public abstract boolean isCollidingWith(@NotNull BaseObject other);
 
-    protected void onCollide(@NotNull ObjectsGroup otherGroup) {
-    }
-
-    protected void onStopColliding(@NotNull ObjectsGroup otherGroup) {
-    }
-
     @Override
     public void tick() {
         tickCollisions();
@@ -63,10 +57,13 @@ public abstract class AbstractObjectsGroup implements ObjectsGroup {
             if (id == otherGroup.getId())
                 continue;
 
-            if (isCollidingWith(otherGroup))
+            if (isCollidingWith(otherGroup)) {
                 onCollide(otherGroup);
-            else
+                otherGroup.onCollide(this);
+            } else {
                 onStopColliding(otherGroup);
+                otherGroup.onStopColliding(this);
+            }
         }
     }
 }

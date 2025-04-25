@@ -34,12 +34,12 @@ public abstract class PhysicsObjectsGroup extends AbstractObjectsGroup {
     }
 
     @Override
-    protected void onCollide(@NotNull ObjectsGroup otherGroup) {
+    public void onCollide(@NotNull ObjectsGroup otherGroup) {
         collidingWith.add(otherGroup.getId());
     }
 
     @Override
-    protected void onStopColliding(@NotNull ObjectsGroup otherGroup) {
+    public void onStopColliding(@NotNull ObjectsGroup otherGroup) {
         collidingWith.remove(otherGroup.getId());
     }
 }

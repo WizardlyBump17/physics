@@ -31,4 +31,10 @@ public interface ObjectsGroup extends Tickable {
                 return true;
         return false;
     }
+
+    default void onCollide(@NotNull ObjectsGroup otherGroup) {
+    }
+
+    default void onStopColliding(@NotNull ObjectsGroup otherGroup) {
+    }
 }
