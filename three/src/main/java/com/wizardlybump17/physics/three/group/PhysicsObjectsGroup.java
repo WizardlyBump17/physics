@@ -18,9 +18,6 @@ public abstract class PhysicsObjectsGroup extends AbstractObjectsGroup {
     }
 
     @Override
-    public abstract boolean isPassable();
-
-    @Override
     public boolean isCollidingWith(@NotNull BaseObject other) {
         if (collidingWith.contains(other.getId()))
             return true;
