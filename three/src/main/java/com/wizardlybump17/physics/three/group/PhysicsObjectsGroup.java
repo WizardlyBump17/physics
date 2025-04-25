@@ -5,15 +5,15 @@ import com.wizardlybump17.physics.three.object.BaseObject;
 import com.wizardlybump17.physics.three.shape.Shape;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public abstract class PhysicsObjectsGroup extends AbstractObjectsGroup {
 
     private final @NotNull Set<Integer> collidingWith = new HashSet<>();
 
-    public PhysicsObjectsGroup(@NotNull BaseObjectContainer container, @NotNull Map<Integer, BaseObject> objects) {
+    public PhysicsObjectsGroup(@NotNull BaseObjectContainer container, @NotNull Collection<BaseObject> objects) {
         super(container, objects);
     }
 

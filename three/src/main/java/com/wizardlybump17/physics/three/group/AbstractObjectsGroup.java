@@ -4,7 +4,9 @@ import com.wizardlybump17.physics.three.container.BaseObjectContainer;
 import com.wizardlybump17.physics.three.object.BaseObject;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -16,9 +18,13 @@ public abstract class AbstractObjectsGroup implements ObjectsGroup {
     private final @NotNull BaseObjectContainer container;
     private final @NotNull Map<Integer, BaseObject> objects;
 
-    public AbstractObjectsGroup(@NotNull BaseObjectContainer container, @NotNull Map<Integer, BaseObject> objects) {
+    public AbstractObjectsGroup(@NotNull BaseObjectContainer container, @NotNull Collection<BaseObject> objects) {
         this.container = container;
-        this.objects = Collections.unmodifiableMap(objects);
+
+        Map<Integer, BaseObject> internalObjects = new HashMap<>();
+        for (BaseObject object : objects)
+            internalObjects.put(object.getId(), object);
+        this.objects = Collections.unmodifiableMap(internalObjects);
     }
 
     @Override
