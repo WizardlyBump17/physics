@@ -7,12 +7,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class MapBaseObjectContainer extends BaseObjectContainer {
+public class MapObjectContainer extends BaseObjectContainer {
 
     private final @NotNull Map<Integer, BaseObject> objects = new HashMap<>();
     private final @NotNull Map<Integer, ObjectsGroup> groups = new HashMap<>();
 
-    public MapBaseObjectContainer(@NotNull UUID id) {
+    public MapObjectContainer(@NotNull UUID id) {
         super(id);
     }
 
