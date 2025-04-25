@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public interface ObjectGroup extends Tickable {
+public interface ObjectsGroup extends Tickable {
 
     int getId();
 
@@ -25,7 +25,7 @@ public interface ObjectGroup extends Tickable {
 
     boolean isCollidingWith(@NotNull BaseObject other);
 
-    default boolean isCollidingWith(@NotNull ObjectGroup otherGroup) {
+    default boolean isCollidingWith(@NotNull ObjectsGroup otherGroup) {
         for (BaseObject otherObject : otherGroup.getObjects().values())
             if (!hasObject(otherObject) && isCollidingWith(otherObject))
                 return true;

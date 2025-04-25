@@ -1,6 +1,6 @@
 package com.wizardlybump17.physics.three.container;
 
-import com.wizardlybump17.physics.three.group.ObjectGroup;
+import com.wizardlybump17.physics.three.group.ObjectsGroup;
 import com.wizardlybump17.physics.three.object.BaseObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,15 +10,10 @@ import java.util.*;
 public class MapBaseObjectContainer extends BaseObjectContainer {
 
     private final @NotNull Map<Integer, BaseObject> objects = new HashMap<>();
-    private final @NotNull Map<Integer, ObjectGroup> groups = new HashMap<>();
+    private final @NotNull Map<Integer, ObjectsGroup> groups = new HashMap<>();
 
     public MapBaseObjectContainer(@NotNull UUID id) {
         super(id);
-    }
-
-    @Override
-    public void addObject(@NotNull BaseObject object) {
-        objects.put(object.getId(), object);
     }
 
     @Override
@@ -32,23 +27,20 @@ public class MapBaseObjectContainer extends BaseObjectContainer {
     }
 
     @Override
-    public void removeObject(int id) {
-        objects.remove(id);
-    }
-
-    @Override
-    public @NotNull Collection<BaseObject> getLoadedObjects() {
+    public @NotNull Collection<BaseObject> getObjects() {
         return Collections.unmodifiableCollection(objects.values());
     }
 
     @Override
-    public @NotNull Collection<ObjectGroup> getLoadedGroups() {
+    public @NotNull Collection<ObjectsGroup> getObjectsGroups() {
         return Collections.unmodifiableCollection(groups.values());
     }
 
     @Override
-    public void addGroup(@NotNull ObjectGroup group) {
+    public void addGroup(@NotNull ObjectsGroup group) {
         groups.put(group.getId(), group);
+        for (BaseObject object : group.getObjects().values())
+            objects.put(object.getId(), object);
     }
 
     @Override
@@ -58,17 +50,16 @@ public class MapBaseObjectContainer extends BaseObjectContainer {
 
     @Override
     public void removeGroup(int groupId) {
-        groups.remove(groupId);
-    }
-
-    @Override
-    public int getLoadedObjectsCount() {
-        return objects.size();
+        ObjectsGroup removed = groups.remove(groupId);
+        if (removed != null) {
+            for (BaseObject object : removed.getObjects().values())
+                objects.remove(object.getId());
+        }
     }
 
     @Override
     public void tick() {
-        for (ObjectGroup group : groups.values())
+        for (ObjectsGroup group : groups.values())
             group.tick();
     }
 }

@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public abstract class AbstractObjectGroup implements ObjectGroup {
+public abstract class AbstractObjectsGroup implements ObjectsGroup {
 
     private static final @NotNull AtomicInteger BODY_COUNTER = new AtomicInteger(0); //what is your body count?
 
@@ -16,7 +16,7 @@ public abstract class AbstractObjectGroup implements ObjectGroup {
     private final @NotNull BaseObjectContainer container;
     private final @NotNull Map<Integer, BaseObject> objects;
 
-    public AbstractObjectGroup(@NotNull BaseObjectContainer container, @NotNull Map<Integer, BaseObject> objects) {
+    public AbstractObjectsGroup(@NotNull BaseObjectContainer container, @NotNull Map<Integer, BaseObject> objects) {
         this.container = container;
         this.objects = Collections.unmodifiableMap(objects);
     }
@@ -47,10 +47,10 @@ public abstract class AbstractObjectGroup implements ObjectGroup {
     @Override
     public abstract boolean isCollidingWith(@NotNull BaseObject other);
 
-    protected void onCollide(@NotNull ObjectGroup otherGroup) {
+    protected void onCollide(@NotNull ObjectsGroup otherGroup) {
     }
 
-    protected void onStopColliding(@NotNull ObjectGroup otherGroup) {
+    protected void onStopColliding(@NotNull ObjectsGroup otherGroup) {
     }
 
     @Override
@@ -59,7 +59,7 @@ public abstract class AbstractObjectGroup implements ObjectGroup {
     }
 
     protected void tickCollisions() {
-        for (ObjectGroup otherGroup : getContainer().getLoadedGroups()) {
+        for (ObjectsGroup otherGroup : getContainer().getObjectsGroups()) {
             if (id == otherGroup.getId())
                 continue;
 
