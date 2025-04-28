@@ -1,5 +1,6 @@
 package com.wizardlybump17.physics.three;
 
+import com.wizardlybump17.physics.Constants;
 import com.wizardlybump17.physics.util.MathUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -205,5 +206,13 @@ public record Vector3D(double x, double y, double z) {
         return rotateAroundX(Math.toRadians(angles.x))
                 .rotateAroundY(Math.toRadians(angles.y))
                 .rotateAroundZ(Math.toRadians(angles.z));
+    }
+
+    public @NotNull Vector3D inMetersPerTick() {
+        return divide(Constants.TICKS_PER_SECOND);
+    }
+
+    public @NotNull Vector3D inMetersPerSecond() {
+        return multiply(Constants.TICKS_PER_SECOND);
     }
 }
