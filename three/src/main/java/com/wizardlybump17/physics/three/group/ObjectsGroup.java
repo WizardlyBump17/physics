@@ -79,9 +79,10 @@ public abstract class ObjectsGroup implements Tickable {
     }
 
     protected void setCenter(@NotNull Vector3D center) {
+        Vector3D currentCenter = getCenter();
         for (BaseObject object : getObjects().values()) {
             Vector3D position = object.getPosition();
-            object.setShape(object.getShape().at(position.add(center.subtract(position))));
+            object.setShape(object.getShape().at(position.add(center.subtract(currentCenter))));
         }
     }
 
