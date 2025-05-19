@@ -27,16 +27,16 @@ public abstract class PhysicsObjectsGroup extends ObjectsGroup {
     }
 
     @Override
-    public boolean isCollidingWith(@NotNull BaseObject other) {
-        if (collidingWith.contains(other.getId()))
-            return true;
-
-        Shape otherShape = other.getShape();
+    public boolean isCollidingWith(@NotNull Shape shape) {
         for (BaseObject object : getObjects().values())
-            if (object.getShape().intersects(otherShape))
+            if (object.getShape().intersects(shape))
                 return true;
-
         return false;
+    }
+
+    @Override
+    public boolean isCollidingWith(@NotNull BaseObject other) {
+        return collidingWith.contains(other.getId()) || super.isCollidingWith(other);
     }
 
     @Override

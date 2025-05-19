@@ -4,6 +4,7 @@ import com.wizardlybump17.physics.Tickable;
 import com.wizardlybump17.physics.three.Vector3D;
 import com.wizardlybump17.physics.three.container.BaseObjectContainer;
 import com.wizardlybump17.physics.three.object.BaseObject;
+import com.wizardlybump17.physics.three.shape.Shape;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -51,11 +52,29 @@ public abstract class ObjectsGroup implements Tickable {
 
     public abstract boolean isPassable();
 
-    public abstract boolean isCollidingWith(@NotNull BaseObject other);
+    public abstract boolean isCollidingWith(@NotNull Shape shape);
+
+    public boolean isCollidingWith(@NotNull BaseObject object) {
+        return isCollidingWith(object.getShape());
+    }
 
     public boolean isCollidingWith(@NotNull ObjectsGroup otherGroup) {
         for (BaseObject otherObject : otherGroup.getObjects().values())
             if (isCollidingWith(otherObject))
+                return true;
+        return false;
+    }
+
+    public boolean isCollidingWithShapes(@NotNull Collection<Shape> shapes) {
+        for (Shape shape : shapes)
+            if (isCollidingWith(shape))
+                return true;
+        return false;
+    }
+
+    public boolean isCollidingWithObjects(@NotNull Collection<BaseObject> objects) {
+        for (BaseObject object : objects)
+            if (isCollidingWith(object))
                 return true;
         return false;
     }
