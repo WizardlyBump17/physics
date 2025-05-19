@@ -85,7 +85,7 @@ public abstract class ObjectsGroup implements Tickable {
     protected void onStopColliding(@NotNull ObjectsGroup otherGroup) {
     }
 
-    protected @NotNull Vector3D getCenter() {
+    public @NotNull Vector3D getCenter() {
         Map<Integer, BaseObject> objects = getObjects();
 
         Vector3D total = Vector3D.ZERO;
@@ -97,7 +97,7 @@ public abstract class ObjectsGroup implements Tickable {
         return total.divide(totalObjects);
     }
 
-    protected void setCenter(@NotNull Vector3D center) {
+    public void setCenter(@NotNull Vector3D center) {
         Vector3D currentCenter = getCenter();
         for (BaseObject object : getObjects().values()) {
             Vector3D position = object.getPosition();
