@@ -1,46 +1,32 @@
 package com.wizardlybump17.physics.three.container;
 
-import com.wizardlybump17.physics.three.group.ObjectsGroup;
-import com.wizardlybump17.physics.three.object.BaseObject;
+import com.wizardlybump17.physics.three.group.ShapesGroup;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class MapObjectContainer extends BaseObjectContainer {
+public class MapObjectContainer extends ShapesGroupContainer {
 
-    private final @NotNull Map<Integer, BaseObject> objects = new HashMap<>();
-    private final @NotNull Map<Integer, ObjectsGroup> groups = new HashMap<>();
+    private final @NotNull Map<Integer, ShapesGroup> groups = new HashMap<>();
 
     public MapObjectContainer(@NotNull UUID id) {
         super(id);
     }
 
     @Override
-    public @Nullable BaseObject getObject(int id) {
-        return objects.get(id);
+    public @Nullable ShapesGroup getGroup(int id) {
+        return groups.get(id);
     }
 
     @Override
-    public boolean hasObject(int id) {
-        return objects.containsKey(id);
-    }
-
-    @Override
-    public @NotNull Collection<BaseObject> getObjects() {
-        return Collections.unmodifiableCollection(objects.values());
-    }
-
-    @Override
-    public @NotNull Collection<ObjectsGroup> getObjectsGroups() {
+    public @NotNull Collection<ShapesGroup> getShapesGroups() {
         return Collections.unmodifiableCollection(groups.values());
     }
 
     @Override
-    public void addGroup(@NotNull ObjectsGroup group) {
+    public void addGroup(@NotNull ShapesGroup group) {
         groups.put(group.getId(), group);
-        for (BaseObject object : group.getObjects().values())
-            objects.put(object.getId(), object);
     }
 
     @Override
@@ -50,21 +36,12 @@ public class MapObjectContainer extends BaseObjectContainer {
 
     @Override
     public void removeGroup(int groupId) {
-        ObjectsGroup removed = groups.remove(groupId);
-        if (removed != null) {
-            for (BaseObject object : removed.getObjects().values())
-                objects.remove(object.getId());
-        }
-    }
-
-    @Override
-    public @Nullable ObjectsGroup getGroup(int groupId) {
-        return groups.get(groupId);
+        groups.remove(groupId);
     }
 
     @Override
     public void tick() {
-        for (ObjectsGroup group : groups.values())
+        for (ShapesGroup group : groups.values())
             group.tick();
     }
 }

@@ -1,46 +1,45 @@
 package com.wizardlybump17.physics.three.group;
 
 import com.wizardlybump17.physics.three.Vector3D;
-import com.wizardlybump17.physics.three.container.BaseObjectContainer;
-import com.wizardlybump17.physics.three.object.BaseObject;
+import com.wizardlybump17.physics.three.container.ShapesGroupContainer;
 import com.wizardlybump17.physics.three.shape.Shape;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-public abstract class PhysicsObjectsGroup extends ObjectsGroup {
+public abstract class PhysicsShapesGroup extends ShapesGroup {
 
     private final @NotNull Set<Integer> collidingWith = new HashSet<>();
     private @NotNull Vector3D acceleration;
     private @NotNull Vector3D velocity;
 
-    public PhysicsObjectsGroup(@NotNull BaseObjectContainer container, @NotNull Collection<BaseObject> objects) {
-        this(container, objects, Vector3D.ZERO, Vector3D.ZERO);
+    public PhysicsShapesGroup(@NotNull ShapesGroupContainer container, @NotNull List<Shape> shapes) {
+        this(container, shapes, Vector3D.ZERO, Vector3D.ZERO);
     }
 
-    public PhysicsObjectsGroup(@NotNull BaseObjectContainer container, @NotNull Collection<BaseObject> objects, @NotNull Vector3D acceleration, @NotNull Vector3D velocity) {
-        super(container, objects);
+    public PhysicsShapesGroup(@NotNull ShapesGroupContainer container, @NotNull List<Shape> shapes, @NotNull Vector3D acceleration, @NotNull Vector3D velocity) {
+        super(container, shapes);
         this.acceleration = acceleration;
         this.velocity = velocity;
     }
 
     @Override
     public boolean isCollidingWith(@NotNull Shape shape) {
-        for (BaseObject object : getObjects().values())
-            if (object.getShape().intersects(shape))
+        for (Shape thisShape : getShapes())
+            if (thisShape.intersects(shape))
                 return true;
         return false;
     }
 
     @Override
-    public boolean isCollidingWith(@NotNull BaseObject other) {
+    public boolean isCollidingWith(@NotNull ShapesGroup other) {
         return collidingWith.contains(other.getId()) || super.isCollidingWith(other);
     }
 
     @Override
-    protected void onCollide(@NotNull ObjectsGroup otherGroup) {
+    protected void onCollide(@NotNull ShapesGroup otherGroup) {
         collidingWith.add(otherGroup.getId());
 
         setAcceleration(Vector3D.ZERO);
@@ -48,7 +47,7 @@ public abstract class PhysicsObjectsGroup extends ObjectsGroup {
     }
 
     @Override
-    protected void onStopColliding(@NotNull ObjectsGroup otherGroup) {
+    protected void onStopColliding(@NotNull ShapesGroup otherGroup) {
         collidingWith.remove(otherGroup.getId());
     }
 
