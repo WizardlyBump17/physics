@@ -12,11 +12,13 @@ public final class Engine {
     private final @NotNull ShapesGroupsContainerRegistry shapesGroupsContainerRegistry;
     private final @NotNull Thread thread;
     private final @NotNull TaskScheduler scheduler;
+    private long ticksPerSecond;
 
-    public Engine(@NotNull ShapesGroupsContainerRegistry shapesGroupsContainerRegistry, @NotNull Thread thread, @NotNull TaskScheduler scheduler) {
+    public Engine(@NotNull ShapesGroupsContainerRegistry shapesGroupsContainerRegistry, @NotNull Thread thread, @NotNull TaskScheduler scheduler, long ticksPerSecond) {
         this.shapesGroupsContainerRegistry = shapesGroupsContainerRegistry;
         this.thread = thread;
         this.scheduler = scheduler;
+        setTicksPerSecond(ticksPerSecond);
     }
 
     public @NotNull ShapesGroupsContainerRegistry getShapesGroupsContainerRegistry() {
@@ -31,10 +33,10 @@ public final class Engine {
         return scheduler;
     }
 
-    public static @NotNull Engine start(@NotNull ShapesGroupsContainerRegistry objectContainerRegistry, @NotNull TaskScheduler scheduler) {
-        EngineThread thread = new EngineThread(scheduler, objectContainerRegistry);
+    public static @NotNull Engine start(@NotNull ShapesGroupsContainerRegistry objectContainerRegistry, @NotNull TaskScheduler scheduler, long ticksPerSecond) {
+        EngineThread thread = new EngineThread(scheduler, objectContainerRegistry, ticksPerSecond);
         thread.setRunning(true);
-        Engine engine = new Engine(objectContainerRegistry, thread, scheduler);
+        Engine engine = new Engine(objectContainerRegistry, thread, scheduler, ticksPerSecond);
         thread.start();
         return engine;
     }
@@ -47,5 +49,15 @@ public final class Engine {
             engineThread.setRunning(false);
         else
             thread.interrupt();
+    }
+
+    public long getTicksPerSecond() {
+        return ticksPerSecond;
+    }
+
+    public void setTicksPerSecond(long ticksPerSecond) {
+        if (ticksPerSecond < 0)
+            throw new IllegalArgumentException("The ticks per second can not be negative.");
+        this.ticksPerSecond = ticksPerSecond;
     }
 }

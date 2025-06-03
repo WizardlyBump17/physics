@@ -1,6 +1,5 @@
 package com.wizardlybump17.physics.three.thread;
 
-import com.wizardlybump17.physics.Constants;
 import com.wizardlybump17.physics.task.scheduler.TaskScheduler;
 import com.wizardlybump17.physics.three.registry.ShapesGroupsContainerRegistry;
 import org.jetbrains.annotations.NotNull;
@@ -15,11 +14,14 @@ public class EngineThread extends Thread {
     private final @NotNull TaskScheduler scheduler;
     private final @NotNull ShapesGroupsContainerRegistry containerRegistry;
     private volatile boolean running = true;
+    private volatile long ticksPerSecond;
+    private volatile long nanosPerTick;
 
-    public EngineThread(@NotNull TaskScheduler scheduler, @NotNull ShapesGroupsContainerRegistry containerRegistry) {
+    public EngineThread(@NotNull TaskScheduler scheduler, @NotNull ShapesGroupsContainerRegistry containerRegistry, long ticksPerSecond) {
         super("EngineThread-" + THREAD_COUNTER.getAndIncrement());
         this.scheduler = scheduler;
         this.containerRegistry = containerRegistry;
+        this.ticksPerSecond = ticksPerSecond;
     }
 
     public @NotNull TaskScheduler getScheduler() {
@@ -38,6 +40,22 @@ public class EngineThread extends Thread {
         this.running = running;
     }
 
+    public long getTicksPerSecond() {
+        return ticksPerSecond;
+    }
+
+    public void setTicksPerSecond(long ticksPerSecond) {
+        if (ticksPerSecond < 0)
+            throw new IllegalArgumentException("The ticks per second can not be negative.");
+
+        this.ticksPerSecond = ticksPerSecond;
+        nanosPerTick = 1_000_000_000 / ticksPerSecond;
+    }
+
+    public long getNanosPerTick() {
+        return nanosPerTick;
+    }
+
     @Override
     public void run() {
         while (running) {
@@ -45,7 +63,7 @@ public class EngineThread extends Thread {
             tickContainers();
 
             try {
-                Thread.sleep(Duration.ofNanos((long) Constants.NANOS_PER_TICK));
+                Thread.sleep(Duration.ofNanos(nanosPerTick));
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 Thread.currentThread().interrupt();
