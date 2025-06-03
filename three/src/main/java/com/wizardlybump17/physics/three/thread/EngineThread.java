@@ -21,7 +21,7 @@ public class EngineThread extends Thread {
         super("EngineThread-" + THREAD_COUNTER.getAndIncrement());
         this.scheduler = scheduler;
         this.containerRegistry = containerRegistry;
-        this.ticksPerSecond = ticksPerSecond;
+        setTicksPerSecond(ticksPerSecond);
     }
 
     public @NotNull TaskScheduler getScheduler() {
