@@ -14,9 +14,10 @@ public class PhysicsShapesGroup extends ShapesGroup {
     private final @NotNull Set<Integer> collidingWith = new HashSet<>();
     private @NotNull Vector3D acceleration;
     private @NotNull Vector3D velocity;
+    private @NotNull Vector3D rotation;
 
     public PhysicsShapesGroup(@NotNull ShapesGroupsContainer container, @NotNull List<Shape> shapes) {
-        this(container, shapes, Vector3D.ZERO, Vector3D.ZERO);
+        this(container, shapes, Vector3D.ZERO, Vector3D.ZERO, Vector3D.ZERO);
     }
 
     @Override
@@ -24,10 +25,11 @@ public class PhysicsShapesGroup extends ShapesGroup {
         return false;
     }
 
-    public PhysicsShapesGroup(@NotNull ShapesGroupsContainer container, @NotNull List<Shape> shapes, @NotNull Vector3D acceleration, @NotNull Vector3D velocity) {
+    public PhysicsShapesGroup(@NotNull ShapesGroupsContainer container, @NotNull List<Shape> shapes, @NotNull Vector3D acceleration, @NotNull Vector3D velocity, @NotNull Vector3D rotation) {
         super(container, shapes);
         this.acceleration = acceleration;
         this.velocity = velocity;
+        this.rotation = rotation;
     }
 
     @Override
@@ -110,5 +112,13 @@ public class PhysicsShapesGroup extends ShapesGroup {
      */
     public @NotNull Vector3D getMaxMovement(@NotNull Vector3D movement) {
         return movement;
+    }
+
+    public @NotNull Vector3D getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(@NotNull Vector3D rotation) {
+        this.rotation = rotation;
     }
 }
