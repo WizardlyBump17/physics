@@ -2,7 +2,7 @@ package com.wizardlybump17.physics.three.thread;
 
 import com.wizardlybump17.physics.Constants;
 import com.wizardlybump17.physics.task.scheduler.TaskScheduler;
-import com.wizardlybump17.physics.three.registry.BaseObjectContainerRegistry;
+import com.wizardlybump17.physics.three.registry.ShapesGroupsContainerRegistry;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -13,10 +13,10 @@ public class EngineThread extends Thread {
     private static final @NotNull AtomicInteger THREAD_COUNTER = new AtomicInteger();
 
     private final @NotNull TaskScheduler scheduler;
-    private final @NotNull BaseObjectContainerRegistry containerRegistry;
+    private final @NotNull ShapesGroupsContainerRegistry containerRegistry;
     private volatile boolean running = true;
 
-    public EngineThread(@NotNull TaskScheduler scheduler, @NotNull BaseObjectContainerRegistry containerRegistry) {
+    public EngineThread(@NotNull TaskScheduler scheduler, @NotNull ShapesGroupsContainerRegistry containerRegistry) {
         super("EngineThread-" + THREAD_COUNTER.getAndIncrement());
         this.scheduler = scheduler;
         this.containerRegistry = containerRegistry;
@@ -26,7 +26,7 @@ public class EngineThread extends Thread {
         return scheduler;
     }
 
-    public @NotNull BaseObjectContainerRegistry getContainerRegistry() {
+    public @NotNull ShapesGroupsContainerRegistry getContainerRegistry() {
         return containerRegistry;
     }
 

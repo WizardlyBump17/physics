@@ -1,7 +1,7 @@
 package com.wizardlybump17.physics.three.group;
 
 import com.wizardlybump17.physics.three.Vector3D;
-import com.wizardlybump17.physics.three.container.ShapesGroupContainer;
+import com.wizardlybump17.physics.three.container.ShapesGroupsContainer;
 import com.wizardlybump17.physics.three.shape.Shape;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,17 +9,22 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public abstract class PhysicsShapesGroup extends ShapesGroup {
+public class PhysicsShapesGroup extends ShapesGroup {
 
     private final @NotNull Set<Integer> collidingWith = new HashSet<>();
     private @NotNull Vector3D acceleration;
     private @NotNull Vector3D velocity;
 
-    public PhysicsShapesGroup(@NotNull ShapesGroupContainer container, @NotNull List<Shape> shapes) {
+    public PhysicsShapesGroup(@NotNull ShapesGroupsContainer container, @NotNull List<Shape> shapes) {
         this(container, shapes, Vector3D.ZERO, Vector3D.ZERO);
     }
 
-    public PhysicsShapesGroup(@NotNull ShapesGroupContainer container, @NotNull List<Shape> shapes, @NotNull Vector3D acceleration, @NotNull Vector3D velocity) {
+    @Override
+    public boolean isPassable() {
+        return false;
+    }
+
+    public PhysicsShapesGroup(@NotNull ShapesGroupsContainer container, @NotNull List<Shape> shapes, @NotNull Vector3D acceleration, @NotNull Vector3D velocity) {
         super(container, shapes);
         this.acceleration = acceleration;
         this.velocity = velocity;

@@ -6,11 +6,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class MapObjectContainer extends ShapesGroupContainer {
+public class MapShapesGroupsContainer extends ShapesGroupsContainer {
 
     private final @NotNull Map<Integer, ShapesGroup> groups = new HashMap<>();
 
-    public MapObjectContainer(@NotNull UUID id) {
+    public MapShapesGroupsContainer(@NotNull UUID id) {
         super(id);
     }
 

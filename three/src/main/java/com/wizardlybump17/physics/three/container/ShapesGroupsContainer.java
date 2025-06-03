@@ -8,11 +8,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.UUID;
 
-public abstract class ShapesGroupContainer implements Tickable {
+public abstract class ShapesGroupsContainer implements Tickable {
 
     private final @NotNull UUID id;
 
-    public ShapesGroupContainer(@NotNull UUID id) {
+    public ShapesGroupsContainer(@NotNull UUID id) {
         this.id = id;
     }
 

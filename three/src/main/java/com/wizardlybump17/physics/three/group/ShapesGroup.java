@@ -2,7 +2,7 @@ package com.wizardlybump17.physics.three.group;
 
 import com.wizardlybump17.physics.Tickable;
 import com.wizardlybump17.physics.three.Vector3D;
-import com.wizardlybump17.physics.three.container.ShapesGroupContainer;
+import com.wizardlybump17.physics.three.container.ShapesGroupsContainer;
 import com.wizardlybump17.physics.three.shape.Shape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -17,10 +17,10 @@ public abstract class ShapesGroup implements Tickable {
     private static final @NotNull AtomicInteger BODY_COUNTER = new AtomicInteger(0); //what is your body count?
 
     private final int id = BODY_COUNTER.getAndIncrement();
-    private final @NotNull ShapesGroupContainer container;
+    private final @NotNull ShapesGroupsContainer container;
     private final @NotNull List<Shape> shapes;
 
-    public ShapesGroup(@NotNull ShapesGroupContainer container, @NotNull List<Shape> shapes) {
+    public ShapesGroup(@NotNull ShapesGroupsContainer container, @NotNull List<Shape> shapes) {
         this.container = container;
         this.shapes = shapes;
     }
@@ -29,7 +29,7 @@ public abstract class ShapesGroup implements Tickable {
         return id;
     }
 
-    public final @NotNull ShapesGroupContainer getContainer() {
+    public final @NotNull ShapesGroupsContainer getContainer() {
         return container;
     }
 
