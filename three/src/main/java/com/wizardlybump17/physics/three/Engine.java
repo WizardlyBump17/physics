@@ -33,6 +33,7 @@ public final class Engine {
 
     public static @NotNull Engine start(@NotNull ShapesGroupsContainerRegistry objectContainerRegistry, @NotNull TaskScheduler scheduler) {
         EngineThread thread = new EngineThread(scheduler, objectContainerRegistry);
+        thread.setRunning(true);
         Engine engine = new Engine(objectContainerRegistry, thread, scheduler);
         thread.start();
         return engine;
