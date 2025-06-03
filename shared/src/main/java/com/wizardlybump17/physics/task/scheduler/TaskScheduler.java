@@ -14,8 +14,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TaskScheduler implements Tickable, Timeable {
+
+    private static final @NotNull Logger LOGGER = Logger.getLogger(TaskScheduler.class.getName());
 
     private final @NotNull AtomicLong currentTick = new AtomicLong();
     private long start;
@@ -113,39 +117,43 @@ public class TaskScheduler implements Tickable, Timeable {
     public void tick() {
         start();
 
-        long now = currentTick.get();
-
-        parse();
-        while (!pendingTasks.isEmpty()) {
-            RegisteredTaskImpl task = pendingTasks.pollLast();
-            if (task.isCancelled()) {
-                parse();
-                continue;
-            }
-
-            if (task.getNextRun() > now) {
-                tempPendingTasks.add(task);
-                parse();
-                continue;
-            }
-
-            task.run();
-
-            if (!task.isCancelled() && task.isRepeatable()) {
-                task.setNextRun(now + task.getPeriod());
-                tempPendingTasks.add(task);
-            } else {
-                task.cancel();
-                runningTasks.remove(task.getId());
-            }
+        try {
+            long now = currentTick.get();
 
             parse();
+            while (!pendingTasks.isEmpty()) {
+                RegisteredTaskImpl task = pendingTasks.pollLast();
+                if (task.isCancelled()) {
+                    parse();
+                    continue;
+                }
+
+                if (task.getNextRun() > now) {
+                    tempPendingTasks.add(task);
+                    parse();
+                    continue;
+                }
+
+                task.run();
+
+                if (!task.isCancelled() && task.isRepeatable()) {
+                    task.setNextRun(now + task.getPeriod());
+                    tempPendingTasks.add(task);
+                } else {
+                    task.cancel();
+                    runningTasks.remove(task.getId());
+                }
+
+                parse();
+            }
+
+            pendingTasks.addAll(tempPendingTasks);
+            tempPendingTasks.clear();
+
+            currentTick.getAndIncrement();
+        } catch (Throwable throwable) {
+            LOGGER.log(Level.SEVERE, "Error while ticking the scheduler", throwable);
         }
-
-        pendingTasks.addAll(tempPendingTasks);
-        tempPendingTasks.clear();
-
-        currentTick.getAndIncrement();
 
         end();
     }

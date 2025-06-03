@@ -5,8 +5,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MapShapesGroupsContainer extends ShapesGroupsContainer {
+
+    private static final @NotNull Logger LOGGER = Logger.getLogger(MapShapesGroupsContainer.class.getName());
 
     private final @NotNull Map<Integer, ShapesGroup> groups = new HashMap<>();
 
@@ -41,7 +45,11 @@ public class MapShapesGroupsContainer extends ShapesGroupsContainer {
 
     @Override
     public void tick() {
-        for (ShapesGroup group : groups.values())
-            group.tick();
+        try {
+            for (ShapesGroup group : groups.values())
+                group.tick();
+        } catch (Throwable throwable) {
+            LOGGER.log(Level.SEVERE, "Error while ticking the container " + getId(), throwable);
+        }
     }
 }
