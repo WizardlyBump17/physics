@@ -5,10 +5,8 @@ import com.wizardlybump17.physics.three.Vector3D;
 import com.wizardlybump17.physics.three.container.ShapesGroupsContainer;
 import com.wizardlybump17.physics.three.shape.Shape;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -33,8 +31,8 @@ public abstract class ShapesGroup implements Tickable {
         return container;
     }
 
-    public @NotNull @Unmodifiable List<Shape> getShapes() {
-        return Collections.unmodifiableList(shapes);
+    public @NotNull List<Shape> getShapes() {
+        return shapes;
     }
 
     public abstract boolean isPassable();
