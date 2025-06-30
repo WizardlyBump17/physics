@@ -1,18 +1,20 @@
 package com.wizardlybump17.physics.three.group;
 
+import com.wizardlybump17.physics.Id;
 import com.wizardlybump17.physics.three.Vector3D;
 import com.wizardlybump17.physics.three.container.ShapesGroupsContainer;
+import com.wizardlybump17.physics.three.physics.Acceleration;
 import com.wizardlybump17.physics.three.shape.Shape;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class PhysicsShapesGroup extends ShapesGroup {
 
     private final @NotNull Set<Integer> collidingWith = new HashSet<>();
-    private @NotNull Vector3D acceleration;
+    private final @NotNull Map<Id, Acceleration> accelerations = new HashMap<>();
     private @NotNull Vector3D velocity;
     private @NotNull Vector3D rotation;
 
@@ -20,16 +22,26 @@ public class PhysicsShapesGroup extends ShapesGroup {
         this(container, shapes, Vector3D.ZERO, Vector3D.ZERO, Vector3D.ZERO);
     }
 
-    @Override
-    public boolean isPassable() {
-        return false;
+    public PhysicsShapesGroup(@NotNull ShapesGroupsContainer container, @NotNull List<Shape> shapes, @NotNull Collection<Acceleration> accelerations, @NotNull Vector3D velocity, @NotNull Vector3D rotation) {
+        super(container, shapes);
+        accelerations.forEach(this::addAcceleration);
+        this.velocity = velocity;
+        this.rotation = rotation;
     }
 
     public PhysicsShapesGroup(@NotNull ShapesGroupsContainer container, @NotNull List<Shape> shapes, @NotNull Vector3D acceleration, @NotNull Vector3D velocity, @NotNull Vector3D rotation) {
-        super(container, shapes);
-        this.acceleration = acceleration;
-        this.velocity = velocity;
-        this.rotation = rotation;
+        this(
+                container,
+                shapes,
+                Collections.singletonList(Acceleration.generic(acceleration)),
+                velocity,
+                rotation
+        );
+    }
+
+    @Override
+    public boolean isPassable() {
+        return false;
     }
 
     @Override
@@ -49,7 +61,7 @@ public class PhysicsShapesGroup extends ShapesGroup {
     protected void onCollide(@NotNull ShapesGroup otherGroup) {
         collidingWith.add(otherGroup.getId());
 
-        setAcceleration(Vector3D.ZERO);
+        setTotalAcceleration(Vector3D.ZERO);
         setVelocity(Vector3D.ZERO);
     }
 
@@ -59,17 +71,55 @@ public class PhysicsShapesGroup extends ShapesGroup {
     }
 
     /**
-     * @return the acceleration of this group, in meters per tick
+     * @return the total acceleration of this group, in meters per tick
      */
-    public @NotNull Vector3D getAcceleration() {
-        return acceleration;
+    public @NotNull Vector3D getTotalAcceleration() {
+        Vector3D totalAcceleration = Vector3D.ZERO;
+        for (Acceleration acceleration : accelerations.values())
+            totalAcceleration = totalAcceleration.add(acceleration.acceleration());
+        return totalAcceleration;
     }
 
     /**
      * @param acceleration the acceleration to set, in meters per tick
      */
-    public void setAcceleration(@NotNull Vector3D acceleration) {
-        this.acceleration = acceleration;
+    public void setTotalAcceleration(@NotNull Vector3D acceleration) {
+        accelerations.clear();
+        setAcceleration(Acceleration.generic(acceleration));
+    }
+
+    public @Nullable Acceleration getAcceleration(@NotNull Id id) {
+        return accelerations.get(id);
+    }
+
+    public void addAcceleration(@NotNull Acceleration acceleration) {
+        Acceleration existing = getAcceleration(acceleration.id());
+        if (existing != null)
+            acceleration = acceleration.add(existing.acceleration());
+        setAcceleration(acceleration);
+    }
+
+    public void subtractAcceleration(@NotNull Acceleration acceleration) {
+        Acceleration existing = getAcceleration(acceleration.id());
+        if (existing != null)
+            acceleration = acceleration.subtract(existing.acceleration());
+        setAcceleration(acceleration);
+    }
+
+    public void setAcceleration(@NotNull Acceleration acceleration) {
+        accelerations.put(acceleration.id(), acceleration);
+    }
+
+    public void clearAcceleration(@NotNull Id id) {
+        accelerations.remove(id);
+    }
+
+    public void clearAccelerations() {
+        accelerations.clear();
+    }
+
+    public @NotNull @UnmodifiableView Map<Id, Acceleration> getAccelerations() {
+        return Collections.unmodifiableMap(accelerations);
     }
 
     /**
@@ -93,7 +143,7 @@ public class PhysicsShapesGroup extends ShapesGroup {
     }
 
     protected void tickMovement() {
-        velocity = getMaxMovement(velocity.add(acceleration));
+        velocity = getMaxMovement(velocity.add(getTotalAcceleration()));
         setCenter(getCenter().add(velocity));
     }
 
