@@ -110,6 +110,11 @@ public class PhysicsShapesGroup extends ShapesGroup {
         accelerations.put(acceleration.id(), acceleration);
     }
 
+    public void setAcceleration(@NotNull Vector3D acceleration) {
+        accelerations.clear();
+        setAcceleration(Acceleration.generic(acceleration));
+    }
+
     public void clearAcceleration(@NotNull Id id) {
         accelerations.remove(id);
     }
