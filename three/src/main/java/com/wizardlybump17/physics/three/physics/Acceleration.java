@@ -25,4 +25,8 @@ public record Acceleration(@NotNull Id id, @NotNull Vector3D acceleration) {
     public @NotNull Acceleration divide(@NotNull Vector3D value) {
         return new Acceleration(id, this.acceleration.divide(value));
     }
+
+    public static @NotNull Acceleration generic(@NotNull Vector3D value) {
+        return new Acceleration(Id.GENERIC, value);
+    }
 }
