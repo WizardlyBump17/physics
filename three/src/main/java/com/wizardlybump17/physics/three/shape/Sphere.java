@@ -69,4 +69,9 @@ public class Sphere extends Shape {
     public @NotNull Sphere withRadius(double radius) {
         return new Sphere(position, radius);
     }
+
+    @Override
+    public @NotNull Sphere clone() {
+        return new Sphere(position, radius);
+    }
 }

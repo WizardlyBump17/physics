@@ -95,4 +95,9 @@ public class Cube extends Shape {
     public @NotNull Vector3D getMax() {
         return max;
     }
+
+    @Override
+    public @NotNull Cube clone() {
+        return new Cube(min, max);
+    }
 }

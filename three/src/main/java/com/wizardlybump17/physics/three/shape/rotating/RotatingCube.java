@@ -95,4 +95,9 @@ public class RotatingCube extends Shape {
 
         return result;
     }
+
+    @Override
+    public @NotNull RotatingCube clone() {
+        return new RotatingCube(position, points, rotation, true);
+    }
 }

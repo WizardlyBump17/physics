@@ -3,7 +3,7 @@ package com.wizardlybump17.physics.three.shape;
 import com.wizardlybump17.physics.three.Vector3D;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class Shape {
+public abstract class Shape implements Cloneable {
 
     public abstract @NotNull Vector3D getPosition();
 
@@ -14,4 +14,6 @@ public abstract class Shape {
     public abstract boolean hasPoint(@NotNull Vector3D point);
 
     public abstract @NotNull Shape at(@NotNull Vector3D newPosition);
+
+    public abstract @NotNull Shape clone();
 }
