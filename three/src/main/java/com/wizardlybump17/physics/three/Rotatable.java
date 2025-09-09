@@ -15,4 +15,16 @@ public interface Rotatable {
     default @NotNull Rotatable subtractRotation(@NotNull Vector3D rotation) {
         return setRotation(getRotation().subtract(rotation));
     }
+
+    @NotNull Vector3D getPivot();
+
+    @NotNull Rotatable setPivot(@NotNull Vector3D pivot);
+
+    default @NotNull Rotatable addPivot(@NotNull Vector3D pivot) {
+        return setPivot(getPivot().add(pivot));
+    }
+
+    default @NotNull Rotatable subtractPivot(@NotNull Vector3D pivot) {
+        return setPivot(getPivot().subtract(pivot));
+    }
 }

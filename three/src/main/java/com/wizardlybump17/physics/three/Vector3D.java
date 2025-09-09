@@ -206,4 +206,28 @@ public record Vector3D(double x, double y, double z) {
                 .rotateAroundY(Math.toRadians(angles.y))
                 .rotateAroundZ(Math.toRadians(angles.z));
     }
+
+    public @NotNull Vector3D rotateAroundX(double radians, @NotNull Vector3D pivot) {
+        return subtract(pivot)
+                .rotateAroundX(radians)
+                .add(pivot);
+    }
+
+    public @NotNull Vector3D rotateAroundY(double radians, @NotNull Vector3D pivot) {
+        return subtract(pivot)
+                .rotateAroundY(radians)
+                .add(pivot);
+    }
+
+    public @NotNull Vector3D rotateAroundZ(double radians, @NotNull Vector3D pivot) {
+        return subtract(pivot)
+                .rotateAroundZ(radians)
+                .add(pivot);
+    }
+
+    public @NotNull Vector3D rotateAround(@NotNull Vector3D angles, @NotNull Vector3D pivot) {
+        return rotateAroundX(Math.toRadians(angles.x), pivot)
+                .rotateAroundY(Math.toRadians(angles.y), pivot)
+                .rotateAroundZ(Math.toRadians(angles.z), pivot);
+    }
 }

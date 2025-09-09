@@ -53,4 +53,19 @@ public record ShapesGroup(@NotNull Id id,
                 position, pivot, rotation
         );
     }
+
+    @Override
+    public @NotNull Vector3D getPivot() {
+        return pivot;
+    }
+
+    @Override
+    public @NotNull ShapesGroup setPivot(@NotNull Vector3D pivot) {
+        return new ShapesGroup(
+                id,
+                shapes,
+                parent, children,
+                position, pivot, rotation
+        );
+    }
 }
