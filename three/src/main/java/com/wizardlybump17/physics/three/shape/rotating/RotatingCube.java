@@ -1,5 +1,6 @@
 package com.wizardlybump17.physics.three.shape.rotating;
 
+import com.wizardlybump17.physics.three.Rotatable;
 import com.wizardlybump17.physics.three.Vector3D;
 import com.wizardlybump17.physics.three.shape.Shape;
 import org.jetbrains.annotations.NotNull;
@@ -9,7 +10,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class RotatingCube extends Shape {
+public class RotatingCube extends Shape implements Rotatable {
 
     private final @NotNull Vector3D position;
     private final @NotNull List<Vector3D> points;
@@ -66,14 +67,17 @@ public class RotatingCube extends Shape {
         return rotation;
     }
 
-    public @NotNull RotatingCube withRotation(@NotNull Vector3D rotation) {
+    @Override
+    public @NotNull RotatingCube setRotation(@NotNull Vector3D rotation) {
         return new RotatingCube(position, points, rotation, true);
     }
 
+    @Override
     public @NotNull RotatingCube addRotation(@NotNull Vector3D rotation) {
         return new RotatingCube(position, points, this.rotation.add(rotation), true);
     }
 
+    @Override
     public @NotNull RotatingCube subtractRotation(@NotNull Vector3D rotation) {
         return new RotatingCube(position, points, this.rotation.subtract(rotation), true);
     }
