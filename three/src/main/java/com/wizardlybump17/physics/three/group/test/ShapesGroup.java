@@ -37,13 +37,18 @@ public class ShapesGroup implements Rotatable {
                         @NotNull Vector3D position, @NotNull Vector3D transformedPosition,
                         @NotNull Vector3D pivot, @NotNull Vector3D rotation) {
         this.id = id;
+
         this.shapes = shapes;
         this.transformedShapes = transformedShapes;
+
         this.parent = parent;
+
         this.children = children;
         this.transformedChildren = transformedChildren;
+
         this.position = position;
         this.transformedPosition = transformedPosition;
+
         this.pivot = pivot;
         this.rotation = rotation;
     }
