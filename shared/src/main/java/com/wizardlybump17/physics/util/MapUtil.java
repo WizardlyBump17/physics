@@ -23,4 +23,19 @@ public final class MapUtil {
     public static <K, V> @NotNull Map<K, V> fromCollection(@NotNull Collection<V> collection, @NotNull Function<V, K> keyExtractor) {
         return fromCollection(HashMap::new, collection, keyExtractor);
     }
+
+    public static <K, V> @NotNull Map<K, V> replaceValues(@NotNull Supplier<Map<K, V>> mapSupplier, @NotNull Map<K, V> map, @NotNull Function<V, V> modifier) {
+        Map<K, V> newMap = mapSupplier.get();
+        map.forEach((k, v) -> newMap.put(k, modifier.apply(v)));
+        return newMap;
+    }
+
+    public static <K, V> @NotNull Map<K, V> replaceValues(@NotNull Map<K, V> map, @NotNull Function<V, V> modifier) {
+        return replaceValues(HashMap::new, map, modifier);
+    }
+
+    public static <K, V> @NotNull Map<K, V> replaceValuesDirect(@NotNull Map<K, V> map, @NotNull Function<V, V> modifier) {
+        map.replaceAll((k, v) -> modifier.apply(v));
+        return map;
+    }
 }

@@ -11,31 +11,102 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.Collection;
 import java.util.Map;
 
-/**
- * @param id
- * @param shapes
- * @param parent
- * @param children
- * @param position the center of the group
- * @param pivot the point around which the group rotates
- * @param rotation
- */
-public record ShapesGroup(@NotNull Id id,
-                          @Unmodifiable @NotNull Map<Id, IdentifiedShape> shapes,
-                          @Nullable ShapesGroup parent, @NotNull @Unmodifiable Map<Id, ShapesGroup> children,
-                          @NotNull Vector3D position, @NotNull Vector3D pivot, @NotNull Vector3D rotation) implements Rotatable {
+public class ShapesGroup implements Rotatable {
 
-    public ShapesGroup {
-        shapes = Map.copyOf(shapes);
-        children = Map.copyOf(children);
+    private final @NotNull Id id;
+
+    private final @Unmodifiable @NotNull Map<Id, IdentifiedShape> shapes;
+    private final @Unmodifiable @NotNull Map<Id, IdentifiedShape> transformedShapes;
+
+    private final @Nullable ShapesGroup parent;
+
+    private final @NotNull @Unmodifiable Map<Id, ShapesGroup> children;
+    private final @Unmodifiable @NotNull Map<Id, ShapesGroup> transformedChildren;
+
+    private final @NotNull Vector3D position;
+    private final @NotNull Vector3D transformedPosition;
+
+    private final @NotNull Vector3D pivot;
+    private final @NotNull Vector3D rotation;
+
+    private ShapesGroup(@NotNull Id id,
+                        @Unmodifiable @NotNull Map<Id, IdentifiedShape> shapes, @Unmodifiable @NotNull Map<Id, IdentifiedShape> transformedShapes,
+                        @Nullable ShapesGroup parent,
+                        @Unmodifiable @NotNull Map<Id, ShapesGroup> children, @Unmodifiable @NotNull Map<Id, ShapesGroup> transformedChildren,
+                        @NotNull Vector3D position, @NotNull Vector3D transformedPosition,
+                        @NotNull Vector3D pivot, @NotNull Vector3D rotation) {
+        this.id = id;
+        this.shapes = shapes;
+        this.transformedShapes = transformedShapes;
+        this.parent = parent;
+        this.children = children;
+        this.transformedChildren = transformedChildren;
+        this.position = position;
+        this.transformedPosition = transformedPosition;
+        this.pivot = pivot;
+        this.rotation = rotation;
     }
 
+    /**
+     * @param id
+     * @param shapes
+     * @param parent
+     * @param children
+     * @param position the center of the group
+     * @param pivot    the point around which the group rotates
+     * @param rotation
+     */
     public ShapesGroup(@NotNull Id id, @NotNull Collection<IdentifiedShape> shapes, @Nullable ShapesGroup parent, @NotNull Collection<ShapesGroup> children, @NotNull Vector3D position, @NotNull Vector3D pivot, @NotNull Vector3D rotation) {
         this(
                 id,
-                MapUtil.fromCollection(shapes, IdentifiedShape::id),
-                parent, MapUtil.fromCollection(children, ShapesGroup::id),
-                position, pivot, rotation
+                Map.copyOf(MapUtil.fromCollection(shapes, IdentifiedShape::id)), Map.of(),
+                parent,
+                Map.copyOf(MapUtil.fromCollection(children, ShapesGroup::getId)), Map.of(),
+                position, position.rotateAround(rotation, pivot),
+                pivot, rotation
+        );
+    }
+
+    public @NotNull Id getId() {
+        return id;
+    }
+
+    public @Unmodifiable @NotNull Map<Id, IdentifiedShape> getShapes() {
+        return shapes;
+    }
+
+    public @Unmodifiable @NotNull Map<Id, IdentifiedShape> getTransformedShapes() {
+        return transformedShapes;
+    }
+
+    public @Nullable ShapesGroup getParent() {
+        return parent;
+    }
+
+    public @Unmodifiable @NotNull Map<Id, ShapesGroup> getChildren() {
+        return children;
+    }
+
+    public @Unmodifiable @NotNull Map<Id, ShapesGroup> getTransformedChildren() {
+        return transformedChildren;
+    }
+
+    public @NotNull Vector3D getPosition() {
+        return position;
+    }
+
+    public @NotNull Vector3D getTransformedPosition() {
+        return transformedPosition;
+    }
+
+    public @NotNull ShapesGroup at(@NotNull Vector3D position) {
+        return new ShapesGroup(
+                id,
+                shapes, Map.of(),
+                parent,
+                children, Map.of(),
+                position, position.rotateAround(position, pivot),
+                pivot, rotation
         );
     }
 
@@ -48,9 +119,11 @@ public record ShapesGroup(@NotNull Id id,
     public @NotNull ShapesGroup setRotation(@NotNull Vector3D rotation) {
         return new ShapesGroup(
                 id,
-                shapes,
-                parent, children,
-                position, pivot, rotation
+                shapes, Map.of(),
+                parent,
+                children, Map.of(),
+                position, position.rotateAround(position, pivot),
+                pivot, rotation
         );
     }
 
@@ -63,9 +136,11 @@ public record ShapesGroup(@NotNull Id id,
     public @NotNull ShapesGroup setPivot(@NotNull Vector3D pivot) {
         return new ShapesGroup(
                 id,
-                shapes,
-                parent, children,
-                position, pivot, rotation
+                shapes, Map.of(),
+                parent,
+                children, Map.of(),
+                position, position.rotateAround(position, pivot),
+                pivot, rotation
         );
     }
 }

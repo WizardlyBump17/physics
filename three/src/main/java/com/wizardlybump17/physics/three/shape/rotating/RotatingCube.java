@@ -30,17 +30,9 @@ public class RotatingCube extends Shape implements Rotatable {
         this.position = position;
         this.points = Collections.unmodifiableList(sorted ? points : sortPoints(points));
         this.rotation = rotation;
-
-        if (pivot.isZero()) {
-            transformedPoints = points.stream()
-                    .map(point -> position.add(point.rotateAround(rotation)))
-                    .toList();
-        } else {
-            transformedPoints = points.stream()
+        transformedPoints = points.stream()
                     .map(point -> position.add(point.rotateAround(rotation, pivot)))
                     .toList();
-        }
-
         this.pivot = pivot;
     }
 
