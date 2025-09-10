@@ -43,6 +43,10 @@ public class RotatingCube extends Shape implements Rotatable {
         return position;
     }
 
+    public @NotNull Vector3D getTransformedPosition() {
+        return transformedPosition;
+    }
+
     @Override
     public double getVolume() {
         return 0;
