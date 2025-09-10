@@ -13,21 +13,23 @@ import java.util.List;
 public class RotatingCube extends Shape implements Rotatable {
 
     private final @NotNull Vector3D position;
+    private final @NotNull Vector3D transformedPosition;
     private final @NotNull List<Vector3D> points;
     private final @NotNull List<Vector3D> transformedPoints;
     private final @NotNull Vector3D rotation;
     private final @NotNull Vector3D pivot;
 
     public RotatingCube(@NotNull Vector3D position, @NotNull List<Vector3D> points, @NotNull Vector3D rotation, @NotNull Vector3D pivot) {
-        this(position, points, rotation, pivot, false);
+        this(position, position.rotateAround(rotation, pivot), points, rotation, pivot, false);
     }
 
     public RotatingCube(@NotNull Vector3D position, @NotNull List<Vector3D> points, @NotNull Vector3D rotation) {
-        this(position, points, rotation, Vector3D.ZERO, false);
+        this(position, position, points, rotation, position, false);
     }
 
-    private RotatingCube(@NotNull Vector3D position, @NotNull List<Vector3D> points, @NotNull Vector3D rotation, @NotNull Vector3D pivot, boolean sorted) {
+    private RotatingCube(@NotNull Vector3D position, @NotNull Vector3D transformedPosition, @NotNull List<Vector3D> points, @NotNull Vector3D rotation, @NotNull Vector3D pivot, boolean sorted) {
         this.position = position;
+        this.transformedPosition = transformedPosition;
         this.points = Collections.unmodifiableList(sorted ? points : sortPoints(points));
         this.rotation = rotation;
         transformedPoints = points.stream()
@@ -58,7 +60,7 @@ public class RotatingCube extends Shape implements Rotatable {
 
     @Override
     public @NotNull RotatingCube at(@NotNull Vector3D newPosition) {
-        return new RotatingCube(newPosition, points, rotation, pivot, true);
+        return new RotatingCube(newPosition, newPosition.rotateAround(rotation, pivot), points, rotation, pivot, true);
     }
 
     public @NotNull List<Vector3D> getPoints() {
@@ -75,17 +77,19 @@ public class RotatingCube extends Shape implements Rotatable {
 
     @Override
     public @NotNull RotatingCube setRotation(@NotNull Vector3D rotation) {
-        return new RotatingCube(position, points, rotation, pivot, true);
+        return new RotatingCube(position, position.rotateAround(rotation, pivot), points, rotation, pivot, true);
     }
 
     @Override
     public @NotNull RotatingCube addRotation(@NotNull Vector3D rotation) {
-        return new RotatingCube(position, points, this.rotation.add(rotation), pivot, true);
+        Vector3D newRotation = this.rotation.add(rotation);
+        return new RotatingCube(position, position.rotateAround(newRotation, pivot), points, newRotation, pivot, true);
     }
 
     @Override
     public @NotNull RotatingCube subtractRotation(@NotNull Vector3D rotation) {
-        return new RotatingCube(position, points, this.rotation.subtract(rotation), pivot, true);
+        Vector3D newRotation = this.rotation.subtract(rotation);
+        return new RotatingCube(position, position.rotateAround(newRotation, pivot), points, newRotation, pivot, true);
     }
 
     public @NotNull RotatingCube withPoints(@NotNull List<Vector3D> points) {
@@ -108,7 +112,7 @@ public class RotatingCube extends Shape implements Rotatable {
 
     @Override
     public @NotNull RotatingCube clone() {
-        return new RotatingCube(position, points, rotation, pivot, true);
+        return new RotatingCube(position, transformedPosition, points, rotation, pivot, true);
     }
 
     @Override
@@ -118,16 +122,18 @@ public class RotatingCube extends Shape implements Rotatable {
 
     @Override
     public @NotNull Rotatable setPivot(@NotNull Vector3D pivot) {
-        return new RotatingCube(position, points, rotation, pivot, true);
+        return new RotatingCube(position, position.rotateAround(rotation, pivot), points, rotation, pivot, true);
     }
 
     @Override
     public @NotNull Rotatable addPivot(@NotNull Vector3D pivot) {
-        return new RotatingCube(position, points, rotation, this.pivot.add(pivot), true);
+        Vector3D newPivot = this.pivot.add(pivot);
+        return new RotatingCube(position, position.rotateAround(rotation, newPivot), points, rotation, newPivot, true);
     }
 
     @Override
     public @NotNull Rotatable subtractPivot(@NotNull Vector3D pivot) {
-        return new RotatingCube(position, points, rotation, this.pivot.subtract(pivot), true);
+        Vector3D newPivot = this.pivot.subtract(pivot);
+        return new RotatingCube(position, position.rotateAround(rotation, newPivot), points, rotation, newPivot, true);
     }
 }
