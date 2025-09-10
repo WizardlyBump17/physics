@@ -7,22 +7,22 @@ import com.wizardlybump17.physics.three.shape.Shape;
 import com.wizardlybump17.physics.util.MapUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 public class ShapesGroup implements Rotatable {
 
     private final @NotNull Id id;
 
-    private final @Unmodifiable @NotNull Map<Id, Shape> shapes;
-    private final @Unmodifiable @NotNull Map<Id, Shape> transformedShapes;
+    private final @NotNull Map<Id, Shape> shapes = new HashMap<>();
+    private final @NotNull Map<Id, Shape> transformedShapes = new HashMap<>();
 
     private final @Nullable ShapesGroup parent;
 
-    private final @NotNull @Unmodifiable Map<Id, ShapesGroup> children;
-    private final @Unmodifiable @NotNull Map<Id, ShapesGroup> transformedChildren;
+    private final @NotNull Map<Id, ShapesGroup> children = new HashMap<>();
+    private final @NotNull Map<Id, ShapesGroup> transformedChildren = new HashMap<>();
 
     private final @NotNull Vector3D position;
     private final @NotNull Vector3D transformedPosition;
@@ -31,20 +31,20 @@ public class ShapesGroup implements Rotatable {
     private final @NotNull Vector3D rotation;
 
     private ShapesGroup(@NotNull Id id,
-                        @Unmodifiable @NotNull Map<Id, Shape> shapes, @Unmodifiable @NotNull Map<Id, Shape> transformedShapes,
+                        @NotNull Map<Id, Shape> shapes, @NotNull Map<Id, Shape> transformedShapes,
                         @Nullable ShapesGroup parent,
-                        @Unmodifiable @NotNull Map<Id, ShapesGroup> children, @Unmodifiable @NotNull Map<Id, ShapesGroup> transformedChildren,
+                        @NotNull Map<Id, ShapesGroup> children, @NotNull Map<Id, ShapesGroup> transformedChildren,
                         @NotNull Vector3D position, @NotNull Vector3D transformedPosition,
                         @NotNull Vector3D pivot, @NotNull Vector3D rotation) {
         this.id = id;
 
-        this.shapes = shapes;
-        this.transformedShapes = transformedShapes;
+        this.shapes.putAll(shapes);
+        this.transformedShapes.putAll(transformedShapes);
 
         this.parent = parent;
 
-        this.children = children;
-        this.transformedChildren = transformedChildren;
+        this.children.putAll(children);
+        this.transformedChildren.putAll(transformedChildren);
 
         this.position = position;
         this.transformedPosition = transformedPosition;
@@ -77,11 +77,11 @@ public class ShapesGroup implements Rotatable {
         return id;
     }
 
-    public @Unmodifiable @NotNull Map<Id, Shape> getShapes() {
+    public @NotNull Map<Id, Shape> getShapes() {
         return shapes;
     }
 
-    public @Unmodifiable @NotNull Map<Id, Shape> getTransformedShapes() {
+    public @NotNull Map<Id, Shape> getTransformedShapes() {
         return transformedShapes;
     }
 
@@ -89,11 +89,11 @@ public class ShapesGroup implements Rotatable {
         return parent;
     }
 
-    public @Unmodifiable @NotNull Map<Id, ShapesGroup> getChildren() {
+    public @NotNull Map<Id, ShapesGroup> getChildren() {
         return children;
     }
 
-    public @Unmodifiable @NotNull Map<Id, ShapesGroup> getTransformedChildren() {
+    public @NotNull Map<Id, ShapesGroup> getTransformedChildren() {
         return transformedChildren;
     }
 
