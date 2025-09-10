@@ -33,7 +33,7 @@ public class RotatingCube extends Shape implements Rotatable {
         this.points = Collections.unmodifiableList(sorted ? points : sortPoints(points));
         this.rotation = rotation;
         transformedPoints = points.stream()
-                    .map(point -> position.add(point.rotateAround(rotation)))
+                    .map(point -> transformedPosition.add(point.rotateAround(rotation)))
                     .toList();
         this.pivot = pivot;
     }
@@ -81,8 +81,7 @@ public class RotatingCube extends Shape implements Rotatable {
 
     @Override
     public @NotNull RotatingCube setRotation(@NotNull Vector3D rotation) {
-        RotatingCube rotatingCube = new RotatingCube(position, position.rotateAround(rotation, pivot), points, rotation, pivot, true);
-        return rotatingCube;
+        return new RotatingCube(position, position.rotateAround(rotation, pivot), points, rotation, pivot, true);
     }
 
     @Override
@@ -126,18 +125,18 @@ public class RotatingCube extends Shape implements Rotatable {
     }
 
     @Override
-    public @NotNull Rotatable setPivot(@NotNull Vector3D pivot) {
+    public @NotNull RotatingCube setPivot(@NotNull Vector3D pivot) {
         return new RotatingCube(position, position.rotateAround(rotation, pivot), points, rotation, pivot, true);
     }
 
     @Override
-    public @NotNull Rotatable addPivot(@NotNull Vector3D pivot) {
+    public @NotNull RotatingCube addPivot(@NotNull Vector3D pivot) {
         Vector3D newPivot = this.pivot.add(pivot);
         return new RotatingCube(position, position.rotateAround(rotation, newPivot), points, rotation, newPivot, true);
     }
 
     @Override
-    public @NotNull Rotatable subtractPivot(@NotNull Vector3D pivot) {
+    public @NotNull RotatingCube subtractPivot(@NotNull Vector3D pivot) {
         Vector3D newPivot = this.pivot.subtract(pivot);
         return new RotatingCube(position, position.rotateAround(rotation, newPivot), points, rotation, newPivot, true);
     }
