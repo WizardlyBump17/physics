@@ -33,7 +33,7 @@ public class RotatingCube extends Shape implements Rotatable {
         this.points = Collections.unmodifiableList(sorted ? points : sortPoints(points));
         this.rotation = rotation;
         transformedPoints = points.stream()
-                    .map(point -> position.add(point.rotateAround(rotation, pivot)))
+                    .map(point -> position.add(point.rotateAround(rotation)))
                     .toList();
         this.pivot = pivot;
     }
@@ -81,7 +81,8 @@ public class RotatingCube extends Shape implements Rotatable {
 
     @Override
     public @NotNull RotatingCube setRotation(@NotNull Vector3D rotation) {
-        return new RotatingCube(position, position.rotateAround(rotation, pivot), points, rotation, pivot, true);
+        RotatingCube rotatingCube = new RotatingCube(position, position.rotateAround(rotation, pivot), points, rotation, pivot, true);
+        return rotatingCube;
     }
 
     @Override
