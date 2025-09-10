@@ -6,6 +6,7 @@ import com.wizardlybump17.physics.three.container.ShapesGroupsContainer;
 import com.wizardlybump17.physics.three.shape.Shape;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -16,11 +17,11 @@ public abstract class ShapesGroup implements Tickable {
 
     private final int id = BODY_COUNTER.getAndIncrement();
     private final @NotNull ShapesGroupsContainer container;
-    private final @NotNull List<Shape> shapes;
+    private final @NotNull List<Shape> shapes = new ArrayList<>();
 
     public ShapesGroup(@NotNull ShapesGroupsContainer container, @NotNull List<Shape> shapes) {
         this.container = container;
-        this.shapes = shapes;
+        this.shapes.addAll(shapes);
     }
 
     public final int getId() {
