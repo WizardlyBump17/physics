@@ -4,7 +4,6 @@ import com.wizardlybump17.physics.Id;
 import com.wizardlybump17.physics.three.Rotatable;
 import com.wizardlybump17.physics.three.Vector3D;
 import com.wizardlybump17.physics.three.shape.Shape;
-import com.wizardlybump17.physics.util.MapUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,11 +18,6 @@ public class ShapesGroup implements Rotatable {
     private final @NotNull Map<Id, Shape> shapes = new HashMap<>();
     private final @NotNull Map<Id, Shape> transformedShapes = new HashMap<>();
 
-    private final @Nullable ShapesGroup parent;
-
-    private final @NotNull Map<Id, ShapesGroup> children = new HashMap<>();
-    private final @NotNull Map<Id, ShapesGroup> transformedChildren = new HashMap<>();
-
     private final @NotNull Vector3D position;
     private final @NotNull Vector3D transformedPosition;
 
@@ -32,19 +26,12 @@ public class ShapesGroup implements Rotatable {
 
     private ShapesGroup(@NotNull Id id,
                         @NotNull Map<Id, Shape> shapes, @NotNull Map<Id, Shape> transformedShapes,
-                        @Nullable ShapesGroup parent,
-                        @NotNull Map<Id, ShapesGroup> children, @NotNull Map<Id, ShapesGroup> transformedChildren,
                         @NotNull Vector3D position, @NotNull Vector3D transformedPosition,
                         @NotNull Vector3D pivot, @NotNull Vector3D rotation) {
         this.id = id;
 
         this.shapes.putAll(shapes);
         this.transformedShapes.putAll(transformedShapes);
-
-        this.parent = parent;
-
-        this.children.putAll(children);
-        this.transformedChildren.putAll(transformedChildren);
 
         this.position = position;
         this.transformedPosition = transformedPosition;
@@ -66,8 +53,6 @@ public class ShapesGroup implements Rotatable {
         this(
                 id,
                 Map.copyOf(shapes), Map.of(),
-                parent,
-                Map.copyOf(MapUtil.fromCollection(children, ShapesGroup::getId)), Map.of(),
                 position, position.rotateAround(rotation, pivot),
                 pivot, rotation
         );
@@ -85,18 +70,6 @@ public class ShapesGroup implements Rotatable {
         return transformedShapes;
     }
 
-    public @Nullable ShapesGroup getParent() {
-        return parent;
-    }
-
-    public @NotNull Map<Id, ShapesGroup> getChildren() {
-        return children;
-    }
-
-    public @NotNull Map<Id, ShapesGroup> getTransformedChildren() {
-        return transformedChildren;
-    }
-
     public @NotNull Vector3D getPosition() {
         return position;
     }
@@ -109,8 +82,6 @@ public class ShapesGroup implements Rotatable {
         return new ShapesGroup(
                 id,
                 shapes, Map.of(),
-                parent,
-                children, Map.of(),
                 position, position.rotateAround(position, pivot),
                 pivot, rotation
         );
@@ -126,8 +97,6 @@ public class ShapesGroup implements Rotatable {
         return new ShapesGroup(
                 id,
                 shapes, Map.of(),
-                parent,
-                children, Map.of(),
                 position, position.rotateAround(position, pivot),
                 pivot, rotation
         );
@@ -143,8 +112,6 @@ public class ShapesGroup implements Rotatable {
         return new ShapesGroup(
                 id,
                 shapes, Map.of(),
-                parent,
-                children, Map.of(),
                 position, position.rotateAround(position, pivot),
                 pivot, rotation
         );
