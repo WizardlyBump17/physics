@@ -123,6 +123,15 @@ public class ContainerShapesGroup implements Tickable {
         return totalAcceleration;
     }
 
+    public void setTotalAcceleration(@NotNull Vector3D acceleration) {
+        accelerations.clear();
+        setAcceleration(Id.GENERIC, acceleration);
+    }
+
+    public void clearAccelerations() {
+        accelerations.clear();
+    }
+
     public @NotNull Vector3D getVelocity() {
         return velocity;
     }
