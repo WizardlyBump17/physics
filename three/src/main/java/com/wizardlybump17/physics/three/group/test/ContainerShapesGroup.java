@@ -94,6 +94,26 @@ public class ContainerShapesGroup {
         return Collections.unmodifiableMap(accelerations);
     }
 
+    public @NotNull Vector3D getAcceleration(@NotNull Id id) {
+        return accelerations.getOrDefault(id, Vector3D.ZERO);
+    }
+
+    public void setAcceleration(@NotNull Id id, @NotNull Vector3D acceleration) {
+        accelerations.put(id, acceleration);
+    }
+
+    public void addAcceleration(@NotNull Id id, @NotNull Vector3D acceleration) {
+        setAcceleration(id, getAcceleration(id).add(acceleration));
+    }
+
+    public void subtractAcceleration(@NotNull Id id, @NotNull Vector3D acceleration) {
+        setAcceleration(id, getAcceleration(id).subtract(acceleration));
+    }
+
+    public void clearAcceleration(@NotNull Id id) {
+        setAcceleration(id, Vector3D.ZERO);
+    }
+
     public @NotNull Vector3D getVelocity() {
         return velocity;
     }
