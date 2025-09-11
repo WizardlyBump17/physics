@@ -164,13 +164,26 @@ public class ContainerShapesGroup implements Tickable {
     @Override
     public void tick() {
         tickMovement();
+        tickUpdateShapes();
     }
 
     protected void tickMovement() {
         Vector3D acceleration = accelerations.values().stream()
                 .reduce(Vector3D::add)
                 .orElse(Vector3D.ZERO);
-        setVelocity(velocity.add(acceleration));
-        setPosition(position.add(velocity));
+
+        Vector3D newVelocity = getMaxMovement(getVelocity().add(acceleration));
+        setVelocity(newVelocity);
+
+        setPosition(position.add(getVelocity()));
+    }
+
+    public @NotNull Vector3D getMaxMovement(@NotNull Vector3D original) {
+        return original;
+    }
+
+    protected void tickUpdateShapes() {
+        this.shapes.replaceAll((id, shape) -> shape.move(getVelocity()));
+        //TODO: change the transformed shapes too
     }
 }
