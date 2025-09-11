@@ -6,6 +6,7 @@ import com.wizardlybump17.physics.three.Vector3D;
 import com.wizardlybump17.physics.three.container.ShapesGroupsContainer;
 import com.wizardlybump17.physics.three.shape.Shape;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collections;
@@ -159,6 +160,29 @@ public class ContainerShapesGroup implements Tickable {
 
     public @UnmodifiableView @NotNull Map<Id, Shape> getTransformedShapes() {
         return Collections.unmodifiableMap(transformedShapes);
+    }
+
+    public @Nullable Shape getShape(@NotNull Id id) {
+        return shapes.get(id);
+    }
+
+    public @Nullable Shape getTransformedShape(@NotNull Id id) {
+        return transformedShapes.get(id);
+    }
+
+    /**
+     * @param id
+     * @param shape
+     * @apiNote this method will apply transformations to the Shape and store it on the {@link #getTransformedShapes()}. Take care by passing the untransformed shape to not have any unexpected behaviours.
+     */
+    public void setShape(@NotNull Id id, @NotNull Shape shape) {
+        shapes.put(id, shape);
+        transformedShapes.put(id, shape.clone());
+    }
+
+    public void removeShape(@NotNull Id id) {
+        shapes.remove(id);
+        transformedShapes.remove(id);
     }
 
     @Override
