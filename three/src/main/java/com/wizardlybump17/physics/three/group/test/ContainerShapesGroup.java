@@ -90,8 +90,8 @@ public class ContainerShapesGroup {
         return container;
     }
 
-    public @NotNull Map<Id, Vector3D> getAccelerations() {
-        return accelerations;
+    public @UnmodifiableView @NotNull Map<Id, Vector3D> getAccelerations() {
+        return Collections.unmodifiableMap(accelerations);
     }
 
     public @NotNull Vector3D getVelocity() {
@@ -141,5 +141,14 @@ public class ContainerShapesGroup {
     }
 
     public void tick() {
+        tickMovement();
+    }
+
+    protected void tickMovement() {
+        Vector3D acceleration = accelerations.values().stream()
+                .reduce(Vector3D::add)
+                .orElse(Vector3D.ZERO);
+        setVelocity(velocity.add(acceleration));
+        setPosition(position.add(velocity));
     }
 }
