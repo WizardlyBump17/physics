@@ -1,6 +1,7 @@
 package com.wizardlybump17.physics.three.group.test;
 
 import com.wizardlybump17.physics.Id;
+import com.wizardlybump17.physics.Tickable;
 import com.wizardlybump17.physics.three.Vector3D;
 import com.wizardlybump17.physics.three.container.ShapesGroupsContainer;
 import com.wizardlybump17.physics.three.shape.Shape;
@@ -12,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ContainerShapesGroup {
+public class ContainerShapesGroup implements Tickable {
 
     private static final @NotNull AtomicInteger ID_COUNTER = new AtomicInteger();
 
@@ -160,6 +161,7 @@ public class ContainerShapesGroup {
         return Collections.unmodifiableMap(transformedShapes);
     }
 
+    @Override
     public void tick() {
         tickMovement();
     }
