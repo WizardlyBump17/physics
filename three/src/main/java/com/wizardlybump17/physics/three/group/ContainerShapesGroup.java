@@ -186,14 +186,8 @@ public class ContainerShapesGroup implements Tickable {
         return transformedShapes.get(id);
     }
 
-    /**
-     * @param id
-     * @param shape
-     * @apiNote this method will apply transformations to the Shape and store it on the {@link #getTransformedShapes()}. Take care by passing the untransformed shape to not have any unexpected behaviours.
-     */
     public void setShape(@NotNull Id id, @NotNull Shape shape) {
-        shapes.put(id, shape);
-        transformedShapes.put(id, shape.clone());
+        shapes.put(id, shape.move(getPosition()));
     }
 
     public void removeShape(@NotNull Id id) {
@@ -204,7 +198,7 @@ public class ContainerShapesGroup implements Tickable {
     @Override
     public void tick() {
         tickMovement();
-        tickUpdateShapes();
+        tickMoveShapes();
     }
 
     protected void tickMovement() {
@@ -219,8 +213,9 @@ public class ContainerShapesGroup implements Tickable {
         return original;
     }
 
-    protected void tickUpdateShapes() {
-        this.shapes.replaceAll((id, shape) -> shape.move(getVelocity()));
-        //TODO: change the transformed shapes too
+    protected void tickMoveShapes() {
+        Vector3D velocity = getVelocity();
+        this.shapes.replaceAll((id, shape) -> shape.move(velocity));
+        this.transformedShapes.replaceAll((id, shape) -> shape.move(velocity));
     }
 }
