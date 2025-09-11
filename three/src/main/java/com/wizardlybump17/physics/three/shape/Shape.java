@@ -16,4 +16,8 @@ public abstract class Shape implements Cloneable {
     public abstract @NotNull Shape at(@NotNull Vector3D newPosition);
 
     public abstract @NotNull Shape clone();
+
+    public @NotNull Shape move(@NotNull Vector3D movement) {
+        return at(getPosition().add(movement));
+    }
 }
