@@ -1,110 +1,119 @@
 package com.wizardlybump17.physics.three.group;
 
-import com.wizardlybump17.physics.Tickable;
+import com.wizardlybump17.physics.Id;
+import com.wizardlybump17.physics.three.Rotatable;
 import com.wizardlybump17.physics.three.Vector3D;
-import com.wizardlybump17.physics.three.container.ShapesGroupsContainer;
 import com.wizardlybump17.physics.three.shape.Shape;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.HashMap;
+import java.util.Map;
 
-public abstract class ShapesGroup implements Tickable {
+public class ShapesGroup implements Rotatable {
 
-    private static final @NotNull AtomicInteger BODY_COUNTER = new AtomicInteger(0); //what is your body count?
+    private final @NotNull Id id;
 
-    private final int id = BODY_COUNTER.getAndIncrement();
-    private final @NotNull ShapesGroupsContainer container;
-    private final @NotNull List<Shape> shapes = new ArrayList<>();
+    private final @NotNull Map<Id, Shape> shapes = new HashMap<>();
+    private final @NotNull Map<Id, Shape> transformedShapes = new HashMap<>();
 
-    public ShapesGroup(@NotNull ShapesGroupsContainer container, @NotNull List<Shape> shapes) {
-        this.container = container;
-        this.shapes.addAll(shapes);
+    private final @NotNull Vector3D position;
+    private final @NotNull Vector3D transformedPosition;
+
+    private final @NotNull Vector3D pivot;
+    private final @NotNull Vector3D rotation;
+
+    private ShapesGroup(@NotNull Id id,
+                        @NotNull Map<Id, Shape> shapes, @NotNull Map<Id, Shape> transformedShapes,
+                        @NotNull Vector3D position, @NotNull Vector3D transformedPosition,
+                        @NotNull Vector3D pivot, @NotNull Vector3D rotation) {
+        this.id = id;
+
+        this.shapes.putAll(shapes);
+        this.transformedShapes.putAll(transformedShapes);
+
+        this.position = position;
+        this.transformedPosition = transformedPosition;
+
+        this.pivot = pivot;
+        this.rotation = rotation;
     }
 
-    public final int getId() {
+    /**
+     * @param id
+     * @param shapes
+     * @param parent
+     * @param children
+     * @param position the center of the group
+     * @param pivot    the point around which the group rotates
+     * @param rotation
+     */
+    public ShapesGroup(@NotNull Id id, @NotNull Map<Id, Shape> shapes, @Nullable ShapesGroup parent, @NotNull Collection<ShapesGroup> children, @NotNull Vector3D position, @NotNull Vector3D pivot, @NotNull Vector3D rotation) {
+        this(
+                id,
+                Map.copyOf(shapes), Map.of(),
+                position, position.rotateAround(rotation, pivot),
+                pivot, rotation
+        );
+    }
+
+    public @NotNull Id getId() {
         return id;
     }
 
-    public final @NotNull ShapesGroupsContainer getContainer() {
-        return container;
-    }
-
-    public @NotNull List<Shape> getShapes() {
+    public @NotNull Map<Id, Shape> getShapes() {
         return shapes;
     }
 
-    public abstract boolean isPassable();
-
-    public abstract boolean isCollidingWith(@NotNull Shape shape);
-
-    public boolean isCollidingWith(@NotNull ShapesGroup otherGroup) {
-        for (Shape otherObject : otherGroup.getShapes())
-            if (isCollidingWith(otherObject))
-                return true;
-        return false;
+    public @NotNull Map<Id, Shape> getTransformedShapes() {
+        return transformedShapes;
     }
 
-    public boolean isCollidingWithShapes(@NotNull Collection<Shape> shapes) {
-        for (Shape shape : shapes)
-            if (isCollidingWith(shape))
-                return true;
-        return false;
+    public @NotNull Vector3D getPosition() {
+        return position;
     }
 
-    public boolean isCollidingWithObjects(@NotNull Collection<ShapesGroup> groups) {
-        for (ShapesGroup group : groups)
-            if (isCollidingWith(group))
-                return true;
-        return false;
+    public @NotNull Vector3D getTransformedPosition() {
+        return transformedPosition;
     }
 
-    protected void onCollide(@NotNull ShapesGroup otherGroup) {
-    }
-
-    protected void onStopColliding(@NotNull ShapesGroup otherGroup) {
-    }
-
-    public @NotNull Vector3D getCenter() {
-        Vector3D total = Vector3D.ZERO;
-        int totalObjects = shapes.size();
-
-        for (Shape shape : shapes)
-            total = total.add(shape.getPosition());
-
-        return total.divide(totalObjects);
-    }
-
-    public void setCenter(@NotNull Vector3D center) {
-        Vector3D currentCenter = getCenter();
-        shapes.replaceAll(shape -> {
-            Vector3D position = shape.getPosition();
-            return shape.at(position.add(center.subtract(currentCenter)));
-        });
+    public @NotNull ShapesGroup at(@NotNull Vector3D position) {
+        return new ShapesGroup(
+                id,
+                shapes, Map.of(),
+                position, position.rotateAround(position, pivot),
+                pivot, rotation
+        );
     }
 
     @Override
-    public void tick() {
-        tickCollisions();
+    public @NotNull Vector3D getRotation() {
+        return rotation;
     }
 
-    protected void tickCollisions() {
-        if (isPassable())
-            return;
+    @Override
+    public @NotNull ShapesGroup setRotation(@NotNull Vector3D rotation) {
+        return new ShapesGroup(
+                id,
+                shapes, Map.of(),
+                position, position.rotateAround(position, pivot),
+                pivot, rotation
+        );
+    }
 
-        for (ShapesGroup otherGroup : getContainer().getShapesGroups()) {
-            if (id == otherGroup.getId())
-                continue;
+    @Override
+    public @NotNull Vector3D getPivot() {
+        return pivot;
+    }
 
-            if (isCollidingWith(otherGroup)) {
-                onCollide(otherGroup);
-                otherGroup.onCollide(this);
-            } else {
-                onStopColliding(otherGroup);
-                otherGroup.onStopColliding(this);
-            }
-        }
+    @Override
+    public @NotNull ShapesGroup setPivot(@NotNull Vector3D pivot) {
+        return new ShapesGroup(
+                id,
+                shapes, Map.of(),
+                position, position.rotateAround(position, pivot),
+                pivot, rotation
+        );
     }
 }

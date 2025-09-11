@@ -1,6 +1,6 @@
 package com.wizardlybump17.physics.three.container;
 
-import com.wizardlybump17.physics.three.group.ShapesGroup;
+import com.wizardlybump17.physics.three.group.ContainerShapesGroup;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,24 +12,26 @@ public class MapShapesGroupsContainer extends ShapesGroupsContainer {
 
     private static final @NotNull Logger LOGGER = Logger.getLogger(MapShapesGroupsContainer.class.getName());
 
-    private final @NotNull Map<Integer, ShapesGroup> groups = new HashMap<>();
+    private final @NotNull Map<Integer, ContainerShapesGroup> groups = new HashMap<>();
 
     public MapShapesGroupsContainer(@NotNull UUID id) {
         super(id);
     }
 
     @Override
-    public @Nullable ShapesGroup getGroup(int id) {
+    public @Nullable ContainerShapesGroup getGroup(int id) {
         return groups.get(id);
     }
 
     @Override
-    public @NotNull Collection<ShapesGroup> getShapesGroups() {
+    public @NotNull Collection<ContainerShapesGroup> getGroups() {
         return Collections.unmodifiableCollection(groups.values());
     }
 
     @Override
-    public void addGroup(@NotNull ShapesGroup group) {
+    public void addGroup(@NotNull ContainerShapesGroup group) {
+        if (group.getContainer() != this)
+            throw new IllegalArgumentException("The group is not associated with this container");
         groups.put(group.getId(), group);
     }
 
@@ -46,7 +48,7 @@ public class MapShapesGroupsContainer extends ShapesGroupsContainer {
     @Override
     public void tick() {
         try {
-            for (ShapesGroup group : groups.values())
+            for (ContainerShapesGroup group : groups.values())
                 group.tick();
         } catch (Throwable throwable) {
             LOGGER.log(Level.SEVERE, "Error while ticking the container " + getId(), throwable);

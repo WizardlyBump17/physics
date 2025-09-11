@@ -1,4 +1,4 @@
-package com.wizardlybump17.physics.three.group.test;
+package com.wizardlybump17.physics.three.group;
 
 import com.wizardlybump17.physics.Id;
 import com.wizardlybump17.physics.Tickable;

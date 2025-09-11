@@ -1,7 +1,7 @@
 package com.wizardlybump17.physics.three.container;
 
 import com.wizardlybump17.physics.Tickable;
-import com.wizardlybump17.physics.three.group.ShapesGroup;
+import com.wizardlybump17.physics.three.group.ContainerShapesGroup;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,21 +20,21 @@ public abstract class ShapesGroupsContainer implements Tickable {
         return id;
     }
 
-    public abstract @NotNull Collection<ShapesGroup> getShapesGroups();
+    public abstract @NotNull Collection<ContainerShapesGroup> getGroups();
 
-    public abstract void addGroup(@NotNull ShapesGroup group);
+    public abstract void addGroup(@NotNull ContainerShapesGroup group);
 
     public abstract boolean hasGroup(int groupId);
 
-    public boolean hasGroup(@NotNull ShapesGroup group) {
+    public boolean hasGroup(@NotNull ContainerShapesGroup group) {
         return hasGroup(group.getId());
     }
 
     public abstract void removeGroup(int groupId);
 
-    public void removeGroup(@NotNull ShapesGroup group) {
+    public void removeGroup(@NotNull ContainerShapesGroup group) {
         removeGroup(group.getId());
     }
 
-    public abstract @Nullable ShapesGroup getGroup(int groupId);
+    public abstract @Nullable ContainerShapesGroup getGroup(int groupId);
 }
