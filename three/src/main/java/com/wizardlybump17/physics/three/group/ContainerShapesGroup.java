@@ -63,7 +63,7 @@ public class ContainerShapesGroup implements Tickable {
                 position, position,
                 position,
                 Vector3D.ZERO,
-                moveShapes(shapes, position), moveShapes(shapes, position)
+                shapes, shapes
         );
     }
 
@@ -80,7 +80,7 @@ public class ContainerShapesGroup implements Tickable {
                 position, position.rotateAround(rotation, pivot),
                 pivot,
                 rotation,
-                moveShapes(shapes, position), moveShapes(shapes, position.rotateAround(rotation, pivot))
+                shapes, shapes
         );
     }
 
@@ -217,11 +217,5 @@ public class ContainerShapesGroup implements Tickable {
         Vector3D velocity = getVelocity();
         this.shapes.replaceAll((id, shape) -> shape.move(velocity));
         this.transformedShapes.replaceAll((id, shape) -> shape.move(velocity));
-    }
-
-    public static @NotNull Map<Id, Shape> moveShapes(@NotNull Map<Id, Shape> shapes, @NotNull Vector3D position) {
-        Map<Id, Shape> movedShapes = new HashMap<>(shapes.size());
-        shapes.forEach((id, shape) -> movedShapes.put(id, shape.move(position)));
-        return movedShapes;
     }
 }
