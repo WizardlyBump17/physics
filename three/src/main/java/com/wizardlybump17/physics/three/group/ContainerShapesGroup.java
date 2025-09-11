@@ -116,6 +116,13 @@ public class ContainerShapesGroup implements Tickable {
         setAcceleration(id, Vector3D.ZERO);
     }
 
+    public @NotNull Vector3D getTotalAcceleration() {
+        Vector3D totalAcceleration = Vector3D.ZERO;
+        for (Vector3D acceleration : accelerations.values())
+            totalAcceleration = totalAcceleration.add(acceleration);
+        return totalAcceleration;
+    }
+
     public @NotNull Vector3D getVelocity() {
         return velocity;
     }
@@ -192,10 +199,7 @@ public class ContainerShapesGroup implements Tickable {
     }
 
     protected void tickMovement() {
-        Vector3D acceleration = accelerations.values().stream()
-                .reduce(Vector3D::add)
-                .orElse(Vector3D.ZERO);
-
+        Vector3D acceleration = getTotalAcceleration();
         Vector3D newVelocity = getMaxMovement(getVelocity().add(acceleration));
         setVelocity(newVelocity);
 
