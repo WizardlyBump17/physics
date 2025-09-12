@@ -84,6 +84,23 @@ public class ContainerShapesGroup implements Tickable {
         );
     }
 
+    public ContainerShapesGroup(@NotNull ShapesGroupsContainer container, @NotNull ShapesGroup group, @NotNull Vector3D position) {
+        this(
+                container,
+                Map.of(), Vector3D.ZERO,
+                group.getPosition().add(position), group.getTransformedPosition().add(position),
+                group.getPivot().add(position),
+                group.getRotation(),
+                moveShapes(group.getShapes(), position), moveShapes(group.getTransformedShapes(), position)
+        );
+    }
+
+    public static @NotNull Map<Id, Shape> moveShapes(@NotNull Map<Id, Shape> shapes, @NotNull Vector3D movement) {
+        Map<Id, Shape> movedShapes = new HashMap<>(shapes.size());
+        shapes.forEach((id, shape) -> movedShapes.put(id, shape.move(movement)));
+        return movedShapes;
+    }
+
     public int getId() {
         return id;
     }
