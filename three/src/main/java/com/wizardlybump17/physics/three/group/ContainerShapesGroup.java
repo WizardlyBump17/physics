@@ -215,7 +215,17 @@ public class ContainerShapesGroup implements Tickable {
 
     protected void tickMoveShapes() {
         Vector3D velocity = getVelocity();
-        this.shapes.replaceAll((id, shape) -> shape.move(velocity));
-        this.transformedShapes.replaceAll((id, shape) -> shape.move(velocity));
+        moveShapes(velocity, false);
+    }
+
+    public @NotNull Vector3D moveShapes(@NotNull Vector3D movement, boolean checkMax) {
+        Vector3D actualMovement = checkMax ? getMaxMovement(movement) : movement;
+        this.shapes.replaceAll((id, shape) -> shape.move(actualMovement));
+        this.transformedShapes.replaceAll((id, shape) -> shape.move(actualMovement));
+        return actualMovement;
+    }
+
+    public void moveShapes(@NotNull Vector3D movement) {
+        moveShapes(movement, true);
     }
 }
