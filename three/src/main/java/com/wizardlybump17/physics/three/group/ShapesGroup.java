@@ -54,6 +54,22 @@ public class ShapesGroup implements Rotatable {
         );
     }
 
+    public ShapesGroup(@NotNull Id id, @NotNull Map<Id, Shape> shapes) {
+        this(
+                id,
+                shapes,
+                shapes.values().stream()
+                        .map(Shape::getPosition)
+                        .reduce(Vector3D::add)
+                        .orElse(Vector3D.ZERO),
+                shapes.values().stream()
+                        .map(Shape::getPosition)
+                        .reduce(Vector3D::add)
+                        .orElse(Vector3D.ZERO),
+                Vector3D.ZERO
+        );
+    }
+
     public @NotNull Id getId() {
         return id;
     }
