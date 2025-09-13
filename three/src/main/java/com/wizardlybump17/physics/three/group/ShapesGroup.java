@@ -5,9 +5,7 @@ import com.wizardlybump17.physics.three.Rotatable;
 import com.wizardlybump17.physics.three.Vector3D;
 import com.wizardlybump17.physics.three.shape.Shape;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,13 +41,11 @@ public class ShapesGroup implements Rotatable {
     /**
      * @param id
      * @param shapes
-     * @param parent
-     * @param children
      * @param position the center of the group
      * @param pivot    the point around which the group rotates
      * @param rotation
      */
-    public ShapesGroup(@NotNull Id id, @NotNull Map<Id, Shape> shapes, @Nullable ShapesGroup parent, @NotNull Collection<ShapesGroup> children, @NotNull Vector3D position, @NotNull Vector3D pivot, @NotNull Vector3D rotation) {
+    public ShapesGroup(@NotNull Id id, @NotNull Map<Id, Shape> shapes, @NotNull Vector3D position, @NotNull Vector3D pivot, @NotNull Vector3D rotation) {
         this(
                 id,
                 Map.copyOf(shapes), Map.of(),
