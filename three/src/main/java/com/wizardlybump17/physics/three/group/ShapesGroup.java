@@ -90,10 +90,10 @@ public class ShapesGroup implements Rotatable {
         return transformedPosition;
     }
 
-    public @NotNull ShapesGroup at(@NotNull Vector3D position) {
+    public @NotNull ShapesGroup setPosition(@NotNull Vector3D position) {
         return new ShapesGroup(
                 id,
-                shapes, Map.of(),
+                shapes, transformShapes(shapes, position, pivot, rotation),
                 position, position.rotateAround(position, pivot),
                 pivot, rotation
         );
@@ -108,7 +108,7 @@ public class ShapesGroup implements Rotatable {
     public @NotNull ShapesGroup setRotation(@NotNull Vector3D rotation) {
         return new ShapesGroup(
                 id,
-                shapes, Map.of(),
+                shapes, transformShapes(shapes, position, pivot, rotation),
                 position, position.rotateAround(position, pivot),
                 pivot, rotation
         );
@@ -123,9 +123,15 @@ public class ShapesGroup implements Rotatable {
     public @NotNull ShapesGroup setPivot(@NotNull Vector3D pivot) {
         return new ShapesGroup(
                 id,
-                shapes, Map.of(),
+                shapes, transformShapes(shapes, position, pivot, rotation),
                 position, position.rotateAround(position, pivot),
                 pivot, rotation
         );
+    }
+
+    public static @NotNull Map<Id, Shape> transformShapes(@NotNull Map<Id, Shape> shapes, @NotNull Vector3D position, @NotNull Vector3D pivot, @NotNull Vector3D rotation) {
+        Map<Id, Shape> transformedShapes = new HashMap<>();
+        shapes.forEach((id, shape) -> transformedShapes.put(id, shape));
+        return transformedShapes;
     }
 }
