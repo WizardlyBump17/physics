@@ -88,7 +88,7 @@ public class ContainerShapesGroup implements Tickable {
         this(
                 container,
                 Map.of(), Vector3D.ZERO,
-                group.getPosition().add(position), group.getTransformedPosition().add(position),
+                group.getPosition().add(position), group.getPosition().add(position).rotateAround(group.getRotation(), group.getPivot().add(position)),
                 group.getPivot().add(position),
                 group.getRotation(),
                 moveShapes(group.getShapes(), position), moveShapes(group.getTransformedShapes(), position)
