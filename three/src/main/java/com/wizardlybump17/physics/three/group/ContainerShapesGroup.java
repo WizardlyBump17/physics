@@ -162,8 +162,12 @@ public class ContainerShapesGroup implements Tickable {
     }
 
     public void setPosition(@NotNull Vector3D position) {
+        Vector3D movement = position.subtract(this.position);
+
         this.position = position;
         transformedPosition = position.rotateAround(rotation, pivot);
+
+        moveShapes(movement, false);
     }
 
     public @NotNull Vector3D getTransformedPosition() {
@@ -215,7 +219,7 @@ public class ContainerShapesGroup implements Tickable {
     @Override
     public void tick() {
         tickMovement();
-        tickMoveShapes();
+//        tickMoveShapes();
     }
 
     protected void tickMovement() {
@@ -235,14 +239,14 @@ public class ContainerShapesGroup implements Tickable {
         moveShapes(velocity, false);
     }
 
-    public @NotNull Vector3D moveShapes(@NotNull Vector3D movement, boolean checkMax) {
+    protected @NotNull Vector3D moveShapes(@NotNull Vector3D movement, boolean checkMax) {
         Vector3D actualMovement = checkMax ? getMaxMovement(movement) : movement;
         this.shapes.replaceAll((id, shape) -> shape.move(actualMovement));
         this.transformedShapes.replaceAll((id, shape) -> shape.move(actualMovement));
         return actualMovement;
     }
 
-    public void moveShapes(@NotNull Vector3D movement) {
+    protected void moveShapes(@NotNull Vector3D movement) {
         moveShapes(movement, true);
     }
 }
