@@ -207,8 +207,14 @@ public class ContainerShapesGroup implements Tickable {
         return transformedShapes.get(id);
     }
 
+    /**
+     * @param id
+     * @param shape
+     * @apiNote this method assumes the shape is already correctly positioned
+     */
     public void setShape(@NotNull Id id, @NotNull Shape shape) {
-        shapes.put(id, shape.move(getPosition()));
+        shapes.put(id, shape);
+        transformedShapes.put(id, shape);
     }
 
     public void removeShape(@NotNull Id id) {
