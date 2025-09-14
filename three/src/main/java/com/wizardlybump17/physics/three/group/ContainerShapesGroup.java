@@ -249,4 +249,13 @@ public class ContainerShapesGroup implements Tickable {
     protected void moveShapes(@NotNull Vector3D movement) {
         moveShapes(movement, true);
     }
+
+    public @NotNull Vector3D move(@NotNull Vector3D movement, boolean checkCollisions) {
+        setPosition(position.add(movement));
+        return movement;
+    }
+
+    public @NotNull Vector3D move(@NotNull Vector3D movement) {
+        return move(movement, true);
+    }
 }
